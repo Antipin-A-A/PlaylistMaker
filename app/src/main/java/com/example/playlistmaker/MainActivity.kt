@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentMusic)
         }
         buttonSettings.setOnClickListener {
-            val intentSearch = Intent(this, SettingsActivity::class.java)
-            startActivity(intentSearch)
+            val intentSetting = Intent(this, SettingsActivity::class.java)
+            startActivity(intentSetting)
         }
     }
 }
