@@ -5,58 +5,41 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
+    android:padding="@dimen/indent_16dp"
     tools:context=".SettingsActivity">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:duplicateParentState="false"
         android:forceDarkAllowed="false"
-        android:padding="4dp">
+        android:gravity="center|start">
+
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/baseline_arrow_back" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/setting"
             android:textColor="@color/black"
-            android:textSize="22sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button"
-            app:layout_constraintStart_toEndOf="@+id/button_back"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/textSize_22sp"
+            android:layout_margin="12dp"/>
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:background="?android:selectableItemBackground"
-            app:cornerRadius="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button_back"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:background="?android:selectableItemBackground"
-            android:backgroundTint="@color/blue"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/baseline_arrow_back"
-            app:iconGravity="textStart"
-            app:iconTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="18dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="18dp">
+        android:layout_marginTop="24dp">
 
         <!--        Студия выдавала ошибку : Switch слишком маленький мин. размер 48dp, стоял wrap_content-->
         <Switch
@@ -69,68 +52,59 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
             android:text="@string/night_theme"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_16sp" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="22dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="22dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
             android:text="@string/share_app"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_16sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:padding="8dp"
+            android:padding="@dimen/indent_8dp"
             app:srcCompat="@drawable/light_mode_share" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="22dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="22dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:padding="8dp"
-            app:srcCompat="@drawable/light_mode_share" />
+            android:padding="@dimen/indent_8dp"
+            app:srcCompat="@drawable/light_mode_support" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|start"
             android:text="@string/write_service"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_16sp" />
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="22dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="22dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:padding="8dp"
+            android:padding="@dimen/indent_8dp"
             app:srcCompat="@drawable/light_mode_arrow" />
 
         <TextView
@@ -138,7 +112,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|start"
             android:text="@string/user_agreement"
-            android:textSize="16sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSize_16sp" />
     </FrameLayout>
 
 
