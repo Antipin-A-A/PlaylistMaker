@@ -11,11 +11,6 @@
     app:circularflow_radiusInDP="12dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:forceDarkAllowed="false"
-        android:padding="@dimen/indent_4dp">
 
         <TextView
             android:id="@+id/textView"
@@ -27,7 +22,7 @@
             android:textSize="22sp" />
 
 
-    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,10 +43,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/black"
             android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/radius_16dp"
             app:icon="@drawable/light_mode_search"
             app:iconGravity="textStart"
-            app:iconSize="24dp"
+            app:iconSize="@dimen/icon_size_24dp"
             app:iconTint="@color/black" />
 
         <Button
@@ -66,10 +61,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/black"
             android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/radius_16dp"
             app:icon="@drawable/baseline_library_music_24"
             app:iconGravity="textStart"
-            app:iconSize="24dp"
+            app:iconSize="@dimen/icon_size_24dp"
             app:iconTint="@color/black" />
 
 
@@ -85,10 +80,10 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="@color/black"
             android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="16dp"
+            app:cornerRadius="@dimen/radius_16dp"
             app:icon="@drawable/light_mode_system"
             app:iconGravity="textStart"
-            app:iconSize="24dp"
+            app:iconSize="@dimen/icon_size_24dp"
             app:iconTint="@color/black" />
 
 
