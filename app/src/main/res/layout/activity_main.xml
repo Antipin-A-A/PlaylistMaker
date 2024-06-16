@@ -12,16 +12,12 @@
     tools:context=".MainActivity">
 
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/indent_4dp"
-            android:text="@string/playlist_market"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
-
-
+    <TextView
+        android:id="@+id/textView"
+        style="@style/TextStyleTullBar"
+        android:layout_marginStart="@dimen/indent_4dp"
+        android:text="@string/playlist_market"
+        android:textColor="@color/white" />
 
 
     <LinearLayout
@@ -33,58 +29,22 @@
 
         <Button
             android:id="@+id/button_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
+            style="@style/ButtonStyle"
             android:text="@string/Poisk"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/light_mode_search"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
+            app:icon="@drawable/light_mode_search" />
 
         <Button
             android:id="@+id/button_music"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
+            style="@style/ButtonStyle"
             android:text="@string/mediateka"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/baseline_library_music_24"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
+            app:icon="@drawable/baseline_library_music_24" />
 
 
         <Button
             android:id="@+id/button_setting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
+            style="@style/ButtonStyle"
             android:text="@string/system_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/light_mode_system"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
+            app:icon="@drawable/light_mode_system" />
 
 
     </LinearLayout>
