@@ -9,4 +9,9 @@
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="setting">Настройки</string>
     <string name="system_text">Настройки</string>
+    <string name="not_interested">Не интересно</string>
+    <string name="url_arrow">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="string_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="string_email_tittle">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="url_share">https://practicum.yandex.ru/android-developer/?from=catalog/</string>
 </resources>

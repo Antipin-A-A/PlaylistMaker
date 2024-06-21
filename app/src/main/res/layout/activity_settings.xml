@@ -52,10 +52,12 @@
         android:layout_height="wrap_content">
 
         <TextView
+
             style="@style/TextStyleSetting"
             android:text="@string/share_app" />
 
         <ImageView
+            android:id="@+id/button_share"
             style="@style/ImageViewStyleSetting"
             app:srcCompat="@drawable/light_mode_share" />
     </FrameLayout>
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/button_support"
             style="@style/ImageViewStyleSetting"
             app:srcCompat="@drawable/light_mode_support" />
 
@@ -78,6 +81,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/button_arrow"
             style="@style/ImageViewStyleSetting"
             app:srcCompat="@drawable/light_mode_arrow" />
 
@@ -85,4 +89,5 @@
             style="@style/TextStyleSetting"
             android:text="@string/user_agreement" />
     </FrameLayout>
+
 </LinearLayout>
