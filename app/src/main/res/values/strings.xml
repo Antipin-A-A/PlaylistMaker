@@ -14,4 +14,5 @@
     <string name="string_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="string_email_tittle">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="url_share">https://practicum.yandex.ru/android-developer/?from=catalog/</string>
+    <string name="text_hint_search">Поиск</string>
 </resources>
