@@ -11,4 +11,6 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="colorThumbTint">#3772E7</color>
+    <color name="colorTrackTint">#9FBBF3</color>
 </resources>

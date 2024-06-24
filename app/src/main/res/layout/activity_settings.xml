@@ -41,7 +41,10 @@
             android:id="@+id/switch_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="center|end" />
+            android:layout_gravity="center|end"
+            android:checked="false"
+            app:thumbTint="@color/colorThumbTint"
+            app:trackTint="@color/colorTrackTint" />
 
         <TextView
             style="@style/TextStyleSetting"

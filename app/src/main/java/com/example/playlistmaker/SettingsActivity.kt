@@ -21,9 +21,6 @@ class SettingsActivity : AppCompatActivity() {
                 KEY_STATUS,
                 CHECKED
             )
-            Toast.makeText(this,"isChecked save = $status", Toast.LENGTH_LONG).show()
-        }else{
-            Toast.makeText(this,"не сработало isChecked = $status", Toast.LENGTH_LONG).show()
         }
 
         val buttonBack = findViewById<ImageView>(R.id.button_back)
@@ -36,11 +33,9 @@ class SettingsActivity : AppCompatActivity() {
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 CHECKED = switchButton.isChecked
-                Toast.makeText(this,"isChecked1 = ${switchButton.isChecked} status = $status", Toast.LENGTH_SHORT).show()
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                CHECKED = switchButton.isChecked
-                Toast.makeText(this,"isChecked2 = ${switchButton.isChecked} status = $status", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -75,5 +70,4 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_STATUS = "KEY_STATUS"
         var CHECKED = false
     }
-
 }
