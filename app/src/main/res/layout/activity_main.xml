@@ -30,7 +30,7 @@
         <Button
             android:id="@+id/button_search"
             style="@style/ButtonStyle"
-            android:text="@string/Poisk"
+            android:text="@string/search_text"
             app:icon="@drawable/light_mode_search" />
 
         <Button
