@@ -7,9 +7,8 @@
     <string name="share_app">Поделиться приложением</string>
     <string name="write_service">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
-    <string name="setting">Настройки</string>
+    <string name="setting">Поиск</string>
     <string name="system_text">Настройки</string>
-    <string name="not_interested">Не интересно</string>
     <string name="url_arrow">https://yandex.ru/legal/practicum_offer/</string>
     <string name="string_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="string_email_tittle">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>

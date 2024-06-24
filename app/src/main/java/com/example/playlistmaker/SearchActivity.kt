@@ -8,15 +8,20 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 class SearchActivity : AppCompatActivity() {
+
+    private var getString : String = STRING
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        if (savedInstanceState != null) {
+            getString = savedInstanceState.getString(KEY_STRING, STRING)
+        }
 
         val buttonBack = findViewById<ImageView>(R.id.button_back)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
@@ -24,7 +29,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
         }
 
@@ -37,20 +43,24 @@ class SearchActivity : AppCompatActivity() {
 
             }
 
-            override fun onTextChanged(s : CharSequence?, start : Int, before : Int, coutn : Int) {
-               if (!s.isNullOrEmpty()){
-                   clearButton.visibility = View.VISIBLE
-               }else{
-                   clearButton.visibility = View.GONE
-               }
-
+            override fun onTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
+                if (!p0.isNullOrEmpty()) {
+                    clearButton.visibility = View.VISIBLE
+                } else {
+                    clearButton.visibility = View.GONE
+                }
             }
 
             override fun afterTextChanged(p0 : Editable?) {
-
+                STRING = inputEditText.text.toString()
             }
-
         }
+
         inputEditText.addTextChangedListener(simpleTextWatcher)
+    }
+
+    companion object {
+        const val KEY_STRING = "PRODUCT_AMOUNT"
+        var STRING = ""
     }
 }

@@ -37,7 +37,8 @@
         android:layout_marginTop="24dp">
 
         <!--        Студия выдавала ошибку : Switch слишком маленький мин. размер 48dp, стоял wrap_content-->
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center|end" />
