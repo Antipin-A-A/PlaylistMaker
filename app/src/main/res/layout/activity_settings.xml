@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/indent_16dp"
+    tools:context=".SettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|start">
+
+        <ImageView
+            android:id="@+id/button_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/baseline_arrow_back"
+            app:tint="@color/blackNight" />
+
+        <TextView
+            style="@style/TextStyleTullBar"
+            android:layout_margin="12dp"
+            android:text="@string/system_text"
+            android:textColor="@color/blackNight" />
+
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp">
+
+        <!--        Студия выдавала ошибку : Switch слишком маленький мин. размер 48dp, стоял wrap_content-->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center|end"
+            android:checked="false"
+            app:thumbTint="@color/colorThumbTint"
+            app:trackTint="@color/colorTrackTint" />
+
+        <TextView
+            style="@style/TextStyleSetting"
+            android:text="@string/night_theme" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            style="@style/TextStyleSetting"
+            android:text="@string/share_app" />
+
+        <ImageView
+            android:id="@+id/button_share"
+            style="@style/ImageViewStyleSetting"
+            app:srcCompat="@drawable/light_mode_share" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/button_support"
+            style="@style/ImageViewStyleSetting"
+            app:srcCompat="@drawable/light_mode_support" />
+
+        <TextView
+            style="@style/TextStyleSetting"
+            android:text="@string/write_service" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/button_arrow"
+            style="@style/ImageViewStyleSetting"
+            app:srcCompat="@drawable/light_mode_arrow" />
+
+        <TextView
+            style="@style/TextStyleSetting"
+            android:text="@string/user_agreement" />
+    </FrameLayout>
+
+</LinearLayout>
