@@ -2,9 +2,10 @@
 <resources>
     <dimen name="indent_16dp">16dp</dimen>
     <dimen name="textSize_22sp">22sp</dimen>
-    <dimen name="indent_4dp">4dp</dimen>
     <dimen name="textSize_16sp">16sp</dimen>
+    <dimen name="indent_4dp">4dp</dimen>
     <dimen name="indent_8dp">8dp</dimen>
+    <dimen name="indent_12dp">12dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>
     <dimen name="icon_size_24dp">24dp</dimen>
 </resources>
