@@ -15,20 +15,18 @@
             android:id="@+id/button_back"
             style="@style/TextStyleTullBar"
             android:text="@string/system_text"
-            android:textColor="@color/blackNight"
             app:drawableStartCompat="@drawable/baseline_arrow_back" />
 
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/FrameStyleSetting"
         android:layout_marginTop="24dp">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_gravity="center|end"
             android:checked="false"
             app:thumbTint="@color/colorThumbTint"
@@ -40,11 +38,9 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/FrameStyleSetting">
 
         <TextView
-
             style="@style/TextStyleSetting"
             android:text="@string/share_app" />
 
@@ -55,8 +51,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/FrameStyleSetting">
 
         <ImageView
             android:id="@+id/button_support"
@@ -69,8 +64,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/FrameStyleSetting">
 
         <ImageView
             android:id="@+id/button_arrow"

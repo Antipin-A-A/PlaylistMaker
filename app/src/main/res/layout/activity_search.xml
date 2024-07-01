@@ -22,33 +22,44 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:foregroundTint="@color/gray_Night"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/indent_8dp"
+        android:paddingBottom="@dimen/indent_8dp">
 
         <EditText
             android:id="@+id/inputEditText"
             style="@style/TextStyleSetting"
             android:layout_width="match_parent"
             android:background="@drawable/edittext"
-            android:drawableStart="@drawable/search_12_icon"
-            android:drawablePadding="@dimen/indent_4dp"
+            android:drawableStart="@drawable/search_14"
+            android:drawablePadding="@dimen/indent_8dp"
             android:drawableTint="@color/gray_Night"
-            android:inputType="text"
+            android:text="@string/editText"
             android:hint="@string/search_text"
             android:maxLines="1"
             android:padding="10dp"
+
             android:textColor="@color/black"
             android:textColorHint="@color/gray_Night"
             android:textColorLink="@color/color_cursor" />
 
         <ImageView
             android:id="@+id/button_search_clean"
-            android:layout_width="@dimen/indent_16dp"
-            android:layout_height="@dimen/indent_16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center|end"
-            android:layout_marginEnd="@dimen/indent_8dp"
-            android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-            app:tint="@color/black" />
+            android:layout_marginEnd="@dimen/indent_10dp"
+            android:background="@color/fonEdit"
+            android:visibility="visible"
+            app:srcCompat="@drawable/clear_16"
+            app:tint="@color/gray_Night" />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
 
 </LinearLayout>
