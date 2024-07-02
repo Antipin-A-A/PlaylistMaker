@@ -28,7 +28,7 @@
         android:foregroundTint="@color/gray_Night"
         android:orientation="horizontal"
         android:paddingStart="@dimen/indent_16dp"
-        android:paddingTop="8dp"
+        android:paddingTop="@dimen/indent_8dp"
         android:paddingEnd="@dimen/indent_16dp"
         android:paddingBottom="@dimen/indent_8dp">
 
