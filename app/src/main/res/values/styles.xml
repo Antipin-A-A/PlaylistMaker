@@ -5,15 +5,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:padding">@dimen/indent_16dp</item>
 
     </style>
 
     <style name="FrameStyleSetting">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/indent_10dp</item>
-        <item name="android:padding">@dimen/indent_10dp</item>
+        <item name="android:layout_marginStart">@dimen/indent_16dp</item>
+        <item name="android:layout_marginEnd">@dimen/indent_12dp</item>
     </style>
 
 
@@ -25,9 +24,8 @@
         <item name="android:drawableTint">@color/blackNight</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:drawablePadding">@dimen/icon_size_24dp</item>
-        <item name="android:layout_marginTop">@dimen/indent_16dp</item>
-        <item name="android:layout_marginBottom">@dimen/indent_16dp</item>
+        <item name="android:layout_marginTop">@dimen/indent_10dp</item>
+        <item name="android:layout_marginStart">@dimen/indent_12dp</item>
     </style>
 
     <style name="ButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -35,7 +33,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">3</item>
         <item name="android:backgroundTint">@color/white</item>
-        <item name="android:insetTop">@dimen/indent_16dp</item>
+        <item name="android:insetTop">@dimen/indent_14dp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">@dimen/textSize_22sp</item>
         <item name="cornerRadius">@dimen/radius_16dp</item>
@@ -56,14 +54,20 @@
         <item name="android:textSize">@dimen/textSize_16sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
+        <item name="android:layout_marginTop">@dimen/indent_21dp</item>
+        <item name="android:layout_marginBottom">@dimen/indent_21dp</item>
     </style>
 
     <style name="ImageViewStyleSetting">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center|end</item>
-
     </style>
 
-    <dimen name="indent_24dp">24dp</dimen>
+    <style name="Arrow_back">
+        <item name="android:layout_width">@dimen/indent_24dp</item>
+        <item name="android:layout_height">@dimen/indent_24dp</item>
+        <item name="android:layout_margin">@dimen/indent_12dp</item>
+    </style>
+
 </resources>

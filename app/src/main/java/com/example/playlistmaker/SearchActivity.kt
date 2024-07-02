@@ -19,7 +19,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val buttonBack = findViewById<TextView>(R.id.button_back_Search)
+        val buttonBack = findViewById<ImageView>(R.id.button_back_Search)
         val editText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.button_search_clean)
 
@@ -62,9 +62,9 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(KEY_STRING, statusString)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+    override fun onRestoreInstanceState(savedInstanceState : Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        statusString = savedInstanceState.getString(KEY_STRING).toString()
+        statusString = savedInstanceState.getString(KEY_STRING) ?: ""
         findViewById<EditText>(R.id.inputEditText).setText(statusString)
     }
 
