@@ -3,89 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/LayoutStyle"
     android:background="@color/blue"
-    android:orientation="vertical"
-    android:padding="@dimen/indent_16dp"
-    app:circularflow_radiusInDP="12dp"
+    android:paddingStart="@dimen/indent_16dp"
+    android:paddingEnd="@dimen/indent_16dp"
+    android:paddingTop="@dimen/indent_14dp"
+    android:paddingBottom="@dimen/indent_28dp"
     tools:context=".MainActivity">
 
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/indent_4dp"
-            android:text="@string/playlist_market"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
-
-
-
+    <TextView
+        android:id="@+id/textView"
+        style="@style/Base.Theme.PlaylistMaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/indent_16dp"
+        android:text="@string/playlist_market"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize_22sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="8dp">
-
+        android:paddingTop="@dimen/indent_24dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/button_search"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
-            android:text="@string/Poisk"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/light_mode_search"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
+            style="@style/ButtonStyle"
+            android:text="@string/search_text"
+            app:icon="@drawable/light_mode_search" />
 
         <Button
             android:id="@+id/button_music"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
+            style="@style/ButtonStyle"
             android:text="@string/mediateka"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/baseline_library_music_24"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
+            app:icon="@drawable/baseline_library_music_24" />
 
 
         <Button
             android:id="@+id/button_setting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:backgroundTint="@color/white"
-            android:foreground="?attr/selectableItemBackground"
-            android:insetTop="@dimen/indent_16dp"
+            style="@style/ButtonStyle"
             android:text="@string/system_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSize_22sp"
-            app:cornerRadius="@dimen/radius_16dp"
-            app:icon="@drawable/light_mode_system"
-            app:iconGravity="textStart"
-            app:iconSize="@dimen/icon_size_24dp"
-            app:iconTint="@color/black" />
-
+            app:icon="@drawable/light_mode_system" />
 
     </LinearLayout>
 
