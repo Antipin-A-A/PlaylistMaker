@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:context=".MusicAdapter">
+
+    <ImageView
+        android:id="@+id/image_view_music_group"
+        android:layout_width="@dimen/indent_45dp"
+        android:layout_height="@dimen/indent_45dp"
+        android:layout_marginStart="@dimen/indent_13dp"
+        android:layout_marginTop="@dimen/indent_8dp"
+        android:layout_marginEnd="@dimen/indent_8dp"
+        android:layout_marginBottom="@dimen/indent_8dp"
+        android:src="@drawable/image" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/indent_66dp"
+        android:layout_marginTop="@dimen/indent_14dp"
+        android:layout_marginEnd="@dimen/indent_44dp"
+        android:layout_marginBottom="@dimen/indent_14dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/track_name"
+            style="@style/TextStyleSearchMusic"
+            android:ellipsize="end"
+            android:textSize="@dimen/text_size_16sp"
+            tools:text="Yesterday (Remastered 2009)" />
+
+
+        <TextView
+            android:id="@+id/artist_time"
+            style="@style/TextStyleSearchMusic"
+            android:textColor="@color/colorTextNameTime"
+            android:textSize="@dimen/text_size_11sp"
+            tools:text="@string/name_artist_time" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/arrow_forward"
+        style="@style/ImageViewStyleSetting"
+        android:layout_marginEnd="@dimen/indent_12dp"
+        android:src="@drawable/light_mode_arrow"
+        app:tint="@color/colorTextNameTime" />
+
+</FrameLayout>

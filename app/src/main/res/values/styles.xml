@@ -19,7 +19,7 @@
     <style name="TextStyleTullBar">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/textSize_22sp</item>
+        <item name="android:textSize">@dimen/text_size_22sp</item>
         <item name="android:textColor">@color/blackNight</item>
         <item name="android:drawableTint">@color/blackNight</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
@@ -35,7 +35,7 @@
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:insetTop">@dimen/indent_14dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/textSize_22sp</item>
+        <item name="android:textSize">@dimen/text_size_22sp</item>
         <item name="cornerRadius">@dimen/radius_16dp</item>
         <item name="iconGravity">textStart</item>
         <item name="android:textFontWeight">500</item>
@@ -51,7 +51,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">start|center</item>
         <item name="android:textColor">@color/blackNight</item>
-        <item name="android:textSize">@dimen/textSize_16sp</item>
+        <item name="android:textSize">@dimen/text_size_16sp</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:layout_marginTop">@dimen/indent_21dp</item>
@@ -68,6 +68,16 @@
         <item name="android:layout_width">@dimen/indent_24dp</item>
         <item name="android:layout_height">@dimen/indent_24dp</item>
         <item name="android:layout_margin">@dimen/indent_12dp</item>
+    </style>
+
+    <style name="TextStyleSearchMusic">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/colorTextTrack</item>
+        <item name="android:textSize">@dimen/text_size_16sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
     </style>
 
 </resources>

@@ -46,7 +46,7 @@
             android:paddingTop="@dimen/indent_8_5dp"
             android:paddingBottom="@dimen/indent_8_5dp"
             android:text="@string/editText"
-            android:textSize="@dimen/textSize_16sp"
+            android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/black"
             android:textColorHint="@color/gray_Night"
             android:textColorLink="@color/color_cursor"
@@ -66,5 +66,13 @@
             android:visibility="gone"
             app:srcCompat="@drawable/clear_16" />
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/music_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/indent_16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/activity_music_adapter" />
 
 </LinearLayout>

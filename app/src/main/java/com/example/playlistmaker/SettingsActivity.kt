@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
@@ -37,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             val tittle = getString(R.string.string_email_tittle)
             val shareIntent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_adress_user)))
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_address_user)))
                 putExtra(Intent.EXTRA_TEXT, message)
                 putExtra(Intent.EXTRA_SUBJECT, tittle)
             }
