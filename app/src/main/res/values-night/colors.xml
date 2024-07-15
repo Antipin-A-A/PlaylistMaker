@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#1A1B22</color>
     <color name="blackNight">#FFFFFFFF</color>
-    <color name="gray_Night">#1A1B22</color>
+    <color name="color_hint_gray_black">#1A1B22</color>
     <color name="fonEdit">#FFFFFFFF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#121212</color>
@@ -15,4 +15,5 @@
     <color name="colorTrackTint">#9FBBF3</color>
     <color name="colorTextTrack">#FFFFFF</color>
     <color name="colorTextNameTime">#FFFFFF</color>
+    <color name="colorHintSearch">#1A1B22</color>
 </resources>

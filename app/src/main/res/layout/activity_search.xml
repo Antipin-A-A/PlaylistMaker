@@ -25,7 +25,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundTint="@color/gray_Night"
         android:orientation="horizontal"
         android:paddingStart="@dimen/indent_16dp"
         android:paddingTop="@dimen/indent_8dp"
@@ -48,7 +47,7 @@
             android:text="@string/editText"
             android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/black"
-            android:textColorHint="@color/gray_Night"
+            android:textColorHint="@color/color_hint_gray_black"
             android:textColorLink="@color/color_cursor"
             android:textFontWeight="400"
             tools:ignore="RtlSymmetry" />
