@@ -13,6 +13,7 @@
     <string name="string_email_tittle">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="url_share">https://practicum.yandex.ru/android-developer/?from=catalog/</string>
     <string name="text_hint_search">Поиск</string>
-    <string name="mail_adress_user">digitex150@yandex.ru</string>
-    <string name="editText"></string>
+    <string name="mail_address_user">digitex150@yandex.ru</string>
+    <string name="editText" />
+    <string name="name_artist_time">%1$s • %2$s</string>
 </resources>
