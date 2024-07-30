@@ -149,6 +149,7 @@ class SearchActivity : AppCompatActivity() {
             results.clear()
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
+            buttonUpdate.visibility = View.GONE
             if (additionalMessage.isNotEmpty()) {
                 buttonUpdate.visibility = View.VISIBLE
             }
