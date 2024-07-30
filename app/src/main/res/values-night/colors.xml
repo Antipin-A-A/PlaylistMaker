@@ -15,5 +15,5 @@
     <color name="colorTrackTint">#9FBBF3</color>
     <color name="colorTextTrack">#FFFFFF</color>
     <color name="colorTextNameTime">#FFFFFF</color>
-    <color name="colorHintSearch">#1A1B22</color>
+    <color name="white_Black">#121212</color>
 </resources>

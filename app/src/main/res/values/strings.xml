@@ -16,4 +16,7 @@
     <string name="mail_address_user">digitex150@yandex.ru</string>
     <string name="editText" />
     <string name="name_artist_time">%1$s • %2$s</string>
+    <string name="errorWifi">Проблемы со связью \n \n Загрузка не удалась. Проверьте подключение кинтернету</string>
+    <string name="error_is_empty">Ничего не нашлось</string>
+    <string name="Update">Обновить</string>
 </resources>

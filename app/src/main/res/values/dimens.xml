@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="indent_16dp">16dp</dimen>
+    <dimen name="size_16dp">16dp</dimen>
     <dimen name="text_size_22sp">22sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
-    <dimen name="indent_4dp">4dp</dimen>
-    <dimen name="indent_8dp">8dp</dimen>
+    <dimen name="size_4dp">4dp</dimen>
+    <dimen name="size_8dp">8dp</dimen>
     <dimen name="indent_12dp">12dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>
     <dimen name="icon_size_24dp">24dp</dimen>
@@ -19,4 +19,6 @@
     <dimen name="indent_44dp">44dp</dimen>
     <dimen name="indent_45dp">45dp</dimen>
     <dimen name="text_size_11sp">11sp</dimen>
+    <dimen name="text_size_19sp">19sp</dimen>
+    <dimen name="indent_102dp">102dp</dimen>
 </resources>
