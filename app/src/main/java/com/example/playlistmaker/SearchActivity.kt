@@ -25,15 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
     private var statusString : String = INPUTTEXT
 
-    private val iTunesBaseURL = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseURL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(ITunesApi::class.java)
-
     private val results = ArrayList<Track>()
     private val adapter = MusicAdapter()
     private lateinit var buttonUpdate: Button
