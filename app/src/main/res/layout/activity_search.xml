@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/indent_4dp">
+        android:padding="@dimen/size_4dp">
 
         <ImageView
             android:id="@+id/button_back_Search"
@@ -26,10 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/indent_16dp"
-        android:paddingTop="@dimen/indent_8dp"
-        android:paddingEnd="@dimen/indent_16dp"
-        android:paddingBottom="@dimen/indent_8dp">
+        android:paddingStart="@dimen/size_16dp"
+        android:paddingTop="@dimen/size_8dp"
+        android:paddingEnd="@dimen/size_16dp"
+        android:paddingBottom="@dimen/size_8dp">
 
         <EditText
             android:id="@+id/inputEditText"
@@ -37,25 +37,27 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext"
             android:drawableStart="@drawable/search_16"
-            android:drawablePadding="@dimen/indent_8dp"
+            android:drawablePadding="@dimen/size_8dp"
             android:fontFamily="@font/ys_display_regular"
             android:hint="@string/search_text"
+            android:imeOptions="actionDone"
             android:maxLines="1"
             android:paddingStart="@dimen/indent_12dp"
             android:paddingTop="@dimen/indent_8_5dp"
             android:paddingBottom="@dimen/indent_8_5dp"
+            android:singleLine="true"
             android:text="@string/editText"
-            android:textSize="@dimen/text_size_16sp"
             android:textColor="@color/black"
             android:textColorHint="@color/color_hint_gray_black"
-            android:textColorLink="@color/color_cursor"
+            android:textCursorDrawable="@drawable/cursor_color"
             android:textFontWeight="400"
+            android:textSize="@dimen/text_size_16sp"
             tools:ignore="RtlSymmetry" />
 
         <ImageView
             android:id="@+id/button_search_clean"
-            android:layout_width="@dimen/indent_16dp"
-            android:layout_height="@dimen/indent_16dp"
+            android:layout_width="@dimen/size_16dp"
+            android:layout_height="@dimen/size_16dp"
             android:layout_gravity="center|end"
             android:layout_marginStart="@dimen/indent_12dp"
             android:layout_marginTop="@dimen/indent_10dp"
@@ -66,12 +68,54 @@
             app:srcCompat="@drawable/clear_16" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/music_list"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/indent_16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/activity_music_adapter" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/music_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/activity_music_adapter">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/placeholderMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/indent_24dp"
+            android:layout_marginTop="@dimen/indent_102dp"
+            android:layout_marginEnd="@dimen/indent_24dp"
+            android:background="#00FFFFFF"
+            android:drawablePadding="@dimen/size_16dp"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/blackNight"
+            android:textFontWeight="400"
+            android:textSize="@dimen/text_size_19sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_upDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_24dp"
+            android:backgroundTint="@color/blackNight"
+            android:text="@string/Update"
+            android:textColor="@color/white_Black"
+            app:cornerRadius="54dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeholderMessage"
+            android:visibility="gone"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

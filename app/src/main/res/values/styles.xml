@@ -11,7 +11,7 @@
     <style name="FrameStyleSetting">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/indent_16dp</item>
+        <item name="android:layout_marginStart">@dimen/size_16dp</item>
         <item name="android:layout_marginEnd">@dimen/indent_12dp</item>
     </style>
 
