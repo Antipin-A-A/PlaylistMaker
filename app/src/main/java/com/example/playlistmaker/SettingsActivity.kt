@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 
@@ -27,10 +28,10 @@ class SettingsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        switchButton.setOnCheckedChangeListener() { buttonView, isChecked ->
+        switchButton.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
             sharedPreferences.edit()
-                .putBoolean(SWITCH_STATUS,isChecked)
+                .putBoolean(SWITCH_STATUS, isChecked)
                 .apply()
         }
         supportButton.setOnClickListener {
@@ -63,5 +64,4 @@ class SettingsActivity : AppCompatActivity() {
     companion object {
         const val SWITCH_STATUS = "SWITCH_STATUS"
     }
-
 }
