@@ -6,22 +6,17 @@
     style="@style/LayoutStyle"
     tools:context=".SettingsActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/size_4dp">
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStartWithNavigation="0dp"
+        app:navigationIcon="@drawable/dark_mode_arrow_back"
+        app:title="@string/system_text"
+        app:titleMargin="8dp"
+        app:titleTextAppearance="@style/ToolbarStyle">
 
-
-        <ImageView
-            android:id="@+id/button_back"
-            style="@style/Arrow_back"
-            app:srcCompat="@drawable/dark_mode_arrow_back" />
-
-        <TextView
-            style="@style/TextStyleTullBar"
-            android:text="@string/system_text" />
-
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         style="@style/FrameStyleSetting"

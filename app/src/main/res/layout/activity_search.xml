@@ -6,21 +6,17 @@
     style="@style/LayoutStyle"
     tools:context=".SearchActivity">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/size_4dp">
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStartWithNavigation="0dp"
+        app:navigationIcon="@drawable/dark_mode_arrow_back"
+        app:title="@string/search_text"
+        app:titleMargin="8dp"
+        app:titleTextAppearance="@style/ToolbarStyle">
 
-        <ImageView
-            android:id="@+id/button_back_Search"
-            style="@style/Arrow_back"
-            app:srcCompat="@drawable/dark_mode_arrow_back" />
-
-        <TextView
-            style="@style/TextStyleTullBar"
-            android:text="@string/search_text" />
-
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -75,12 +71,26 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/activity_music_adapter">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/music_list2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textLookingForYou"
             tools:listitem="@layout/activity_music_adapter">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -104,18 +114,48 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button_upDate"
+            android:id="@+id/buttonUpDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/indent_24dp"
             android:backgroundTint="@color/blackNight"
             android:text="@string/Update"
             android:textColor="@color/white_Black"
+            android:visibility="gone"
             app:cornerRadius="54dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeholderMessage"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toBottomOf="@+id/placeholderMessage" />
+
+        <Button
+            android:id="@+id/buttonClearHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/blackNight"
+            android:text="@string/clear_hictory_text_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white_Black"
+            android:textSize="@dimen/text_size_14sp"
+            android:visibility="gone"
+            app:cornerRadius="54dp"
+            app:layout_constraintBottom_toBottomOf="@+id/music_list2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textLookingForYou"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:padding="@dimen/size_16dp"
+            android:text="@string/find_you"
+            android:textColor="@color/blackNight"
+            android:textSize="@dimen/text_size_19sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

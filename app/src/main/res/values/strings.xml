@@ -19,4 +19,6 @@
     <string name="errorWifi">Проблемы со связью \n \n Загрузка не удалась. Проверьте подключение кинтернету</string>
     <string name="error_is_empty">Ничего не нашлось</string>
     <string name="Update">Обновить</string>
+    <string name="clear_hictory_text_button">Очистить историю</string>
+    <string name="find_you">Вы искали</string>
 </resources>

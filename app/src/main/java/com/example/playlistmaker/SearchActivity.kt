@@ -1,45 +1,83 @@
 package com.example.playlistmaker
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-    private var statusString : String = INPUTTEXT
-
+    private var statusString : String = INPUT_TEXT
+    private var items = ArrayList<Track>()
     private val results = ArrayList<Track>()
-    private val adapter = MusicAdapter()
-    private lateinit var buttonUpdate: Button
+    lateinit var adapter : MusicAdapter
+    lateinit var adapter2 : MusicAdapter
+    private lateinit var buttonUpdate : Button
+    private lateinit var trackList2 : RecyclerView
+    private lateinit var  textFind : TextView
+    private lateinit var clearButtonHistory : Button
 
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val buttonBack = findViewById<ImageView>(R.id.button_back_Search)
+        val buttonBackToollbar = findViewById<Toolbar>(R.id.toolbar)
         val editText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.button_search_clean)
         val trackList = findViewById<RecyclerView>(R.id.music_list)
-        buttonUpdate = findViewById(R.id.button_upDate)
+        buttonUpdate = findViewById(R.id.buttonUpDate)
+        trackList2 = findViewById(R.id.music_list2)
+        textFind = findViewById(R.id.textLookingForYou)
+        clearButtonHistory = findViewById(R.id.buttonClearHistory)
 
+        val sharedPreferences = getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
+        val facts = sharedPreferences.getString(FACTS_LIST_KEY, null)
 
+        if (facts != null) {
+            items = createFactsListFromJson(facts)
+        }
+
+        val onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(item : Track) {
+                if (!items.contains(item)) {
+                    if (items.size < 10) {
+                        items.add(item)
+                    } else {
+                        items.removeLast()
+                        items.add(item)
+                    }
+                } else {
+                    items.remove(item)
+                    items.add(0, item)
+
+                }
+                sharedPreferences.edit()
+                    .putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
+                    .apply()
+            }
+        }
+
+        adapter2 = MusicAdapter(onItemClickListener)
+        adapter2.tracks = items
+        trackList2.adapter = adapter2
+
+        adapter = MusicAdapter(onItemClickListener)
         adapter.tracks = results
         trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         trackList.adapter = adapter
@@ -50,10 +88,18 @@ class SearchActivity : AppCompatActivity() {
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
             results.clear()
+            adapter.notifyDataSetChanged()
+            adapter2.notifyDataSetChanged()
         }
 
-        buttonBack.setOnClickListener {
+        buttonBackToollbar.setNavigationOnClickListener(){
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && editText.text.isEmpty() && items.isNotEmpty()) {
+                viewGroupTrackList2(VISIBLE)
+            }
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -62,10 +108,16 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
-                if (!p0.isNullOrEmpty()) {
-                    clearButton.visibility = View.VISIBLE
+                if (editText.hasFocus() && p0?.isEmpty() == true && items.isNotEmpty()) {
+                    viewGroupTrackList2(VISIBLE)
                 } else {
-                    clearButton.visibility = View.GONE
+                    viewGroupTrackList2(GONE)
+                }
+
+                if (!p0.isNullOrEmpty()) {
+                    clearButton.visibility = VISIBLE
+                } else {
+                    clearButton.visibility = GONE
                 }
             }
 
@@ -88,9 +140,17 @@ class SearchActivity : AppCompatActivity() {
             iTunesServiceSearch(editText.text.toString())
         }
 
+        clearButtonHistory.setOnClickListener {
+            sharedPreferences.edit()
+                .remove(FACTS_LIST_KEY)
+                .apply()
+            items.clear()
+            adapter2.notifyDataSetChanged()
+            viewGroupTrackList2(GONE)
+        }
     }
 
-    private fun iTunesServiceSearch(string : String){
+    private fun iTunesServiceSearch(string : String) {
         iTunesService.search(string)
             .enqueue(object : Callback<TrackResponse> {
                 override fun onResponse(
@@ -133,20 +193,20 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showMessage(text : String, additionalMessage : String, drawable : Int) {
         val placeholderMessage = findViewById<TextView>(R.id.placeholderMessage)
-        placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0,drawable,0,0)
+        placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0)
 
         if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
+            placeholderMessage.visibility = VISIBLE
             results.clear()
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
-            buttonUpdate.visibility = View.GONE
+            buttonUpdate.visibility = GONE
             if (additionalMessage.isNotEmpty()) {
-                buttonUpdate.visibility = View.VISIBLE
+                buttonUpdate.visibility = VISIBLE
             }
         } else {
-            placeholderMessage.visibility = View.GONE
-            buttonUpdate.visibility = View.GONE
+            placeholderMessage.visibility = GONE
+            buttonUpdate.visibility = GONE
         }
     }
 
@@ -161,9 +221,26 @@ class SearchActivity : AppCompatActivity() {
         findViewById<EditText>(R.id.inputEditText).setText(statusString)
     }
 
+    private fun createFactsListFromJson(json : String?) : ArrayList<Track> {
+        val itemType = object : TypeToken<ArrayList<Track?>?>() {}.type
+        val itemList = Gson().fromJson<ArrayList<Track>>(json, itemType)
+        return itemList
+    }
+
+    private fun createJsonFromFactsList(facts : ArrayList<Track>) : String {
+        return Gson().toJson(facts)
+    }
+
+  private  fun viewGroupTrackList2(visible : Int) {
+        trackList2.visibility = visible
+        textFind.visibility = visible
+        clearButtonHistory.visibility = visible
+    }
 
     companion object {
         const val KEY_STRING = "KEY_STRING"
-        const val INPUTTEXT = ""
+        const val INPUT_TEXT = ""
+        const val FACTS_LIST_KEY = "FACTS_LIST_KEY"
+
     }
 }
