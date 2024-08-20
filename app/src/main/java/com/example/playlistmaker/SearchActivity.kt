@@ -24,13 +24,13 @@ import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
     private var statusString : String = INPUT_TEXT
-    private var items = ArrayList<Track>()
-    private val results = ArrayList<Track>()
+    private var items = mutableListOf<Track>()
+    private val results = mutableListOf<Track>()
     lateinit var adapter : MusicAdapter
     lateinit var adapter2 : MusicAdapter
     private lateinit var buttonUpdate : Button
     private lateinit var trackList2 : RecyclerView
-    private lateinit var  textFind : TextView
+    private lateinit var textFind : TextView
     private lateinit var clearButtonHistory : Button
 
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -52,25 +52,11 @@ class SearchActivity : AppCompatActivity() {
         if (facts != null) {
             items = createFactsListFromJson(facts)
         }
-
-        val onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(item : Track) {
-                if (!items.contains(item)) {
-                    if (items.size < 10) {
-                        items.add(item)
-                    } else {
-                        items.removeLast()
-                        items.add(item)
-                    }
-                } else {
-                    items.remove(item)
-                    items.add(0, item)
-
-                }
-                sharedPreferences.edit()
-                    .putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
-                    .apply()
-            }
+        val onItemClickListener = OnItemClickListener {
+            val itemsTrack = ItemsTrack()
+            itemsTrack.itemsListTrack(items, it)
+            sharedPreferences.edit().putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
+                .apply()
         }
 
         adapter2 = MusicAdapter(onItemClickListener)
@@ -92,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
             adapter2.notifyDataSetChanged()
         }
 
-        buttonBackToollbar.setNavigationOnClickListener(){
+        buttonBackToollbar.setNavigationOnClickListener() {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -227,11 +213,11 @@ class SearchActivity : AppCompatActivity() {
         return itemList
     }
 
-    private fun createJsonFromFactsList(facts : ArrayList<Track>) : String {
+    private fun createJsonFromFactsList(facts : MutableList<Track>) : String {
         return Gson().toJson(facts)
     }
 
-  private  fun viewGroupTrackList2(visible : Int) {
+    private fun viewGroupTrackList2(visible : Int) {
         trackList2.visibility = visible
         textFind.visibility = visible
         clearButtonHistory.visibility = visible

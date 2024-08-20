@@ -11,5 +11,5 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
- val iTunesService : ITunesApi = retrofit.create(ITunesApi::class.java)
+val iTunesService : ITunesApi = retrofit.create(ITunesApi::class.java)
 

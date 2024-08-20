@@ -3,7 +3,7 @@ package com.example.playlistmaker
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 
-const val THEME_DAY_NIGHT = "THEME_DAY_NIGHT"
+private const val THEME_DAY_NIGHT = "THEME_DAY_NIGHT"
 
 class App : Application() {
 

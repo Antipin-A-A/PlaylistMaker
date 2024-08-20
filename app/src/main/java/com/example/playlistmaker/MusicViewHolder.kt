@@ -8,13 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
-class MusicViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.activity_music_adapter, parent, false)) {
+class MusicViewHolder(parent : ViewGroup) : RecyclerView.ViewHolder(
+    LayoutInflater.from(parent.context).inflate(R.layout.activity_music_adapter, parent, false)
+) {
 
     private val trackName : TextView = itemView.findViewById(R.id.track_name)
     private val artistTime : TextView = itemView.findViewById(R.id.artist_time)

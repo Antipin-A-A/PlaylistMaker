@@ -3,9 +3,10 @@ package com.example.playlistmaker
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MusicAdapter(private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<MusicViewHolder>() {
+class MusicAdapter(private val onItemClickListener : OnItemClickListener) :
+    RecyclerView.Adapter<MusicViewHolder>() {
 
-    var tracks = ArrayList<Track>()
+    var tracks = mutableListOf<Track>()
 
 
     override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : MusicViewHolder {

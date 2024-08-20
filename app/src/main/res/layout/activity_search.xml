@@ -84,10 +84,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_list2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textLookingForYou"
@@ -132,13 +131,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/blackNight"
+            android:layout_marginTop="@dimen/indent_24dp"
             android:text="@string/clear_hictory_text_button"
             android:textAllCaps="false"
             android:textColor="@color/white_Black"
             android:textSize="@dimen/text_size_14sp"
             android:visibility="gone"
             app:cornerRadius="54dp"
-            app:layout_constraintBottom_toBottomOf="@+id/music_list2"
+            app:layout_constraintTop_toBottomOf="@+id/music_list2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
