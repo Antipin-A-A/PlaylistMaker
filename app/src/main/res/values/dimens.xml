@@ -21,4 +21,5 @@
     <dimen name="text_size_11sp">11sp</dimen>
     <dimen name="text_size_19sp">19sp</dimen>
     <dimen name="indent_102dp">102dp</dimen>
+    <dimen name="text_size_14sp">14sp</dimen>
 </resources>

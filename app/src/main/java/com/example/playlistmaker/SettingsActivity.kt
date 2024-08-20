@@ -6,30 +6,32 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.appcompat.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val buttonBack = findViewById<ImageView>(R.id.button_back)
+        val buttonBack = findViewById<Toolbar>(R.id.toolbar)
         val shareButton = findViewById<ImageView>(R.id.button_share)
         val arrowButton = findViewById<ImageView>(R.id.button_arrow)
         val supportButton = findViewById<ImageView>(R.id.button_support)
         val switchButton = findViewById<SwitchCompat>(R.id.switch_button)
 
-        buttonBack.setOnClickListener {
+        val sharedPreferences = getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
+        switchButton.isChecked = sharedPreferences.getBoolean(SWITCH_STATUS, false)
+
+        buttonBack.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        switchButton.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        switchButton.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+            sharedPreferences.edit()
+                .putBoolean(SWITCH_STATUS, isChecked)
+                .apply()
         }
         supportButton.setOnClickListener {
             val message = getString(R.string.string_email_text)
@@ -58,4 +60,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        const val SWITCH_STATUS = "SWITCH_STATUS"
+    }
 }
