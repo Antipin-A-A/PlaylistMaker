@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -54,9 +55,23 @@ class SearchActivity : AppCompatActivity() {
         }
         val onItemClickListener = OnItemClickListener {
             val itemsTrack = ItemsTrack()
+            val track = Track(
+                it.trackName,
+                it.artistName,
+                it.trackTimeMillis,
+                it.artworkUrl100,
+                it.trackId,
+                it.collectionName,
+                it.releaseDate,
+                it.primaryGenreName,
+                it.country
+            )
             itemsTrack.itemsListTrack(items, it)
-            sharedPreferences.edit().putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
+            sharedPreferences.edit()
+                .putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
+                .putString(NEW_FACT_KEY, createJsonFromFact(track))
                 .apply()
+            startActivity(Intent(this,MusicActivity::class.java))
         }
 
         adapter2 = MusicAdapter(onItemClickListener)
@@ -216,6 +231,9 @@ class SearchActivity : AppCompatActivity() {
     private fun createJsonFromFactsList(facts : MutableList<Track>) : String {
         return Gson().toJson(facts)
     }
+    private fun createJsonFromFact(fact : Track) : String {
+        return Gson().toJson(fact)
+    }
 
     private fun viewGroupTrackList2(visible : Int) {
         trackList2.visibility = visible
@@ -227,6 +245,5 @@ class SearchActivity : AppCompatActivity() {
         const val KEY_STRING = "KEY_STRING"
         const val INPUT_TEXT = ""
         const val FACTS_LIST_KEY = "FACTS_LIST_KEY"
-
     }
 }

@@ -19,30 +19,21 @@ class MusicViewHolder(parent : ViewGroup) : RecyclerView.ViewHolder(
     private val imageGroup : ImageView = itemView.findViewById(R.id.image_view_music_group)
 
     fun bind(item : Track) {
-        val track = item.trackName
         val artistName = if (item.artistName.length > 20) {
             item.artistName.take(17) + "..."
         } else {
             item.artistName
         }
         val time = item.trackTimeMillis
-        val cloudsIcon = item.artworkUrl100
         val convectorTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(time.toLong())
 
-        trackName.text = track
+        trackName.text = item.trackName
         artistTime.text = itemView.context.getString(R.string.name_artist_time, artistName, convectorTime)
         Glide.with(itemView)
-            .load(cloudsIcon)
+            .load(item.artworkUrl100)
             .placeholder(R.drawable.image)
             .fitCenter()
             .transform(RoundedCorners(10))
-//            .context.resources.getDimension
-//            .PixelSize()
             .into(imageGroup)
     }
 }
-
-//fun Int.dpToPx(): Int {
-//    val displayMetrics = Resources.getSystem().displayMetrics
-//    return (this * (displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT.toFloat())).roundToInt()
-//}
