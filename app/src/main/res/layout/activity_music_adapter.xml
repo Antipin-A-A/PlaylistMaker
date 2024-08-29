@@ -8,7 +8,7 @@
     tools:context=".MusicAdapter">
 
     <ImageView
-        android:id="@+id/image_view_music_group"
+        android:id="@+id/imageMusicGroup"
         android:layout_width="@dimen/indent_45dp"
         android:layout_height="@dimen/indent_45dp"
         android:layout_marginStart="@dimen/indent_13dp"
@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/track_name"
+            android:id="@+id/trackName"
             style="@style/TextStyleSearchMusic"
             android:ellipsize="end"
             android:textSize="@dimen/text_size_16sp"
@@ -35,7 +35,7 @@
 
 
         <TextView
-            android:id="@+id/artist_time"
+            android:id="@+id/artistNameAndTime"
             style="@style/TextStyleSearchMusic"
             android:textColor="@color/colorTextNameTime"
             android:textSize="@dimen/text_size_11sp"
@@ -45,7 +45,7 @@
 
 
     <ImageView
-        android:id="@+id/arrow_forward"
+        android:id="@+id/arrowForward"
         style="@style/ImageViewStyleSetting"
         android:layout_marginEnd="@dimen/indent_12dp"
         android:src="@drawable/light_mode_arrow"

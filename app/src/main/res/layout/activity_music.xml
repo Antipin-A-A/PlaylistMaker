@@ -7,4 +7,228 @@
     android:layout_height="match_parent"
     tools:context=".MusicActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/dark_mode_arrow_back"
+        app:titleMargin="8dp"
+        app:titleTextAppearance="@style/ToolbarStyle">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8dp"
+        android:layout_marginEnd="@dimen/size_8dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/indent_24dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineStart16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8dp"
+        android:layout_marginEnd="@dimen/size_8dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/size_16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/indent_24dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/indent_26dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/collectionNameFirst"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/placeholder" />
+
+    <TextView
+        android:id="@+id/collectionNameFirst"
+        style="@style/TextStylePlayer"
+        android:layout_marginTop="@dimen/indent_24dp"
+        android:text="@string/collection_name"
+        android:textSize="@dimen/text_size_22sp"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/artistName"
+        style="@style/TextStylePlayer"
+        android:layout_marginTop="@dimen/indent_12dp"
+        android:text="@string/artist_name"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/collectionNameFirst" />
+
+    <ImageView
+        android:id="@+id/imagePlay"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/currentTrackTime"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toBottomOf="@+id/artistName"
+        app:srcCompat="@drawable/play_icon" />
+
+    <ImageButton
+        android:id="@+id/buttonAdd"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:background="@drawable/round_button"
+        android:src="@drawable/albom_with"
+        app:layout_constraintBottom_toBottomOf="@+id/imagePlay"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintTop_toTopOf="@+id/imagePlay" />
+
+    <ImageButton
+        android:id="@+id/buttonLike"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_button"
+        android:src="@drawable/head_with"
+        app:layout_constraintBottom_toBottomOf="@+id/imagePlay"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="@+id/imagePlay" />
+
+    <TextView
+        android:id="@+id/currentTrackTime"
+        style="@style/TextStylePlayer"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="@string/current_track_time"
+        android:textFontWeight="500"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTime"
+        app:layout_constraintEnd_toEndOf="@+id/imagePlay"
+        app:layout_constraintStart_toStartOf="@+id/imagePlay"
+        app:layout_constraintTop_toBottomOf="@+id/imagePlay" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="textViewTime, textViewCountry" />
+
+
+    <TextView
+        android:id="@+id/textViewTime"
+        style="@style/TextStyleCategory"
+        android:text="@string/dlitelnost"
+        android:layout_marginTop="@dimen/indent_30dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewAlbum"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
+        app:layout_constraintTop_toBottomOf="@+id/currentTrackTime"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <TextView
+        android:id="@+id/textViewAlbum"
+        style="@style/TextStyleCategory"
+        android:text="@string/albom"
+        app:layout_constraintBottom_toTopOf="@+id/textViewYear"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTime" />
+
+    <TextView
+        android:id="@+id/textViewYear"
+        style="@style/TextStyleCategory"
+        android:text="@string/god"
+        app:layout_constraintBottom_toTopOf="@+id/textViewGenre"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAlbum" />
+
+    <TextView
+        android:id="@+id/textViewGenre"
+        style="@style/TextStyleCategory"
+        android:text="@string/ganr"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCountry"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
+        app:layout_constraintTop_toBottomOf="@+id/textViewYear" />
+
+    <TextView
+        android:id="@+id/textViewCountry"
+        style="@style/TextStyleCategory"
+        android:layout_marginBottom="@dimen/indent_20dp"
+        android:text="@string/Strana"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
+        app:layout_constraintTop_toBottomOf="@+id/textViewGenre" />
+
+    <TextView
+        android:id="@+id/country"
+        style="@style/TextStyleCategory"
+        android:textColor="@color/blackNight"
+        android:gravity="end"
+        android:text="@string/country"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewCountry"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/barrier3" />
+
+    <TextView
+        android:id="@+id/primaryGenreName"
+        style="@style/TextStyleCategory"
+        android:textColor="@color/blackNight"
+        android:gravity="end"
+        android:text="@string/primary_genre_name"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewGenre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/barrier3" />
+
+    <TextView
+        android:id="@+id/releaseDate"
+        style="@style/TextStyleCategory"
+        android:textColor="@color/blackNight"
+        android:gravity="end"
+        android:text="@string/release_date"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewYear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/barrier3" />
+
+    <TextView
+        android:id="@+id/collectionName"
+        style="@style/TextStyleCategory"
+        android:textColor="@color/blackNight"
+        android:gravity="end"
+        android:text="@string/collection_name"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewAlbum"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/barrier3" />
+
+    <TextView
+        android:id="@+id/trackTime"
+        style="@style/TextStyleCategory"
+        android:textColor="@color/blackNight"
+        android:gravity="end"
+        android:text="@string/track_time"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@+id/barrier3" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

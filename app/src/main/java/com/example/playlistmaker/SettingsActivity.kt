@@ -8,22 +8,24 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState : Bundle?) {
+    lateinit var binding: ActivitySettingsBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val buttonBack = findViewById<Toolbar>(R.id.toolbar)
-        val shareButton = findViewById<ImageView>(R.id.button_share)
-        val arrowButton = findViewById<ImageView>(R.id.button_arrow)
-        val supportButton = findViewById<ImageView>(R.id.button_support)
-        val switchButton = findViewById<SwitchCompat>(R.id.switch_button)
+        initSetting()
 
+    }
+
+    private fun initSetting() = with(binding) {
         val sharedPreferences = getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
         switchButton.isChecked = sharedPreferences.getBoolean(SWITCH_STATUS, false)
 
-        buttonBack.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -33,7 +35,7 @@ class SettingsActivity : AppCompatActivity() {
                 .putBoolean(SWITCH_STATUS, isChecked)
                 .apply()
         }
-        supportButton.setOnClickListener {
+        buttonSupport.setOnClickListener {
             val message = getString(R.string.string_email_text)
             val tittle = getString(R.string.string_email_tittle)
             val shareIntent = Intent(Intent.ACTION_SENDTO).apply {
@@ -44,13 +46,13 @@ class SettingsActivity : AppCompatActivity() {
             }
             startActivity(shareIntent)
         }
-        arrowButton.setOnClickListener {
+        buttonArrow.setOnClickListener {
             val url = Uri.parse(getString(R.string.url_arrow))
             val intent = Intent(Intent.ACTION_VIEW, url)
             startActivity(intent)
         }
 
-        shareButton.setOnClickListener {
+        buttonShare.setOnClickListener {
             val message = getString(R.string.url_share)
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"

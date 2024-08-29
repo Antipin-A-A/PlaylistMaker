@@ -21,4 +21,16 @@
     <string name="Update">Обновить</string>
     <string name="clear_hictory_text_button">Очистить историю</string>
     <string name="find_you">Вы искали</string>
+    <string name="collection_name"> </string>
+    <string name="release_date">1965</string>
+    <string name="primary_genre_name">Rock</string>
+    <string name="country">Великобритания</string>
+    <string name="artist_name">The Beatles</string>
+    <string name="track_time">5:35</string>
+    <string name="Strana">Страна</string>
+    <string name="ganr">Жанр</string>
+    <string name="god">Год</string>
+    <string name="albom">Альбом</string>
+    <string name="dlitelnost">Длительность</string>
+    <string name="current_track_time">0:30</string>
 </resources>
