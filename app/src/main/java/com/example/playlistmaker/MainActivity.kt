@@ -4,26 +4,31 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState : Bundle?) {
+    lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
-        val buttonMusic = findViewById<Button>(R.id.button_music)
-        val buttonSettings = findViewById<Button>(R.id.button_setting)
+        init()
 
+    }
+
+    private fun init() = with(binding) {
+        val intent = this@MainActivity
         buttonSearch.setOnClickListener {
-            val intentSearch = Intent(this, SearchActivity::class.java)
+            val intentSearch = Intent(intent, SearchActivity::class.java)
             startActivity(intentSearch)
         }
         buttonMusic.setOnClickListener {
-            val intentMusic = Intent(this, MusicActivity::class.java)
+            val intentMusic = Intent(intent, MusicActivity::class.java)
             startActivity(intentMusic)
         }
-        buttonSettings.setOnClickListener {
-            val intentSetting = Intent(this, SettingsActivity::class.java)
+        buttonSetting.setOnClickListener {
+            val intentSetting = Intent(intent, SettingsActivity::class.java)
             startActivity(intentSetting)
         }
     }

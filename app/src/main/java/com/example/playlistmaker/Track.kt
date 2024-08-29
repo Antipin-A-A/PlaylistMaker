@@ -1,5 +1,8 @@
 package com.example.playlistmaker
 
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 data class Track(
     val trackName : String,
     val artistName : String,
@@ -12,4 +15,6 @@ data class Track(
     val country: String
 ){
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    fun convectorTime(): String? = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis.toLong())
+
 }
