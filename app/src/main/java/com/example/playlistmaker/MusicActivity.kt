@@ -1,6 +1,9 @@
 package com.example.playlistmaker
 
+
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -11,12 +14,20 @@ import com.google.gson.Gson
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 class MusicActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMusicBinding
+
+    private lateinit var binding: ActivityMusicBinding
+
+    private var player: Player? = null
+    private var mainThreadHandler: Handler? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        mainThreadHandler = Handler(Looper.getMainLooper())
 
         init()
     }
@@ -43,6 +54,8 @@ class MusicActivity : AppCompatActivity() {
                 primaryGenreName.text = track.primaryGenreName
                 textViewCountry.text = track.country
 
+                val url = track.previewUrl
+
                 Glide.with(this@MusicActivity)
                     .load(track.getCoverArtwork())
                     .placeholder(R.drawable.image)
@@ -54,8 +67,30 @@ class MusicActivity : AppCompatActivity() {
                     snake(it, "Плейлист «BeSt SoNg EvEr!» создан")
 
                 }
+
+                player = Player(url, buttonPlay, currentTrackTime, mainThreadHandler)
+                player?.preparePlayer()
+                buttonPlay.setOnClickListener {
+                    player?.playbackControl()
+                    if (player!!.isRunTime) {
+                        player?.startPlayer()
+                    } else {
+                        player?.pausePlayer()
+                    }
+                }
             }
+
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        player?.pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player?.mediaPlayer?.release()
     }
 
     private fun snake(view: View, string: String) {
@@ -67,4 +102,5 @@ class MusicActivity : AppCompatActivity() {
     private fun createFactFromJson(json: String): Track {
         return Gson().fromJson(json, Track::class.java)
     }
+
 }
