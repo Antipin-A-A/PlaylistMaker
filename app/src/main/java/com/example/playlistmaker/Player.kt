@@ -64,7 +64,7 @@ class Player(
     /*Какой счетчи правильно использовать работают оба */
     /*Счетчик-1*/
     private fun createUpdateTimerTask() {
-        var startTime = System.currentTimeMillis()
+        val startTime = System.currentTimeMillis()
         var seconds = 0L
         handler?.post(
             object : Runnable {
@@ -73,9 +73,9 @@ class Player(
                     val remainingTime = (secondsCount * DELAY) - elapsedTime
                     if (isRunTime && remainingTime > 0) {
                         seconds = remainingTime / DELAY
-                        trackTimeView?.text =
+                        trackTimeView.text =
                             String.format("%d:%02d", seconds / 60, seconds % 60)
-                        handler?.postDelayed(this, DELAY)
+                        handler.postDelayed(this, DELAY)
                     } else {
                         secondsCount = seconds
                     }
@@ -92,9 +92,9 @@ class Player(
                     if (isRunTime && second > 0) {
                         second = secondsCount - 1
                         secondsCount = second
-                        trackTimeView?.text =
+                        trackTimeView.text =
                             String.format("%d:%02d", second / 60, second % 60)
-                        handler?.postDelayed(this, DELAY)
+                        handler.postDelayed(this, DELAY)
                     }else{
                         secondsCount = second+1
                     }
