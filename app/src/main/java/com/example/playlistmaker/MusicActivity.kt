@@ -72,11 +72,6 @@ class MusicActivity : AppCompatActivity() {
                 player?.preparePlayer()
                 buttonPlay.setOnClickListener {
                     player?.playbackControl()
-                    if (player!!.isRunTime) {
-                        player?.startPlayer()
-                    } else {
-                        player?.pausePlayer()
-                    }
                 }
             }
 

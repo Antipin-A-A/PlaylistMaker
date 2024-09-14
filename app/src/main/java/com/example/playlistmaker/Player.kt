@@ -26,6 +26,7 @@ class Player(
             playButtonView.setImageResource(R.drawable.play_icon)
             playerState = STATE_PREPARED
             secondsCount = 31L
+            isRunTime = false
         }
     }
 
@@ -83,17 +84,21 @@ class Player(
     }
     /*Счетчик-2*/
     private fun createUpdateTimerTask2() {
+        var second = 1L
         handler?.post(
             object : Runnable {
                 override fun run() {
-                    val second = secondsCount - 1
                     println("second -$second")
-                    if (isRunTime && second >= 0) {
+                    if (isRunTime && second > 0) {
+                        second = secondsCount - 1
+                        secondsCount = second
                         trackTimeView?.text =
                             String.format("%d:%02d", second / 60, second % 60)
                         handler?.postDelayed(this, DELAY)
+                    }else{
+                        secondsCount = second+1
                     }
-                    secondsCount = second
+
                 }
             })
 
