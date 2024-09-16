@@ -135,7 +135,6 @@ class SearchActivity : AppCompatActivity() {
 
     private fun iTunesServiceSearch() = with(binding) {
 
-        viewGroupTrackList2(VISIBLE)
         adapter2.notifyDataSetChanged()
         trackList.visibility = GONE
 

@@ -61,7 +61,7 @@ class MusicActivity : AppCompatActivity() {
 
                 Glide.with(this@MusicActivity)
                     .load(track.getCoverArtwork())
-                    .placeholder(R.drawable.image)
+                    .placeholder(R.drawable.placeholder)
                     .fitCenter()
                     .transform(RoundedCorners(10))
                     .into(imageView)
