@@ -146,7 +146,6 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = GONE
             progressBar.visibility = VISIBLE
             buttonCleanSearch.visibility = VISIBLE
-            progressBar.visibility = GONE
             buttonUpdate.visibility = GONE
 
             iTunesService.search(editText.text.toString())

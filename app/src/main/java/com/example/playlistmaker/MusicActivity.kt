@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -21,6 +22,8 @@ class MusicActivity : AppCompatActivity() {
 
     private var player: Player? = null
     private var mainThreadHandler: Handler? = null
+    private var isRunTime = false
+    private var secondsCount = 31L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,13 +71,13 @@ class MusicActivity : AppCompatActivity() {
 
                 }
 
-                player = Player(url, buttonPlay, currentTrackTime, mainThreadHandler)
+                player = Player(url)
                 player?.preparePlayer()
+
                 buttonPlay.setOnClickListener {
-                    player?.playbackControl()
+                    playerStart()
                 }
             }
-
         }
     }
 
@@ -96,6 +99,51 @@ class MusicActivity : AppCompatActivity() {
 
     private fun createFactFromJson(json: String): Track {
         return Gson().fromJson(json, Track::class.java)
+    }
+
+    private fun createUpdateTimerTask(trackTimeView: TextView, handler: Handler?) {
+        val startTime = System.currentTimeMillis()
+        var seconds = 0L
+        handler?.post(
+            object : Runnable {
+                override fun run() {
+                    val elapsedTime = System.currentTimeMillis() - startTime
+                    val remainingTime = (secondsCount * DELAY) - elapsedTime
+                    if (isRunTime && remainingTime > 0) {
+                        seconds = remainingTime / DELAY
+                        trackTimeView.text =
+                            String.format("%d:%02d", seconds / 60, seconds % 60)
+                        handler.postDelayed(this, DELAY)
+                    } else {
+                        secondsCount = seconds
+                    }
+                }
+            })
+    }
+
+    private fun playerStart() = with(binding) {
+        player?.playbackControl()
+
+        if (isRunTime) {
+            player?.pausePlayer()
+            isRunTime = false
+            buttonPlay.setImageResource(R.drawable.play_icon)
+        } else {
+            player?.startPlayer()
+            isRunTime = true
+            buttonPlay.setImageResource(R.drawable.pause_icon)
+            createUpdateTimerTask(currentTrackTime, mainThreadHandler)
+        }
+
+        player?.mediaPlayer?.setOnCompletionListener {
+            buttonPlay.setImageResource(R.drawable.play_icon)
+            secondsCount = 31L
+            isRunTime = false
+        }
+    }
+
+    companion object {
+        private const val DELAY = 1000L
     }
 
 }
