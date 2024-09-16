@@ -7,7 +7,7 @@ class ItemsTrack() {
                 items.add(it)
             } else {
                 items.removeLast()
-                items.add(it)
+                items.add(0,it)
             }
         } else {
             items.remove(it)
