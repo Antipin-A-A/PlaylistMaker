@@ -1,10 +1,6 @@
 package com.example.playlistmaker
 
 import android.media.MediaPlayer
-import android.os.Handler
-import android.widget.ImageView
-import android.widget.TextView
-
 
 class Player(private val url: String, ) {
 
