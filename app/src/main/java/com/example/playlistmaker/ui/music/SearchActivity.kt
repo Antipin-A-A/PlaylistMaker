@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.music
 
 import android.content.Context
 import android.content.Intent
@@ -16,17 +16,38 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.dto.NEW_FACT_KEY
+import com.example.playlistmaker.data.dto.SharedPrefTrack
+import com.example.playlistmaker.data.network.TrackStorageRepositoryImpl
 import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.domain.api.OnItemClickListener
+import com.example.playlistmaker.domain.api.TrackIteractor
+import com.example.playlistmaker.domain.impl.ItemsTrack
+import com.example.playlistmaker.presentation.SaveTrackInteractor
+import com.example.playlistmaker.domain.modeles.Track
+import com.example.playlistmaker.presentation.DeleteTrackUseCase
+import com.example.playlistmaker.presentation.GetTrackUseCase
+import com.example.playlistmaker.ui.player.MusicActivity
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
+
+    private val trackInterator = Creator.provideTrackInteractor()
+
+    private val trackStorageRepositoryImpl by lazy {
+        TrackStorageRepositoryImpl(
+            SharedPrefTrack(applicationContext)
+        )
+    }
+    private val saveTrackInteractor by lazy { SaveTrackInteractor(trackStorageRepositoryImpl) }
+    private val getTrackUseCAse by lazy { GetTrackUseCase(trackStorageRepositoryImpl) }
+    private val deleteTrack by lazy { DeleteTrackUseCase(trackStorageRepositoryImpl) }
+
     lateinit var binding: ActivitySearchBinding
     private var statusString: String = INPUT_TEXT
-    private var items = mutableListOf<Track>()
+    private var savedTrackList = mutableListOf<Track>()
     private val results = mutableListOf<Track>()
     lateinit var adapter: MusicAdapter
     lateinit var adapter2: MusicAdapter
@@ -41,26 +62,24 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val preferencesManager = SharedPrefTrack(this)
+//        val trackStorageRepository = TrackStorageRepositoryImpl()
+
         buttonUpdate = findViewById(R.id.buttonUpDate)
         trackList2 = findViewById(R.id.trackList2)
         textFind = findViewById(R.id.textLookingForYou)
         clearButtonHistory = findViewById(R.id.buttonClearHistory)
         placeholderMessage = findViewById(R.id.placeholderMessage)
 
-        val sharedPreferences = getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
-        val facts = sharedPreferences.getString(FACTS_LIST_KEY, null)
 
-        if (facts != null) {
-            items = createFactsListFromJson(facts)
-        }
+         savedTrackList =
+             getTrackUseCAse.execute().toMutableList()
+
         val onItemClickListener = OnItemClickListener { track ->
             if (clickDebounce()) {
                 val itemsTrack = ItemsTrack()
-                itemsTrack.itemsListTrack(items, track)
-                sharedPreferences.edit()
-                    .putString(FACTS_LIST_KEY, createJsonFromFactsList(items))
-                    .apply()
-
+                itemsTrack.itemsListTrack(savedTrackList, track)
+                saveTrackInteractor.execute(savedTrackList)
                 val intent = Intent(this, MusicActivity::class.java)
                 intent.putExtra(NEW_FACT_KEY, createJsonFromFact(track))
                 startActivity(intent)
@@ -68,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         adapter2 = MusicAdapter(onItemClickListener)
-        adapter2.tracks = items
+        adapter2.tracks = savedTrackList
         trackList2.adapter = adapter2
 
         adapter = MusicAdapter(onItemClickListener)
@@ -87,7 +106,7 @@ class SearchActivity : AppCompatActivity() {
             adapter2.notifyDataSetChanged()
             buttonUpdate.visibility = GONE
             placeholderMessage.visibility = GONE
-            if (items.isNotEmpty()) viewGroupTrackList2(VISIBLE)
+            if (savedTrackList.isNotEmpty()) viewGroupTrackList2(VISIBLE)
         }
 
         binding.toolbar.setNavigationOnClickListener() {
@@ -95,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && binding.editText.text.isEmpty() && items.isNotEmpty()) {
+            if (hasFocus && binding.editText.text.isEmpty() && savedTrackList.isNotEmpty()) {
                 viewGroupTrackList2(VISIBLE)
             }
         }
@@ -124,10 +143,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         clearButtonHistory.setOnClickListener {
-            sharedPreferences.edit()
-                .remove(FACTS_LIST_KEY)
-                .apply()
-            items.clear()
+           preferencesManager.removeAllTrackList()
+            savedTrackList.clear()
             adapter2.notifyDataSetChanged()
             viewGroupTrackList2(GONE)
         }
@@ -143,23 +160,17 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = GONE
             progressBar.visibility = VISIBLE
             buttonCleanSearch.visibility = VISIBLE
-            buttonUpdate.visibility = GONE
 
-            iTunesService.search(editText.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
-                    override fun onResponse(
-                        call: Call<TrackResponse>,
-                        response: Response<TrackResponse>,
-                    ) {
-                        progressBar.visibility = GONE
-                        if (response.code() == 200) {
+
+            trackInterator.searchTrack(editText.text.toString(),
+                object : TrackIteractor.TrackConsumer {
+                    override fun consume(foundTreks: List<Track>) {
+                        handler.post {
+                            progressBar.visibility = GONE
                             results.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                trackList.visibility = VISIBLE
-                                results.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
-                            }
-
+                            results.addAll(foundTreks)
+                            trackList.visibility = VISIBLE
+                            adapter.notifyDataSetChanged()
                             if (results.isEmpty() && binding.editText.text.isNotEmpty()) {
 
                                 showMessage(
@@ -171,28 +182,14 @@ class SearchActivity : AppCompatActivity() {
                                 showMessage("", "1", R.drawable.intent_mode)
                                 progressBar.visibility = GONE
                             }
-                        } else {
-                            progressBar.visibility = GONE
-                            showMessage(
-                                getString(R.string.errorWifi),
-                                response.code().toString(),
-                                R.drawable.intent_mode
-                            )
                         }
-                    }
 
-
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                        viewGroupTrackList2(GONE)
-                        showMessage(
-                            getString(R.string.errorWifi),
-                            t.message.toString(),
-                            R.drawable.intent_mode
-                        )
                     }
                 })
         }
+
     }
+
 
     private fun showMessage(text: String, additionalMessage: String, drawable: Int) {
 
@@ -224,16 +221,6 @@ class SearchActivity : AppCompatActivity() {
         findViewById<EditText>(R.id.editText).setText(statusString)
     }
 
-    private fun createFactsListFromJson(json: String?): ArrayList<Track> {
-        val itemType = object : TypeToken<ArrayList<Track?>?>() {}.type
-        val itemList = Gson().fromJson<ArrayList<Track>>(json, itemType)
-        return itemList
-    }
-
-    private fun createJsonFromFactsList(facts: MutableList<Track>): String {
-        return Gson().toJson(facts)
-    }
-
     private fun createJsonFromFact(fact: Track): String {
         return Gson().toJson(fact)
     }
@@ -247,7 +234,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val KEY_STRING = "KEY_STRING"
         const val INPUT_TEXT = ""
-        const val FACTS_LIST_KEY = "FACTS_LIST_KEY"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_DEBOUNCE_DELAY = 1000L
     }

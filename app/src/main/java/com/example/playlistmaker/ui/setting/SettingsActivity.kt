@@ -1,14 +1,15 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.setting
 
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.domain.AppTheme
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.dto.PRACTICUM_EXAMPLE_PREFERENCES
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+
 
 class SettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivitySettingsBinding
@@ -30,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         switchButton.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            (applicationContext as AppTheme).switchTheme(isChecked)
             sharedPreferences.edit()
                 .putBoolean(SWITCH_STATUS, isChecked)
                 .apply()

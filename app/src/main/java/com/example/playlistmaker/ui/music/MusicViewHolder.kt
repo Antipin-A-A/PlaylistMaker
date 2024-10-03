@@ -1,11 +1,13 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.music
 
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMusicAdapterBinding
+import com.example.playlistmaker.domain.modeles.Track
 
 class MusicViewHolder(item: View) : RecyclerView.ViewHolder(item){
 

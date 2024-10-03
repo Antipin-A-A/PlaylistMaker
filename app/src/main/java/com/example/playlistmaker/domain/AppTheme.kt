@@ -1,11 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.data.dto.PRACTICUM_EXAMPLE_PREFERENCES
 
 private const val THEME_DAY_NIGHT = "THEME_DAY_NIGHT"
 
-class App : Application() {
+class AppTheme : Application() {
 
     private var darkTheme = false
 

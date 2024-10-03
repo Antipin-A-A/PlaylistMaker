@@ -1,4 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.impl
+
+import com.example.playlistmaker.domain.modeles.Track
+
 
 class ItemsTrack() {
     fun itemsListTrack(items : MutableList<Track>, it : Track) {

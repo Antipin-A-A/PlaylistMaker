@@ -1,5 +1,4 @@
-package com.example.playlistmaker
-
+package com.example.playlistmaker.domain.modeles
 import android.media.MediaPlayer
 
 class Player(private val url: String, ) {
