@@ -1,10 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
+import com.example.playlistmaker.ui.music.SearchActivity
+import com.example.playlistmaker.ui.player.MusicActivity
+import com.example.playlistmaker.ui.setting.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding

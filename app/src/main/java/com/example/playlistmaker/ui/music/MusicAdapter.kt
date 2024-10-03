@@ -1,9 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.music
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.OnItemClickListener
+import com.example.playlistmaker.domain.modeles.Track
 
 class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MusicViewHolder>() {
