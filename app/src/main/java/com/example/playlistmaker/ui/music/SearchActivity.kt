@@ -27,7 +27,6 @@ import com.example.playlistmaker.domain.api.TrackIteractor
 import com.example.playlistmaker.domain.impl.ItemsTrack
 import com.example.playlistmaker.presentation.SaveTrackInteractor
 import com.example.playlistmaker.domain.modeles.Track
-import com.example.playlistmaker.presentation.DeleteTrackUseCase
 import com.example.playlistmaker.presentation.GetTrackUseCase
 import com.example.playlistmaker.ui.player.MusicActivity
 import com.google.gson.Gson
@@ -43,7 +42,7 @@ class SearchActivity : AppCompatActivity() {
     }
     private val saveTrackInteractor by lazy { SaveTrackInteractor(trackStorageRepositoryImpl) }
     private val getTrackUseCAse by lazy { GetTrackUseCase(trackStorageRepositoryImpl) }
-    private val deleteTrack by lazy { DeleteTrackUseCase(trackStorageRepositoryImpl) }
+
 
     lateinit var binding: ActivitySearchBinding
     private var statusString: String = INPUT_TEXT
@@ -63,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val preferencesManager = SharedPrefTrack(this)
-//        val trackStorageRepository = TrackStorageRepositoryImpl()
+
 
         buttonUpdate = findViewById(R.id.buttonUpDate)
         trackList2 = findViewById(R.id.trackList2)

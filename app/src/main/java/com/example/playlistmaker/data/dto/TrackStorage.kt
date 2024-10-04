@@ -7,5 +7,4 @@ interface TrackStorage {
 
     fun getTrack(): List<TrackDto>
 
-    fun removeAllTrackList()
 }

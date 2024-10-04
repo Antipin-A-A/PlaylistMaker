@@ -32,11 +32,13 @@ class SharedPrefTrack(private val context: Context) : TrackStorage {
         }
     }
 
-    override fun removeAllTrackList() {
+    fun removeAllTrackList() {
         sharedPreferences.edit()
             .remove(FACTS_LIST_KEY)
             .apply()
     }
+
+
 
 }
 

@@ -1,13 +1,12 @@
 package com.example.playlistmaker.ui.setting
 
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.domain.AppTheme
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.PRACTICUM_EXAMPLE_PREFERENCES
+import com.example.playlistmaker.data.dto.SupportMessage
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 
@@ -26,6 +25,8 @@ class SettingsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
         switchButton.isChecked = sharedPreferences.getBoolean(SWITCH_STATUS, false)
 
+        val supportMessage = SupportMessage(applicationContext)
+
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -37,29 +38,20 @@ class SettingsActivity : AppCompatActivity() {
                 .apply()
         }
         buttonSupport.setOnClickListener {
+            val email = getString(R.string.mail_address_user)
             val message = getString(R.string.string_email_text)
             val tittle = getString(R.string.string_email_tittle)
-            val shareIntent = Intent(Intent.ACTION_SENDTO).apply {
-                data = Uri.parse("mailto:")
-                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_address_user)))
-                putExtra(Intent.EXTRA_TEXT, message)
-                putExtra(Intent.EXTRA_SUBJECT, tittle)
-            }
-            startActivity(shareIntent)
+            supportMessage.support(email,message,tittle)
+
         }
         buttonArrow.setOnClickListener {
-            val url = Uri.parse(getString(R.string.url_arrow))
-            val intent = Intent(Intent.ACTION_VIEW, url)
-            startActivity(intent)
+            val uri = getString(R.string.url_arrow)
+            supportMessage.arrow(uri)
         }
 
         buttonShare.setOnClickListener {
             val message = getString(R.string.url_share)
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, message)
-            }
-            startActivity(intent)
+            supportMessage.share(message)
         }
     }
 

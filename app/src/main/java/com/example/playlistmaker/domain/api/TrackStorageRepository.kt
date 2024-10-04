@@ -8,5 +8,4 @@ interface TrackStorageRepository {
 
     fun getTrack():List<Track>
 
-    fun removeAllTrackList()
 }

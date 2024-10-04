@@ -43,5 +43,4 @@ class TrackStorageRepositoryImpl(private val trackStorage: TrackStorage) : Track
         }
     }
 
-    override fun removeAllTrackList() {}
 }
