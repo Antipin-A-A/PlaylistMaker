@@ -82,10 +82,8 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(binding.buttonCleanSearch.windowToken, 0)
             results.clear()
             adapter.notifyDataSetChanged()
-//            adapter2.notifyDataSetChanged()
             buttonUpdate.visibility = GONE
             placeholderMessage.visibility = GONE
-//            adapter2.tracks = trackIteractor.getSavedTracks().toMutableList()
             viewGroupTrackList2()
         }
 

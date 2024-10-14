@@ -16,7 +16,7 @@ object Convector {
         }
     }
 
-    fun convectorData(releaseDate: String): String? {
+    fun convectorData(releaseDate: String): String {
         val regex = Regex("^(\\d{4})$")
         val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
         return if (regex.matches(releaseDate)) {
