@@ -21,7 +21,7 @@ class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
 
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         holder.bind(tracks[position])
-        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(tracks[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(tracks[position]) }
     }
 
     override fun getItemCount(): Int {

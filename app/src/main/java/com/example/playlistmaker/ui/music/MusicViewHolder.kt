@@ -22,7 +22,7 @@ class MusicViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
         trackName.text = item.trackName
 
-        artistNameAndTime.text = itemView.context.getString(R.string.name_artist_time, artistName, item.convectorTime())
+        artistNameAndTime.text = itemView.context.getString(R.string.name_artist_time, artistName, item.trackTimeMillis)
 
         Glide.with(itemView)
             .load(item.artworkUrl100)
