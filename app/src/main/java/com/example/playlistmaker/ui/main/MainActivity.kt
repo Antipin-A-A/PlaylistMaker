@@ -1,18 +1,24 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.util.Creator
+import com.example.playlistmaker.util.Creator.setContext
 import com.example.playlistmaker.databinding.ActivityMainBinding
+import com.example.playlistmaker.presentation.theme.AppTheme
+import com.example.playlistmaker.ui.music_search.SearchActivity
+import com.example.playlistmaker.ui.media_player.MusicActivity
+import com.example.playlistmaker.ui.setting.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private val themeInteractor by lazy { Creator.provideThemeInteractor() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setContext(applicationContext)
         init()
 
     }
@@ -31,5 +37,8 @@ class MainActivity : AppCompatActivity() {
             val intentSetting = Intent(intent, SettingsActivity::class.java)
             startActivity(intentSetting)
         }
+
+        AppTheme.switchTheme(themeInteractor.getSwitchStatus())
+
     }
 }
