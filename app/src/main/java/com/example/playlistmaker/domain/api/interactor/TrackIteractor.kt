@@ -6,7 +6,7 @@ interface TrackIteractor {
     fun searchTrack(expression: String, consumer: TrackConsumer)
 
     interface TrackConsumer {
-        fun consume(foundTreks: List<Track>)
+        fun consume(foundTreks: List<Track>?, errorMessage: String?)
     }
 
     fun saveTrack(track: Track)

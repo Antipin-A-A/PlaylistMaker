@@ -1,7 +1,8 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.util
 
 import android.content.Context
 import com.example.playlistmaker.data.Themes.ThemeRepositoryImpl
+import com.example.playlistmaker.data.network.ConnectedManager
 import com.example.playlistmaker.data.network.RetrofitManager
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TrackRepositoryImpl
@@ -31,7 +32,13 @@ object Creator {
     }
 
     private fun getTrackRepository(): TrackRepository {
-        return TrackRepositoryImpl(RetrofitNetworkClient(RetrofitManager()))
+        return TrackRepositoryImpl(
+            RetrofitNetworkClient(
+                RetrofitManager(), ConnectedManager(
+                    appContext
+                )
+            )
+        )
     }
 
     private fun getTrackStorageRepository(): TrackStorageRepository {

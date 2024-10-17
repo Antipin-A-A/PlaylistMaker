@@ -5,6 +5,7 @@ import com.example.playlistmaker.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.domain.api.reposirory.TrackRepository
 import com.example.playlistmaker.domain.api.reposirory.TrackStorageRepository
 import com.example.playlistmaker.domain.modeles.Track
+import com.example.playlistmaker.util.Resource
 
 class TracksInteractorImpl(
     private val repository: TrackRepository,
@@ -13,7 +14,15 @@ class TracksInteractorImpl(
 
     override fun searchTrack(expression: String, consumer: TrackIteractor.TrackConsumer) {
         val thread = Thread {
-            consumer.consume(repository.searchTracks(expression))
+            when (val resource = repository.searchTracks(expression)) {
+                is Resource.Success -> {
+                    consumer.consume(resource.data, null)
+                }
+
+                is Resource.Error -> {
+                    consumer.consume(null, resource.message)
+                }
+            }
         }
         thread.start()
     }
