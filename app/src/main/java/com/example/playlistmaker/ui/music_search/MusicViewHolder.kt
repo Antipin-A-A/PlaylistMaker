@@ -15,14 +15,14 @@ class MusicViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
     fun bind(item: Track) = with(binding) {
         val artistName = if (item.artistName?.length!! > 20) {
-            item.artistName?.take(17) + "..."
+            item.artistName.take(17) + "..."
         } else {
             item.artistName
         }
 
         trackName.text = item.trackName
 
-        artistNameAndTime.text = itemView.context.getString(R.string.name_artist_time, artistName, item.trackTimeMillis,item.releaseDate)
+        artistNameAndTime.text = itemView.context.getString(R.string.name_artist_time, artistName, item.trackTimeMillis)
 
         Glide.with(itemView)
             .load(item.artworkUrl100)
