@@ -51,7 +51,7 @@ class MusicActivity : AppCompatActivity() {
                 trackTime.text = track.trackTimeMillis
                 releaseDate.text = track.releaseDate
                 primaryGenreName.text = track.primaryGenreName
-                textViewCountry.text = track.country
+                country.text = track.country
 
                 val url = track.previewUrl
 

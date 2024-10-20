@@ -16,14 +16,18 @@ object Convector {
         }
     }
 
-    fun convectorData(releaseDate: String): String {
+    fun convectorData(releaseDate: String?): String? {
         val regex = Regex("^(\\d{4})$")
         val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        return if (regex.matches(releaseDate)) {
-            releaseDate
+        return if (releaseDate == "null") {
+            return "null"
         } else {
-            val localDateTime = LocalDateTime.parse(releaseDate, pattern)
-            localDateTime.year.toString()
+            if (regex.matches(releaseDate.toString())) {
+                releaseDate
+            } else {
+                val localDateTime = LocalDateTime.parse(releaseDate, pattern)
+                localDateTime.year.toString()
+            }
         }
     }
 }
