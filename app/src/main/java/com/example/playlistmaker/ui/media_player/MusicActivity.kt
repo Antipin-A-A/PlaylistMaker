@@ -1,29 +1,30 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.media_player
 
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMusicBinding
+import com.example.playlistmaker.domain.modeles.Track
+import com.example.playlistmaker.ui.music_search.NEW_FACT_KEY
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class MusicActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicBinding
 
-    private var player: Player? = null
+    private var mediaPlayer: MediaPlayer? = null
     private var mainThreadHandler: Handler? = null
     private var isRunTime = false
-    private var secondsCount = 31L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,15 +48,10 @@ class MusicActivity : AppCompatActivity() {
                 artistName.text = track.artistName
                 collectionNameFirst.text = track.trackName
                 collectionName.text = track.collectionName
-
-                val data = track.releaseDate
-                val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                val localDateTime = LocalDateTime.parse(data, pattern)
-
-                trackTime.text = track.convectorTime()
-                releaseDate.text = localDateTime.year.toString()
+                trackTime.text = track.trackTimeMillis
+                releaseDate.text = track.releaseDate
                 primaryGenreName.text = track.primaryGenreName
-                textViewCountry.text = track.country
+                country.text = track.country
 
                 val url = track.previewUrl
 
@@ -71,8 +67,8 @@ class MusicActivity : AppCompatActivity() {
 
                 }
 
-                player = Player(url)
-                player?.preparePlayer()
+                mediaPlayer = MediaPlayer(url)
+                mediaPlayer?.preparePlayer()
 
                 buttonPlay.setOnClickListener {
                     playerStart()
@@ -83,12 +79,13 @@ class MusicActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        player?.pausePlayer()
+        mediaPlayer?.pausePlayer()
+        isRunTime = false
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player?.mediaPlayer?.release()
+        mediaPlayer?.mediaPlayer?.release()
     }
 
     private fun snake(view: View, string: String) {
@@ -101,43 +98,37 @@ class MusicActivity : AppCompatActivity() {
         return Gson().fromJson(json, Track::class.java)
     }
 
-    private fun createUpdateTimerTask(trackTimeView: TextView, handler: Handler?) {
-        val startTime = System.currentTimeMillis()
-        var seconds = 0L
-        handler?.post(
-            object : Runnable {
-                override fun run() {
-                    val elapsedTime = System.currentTimeMillis() - startTime
-                    val remainingTime = (secondsCount * DELAY) - elapsedTime
-                    if (isRunTime && remainingTime > 0) {
-                        seconds = remainingTime / DELAY
-                        trackTimeView.text =
-                            String.format("%d:%02d", seconds / 60, seconds % 60)
-                        handler.postDelayed(this, DELAY)
-                    } else {
-                        secondsCount = seconds
-                    }
+    private fun createUpdateTimerTask(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                if (isRunTime ) {
+                    val trackTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer?.mediaPlayer?.currentPosition?.toLong())
+                    binding.currentTrackTime.text = trackTime
+                    mainThreadHandler?.postDelayed(this, DELAY)
                 }
-            })
+            }
+        }
     }
 
     private fun playerStart() = with(binding) {
-        player?.playbackControl()
+        mediaPlayer?.playbackControl()
 
         if (isRunTime) {
-            player?.pausePlayer()
+            mediaPlayer?.pausePlayer()
             isRunTime = false
             buttonPlay.setImageResource(R.drawable.play_icon)
+            mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
         } else {
-            player?.startPlayer()
+            mediaPlayer?.startPlayer()
             isRunTime = true
             buttonPlay.setImageResource(R.drawable.pause_icon)
-            createUpdateTimerTask(currentTrackTime, mainThreadHandler)
+//            createUpdateTimerTask(currentTrackTime, mainThreadHandler)
+            mainThreadHandler?.post(createUpdateTimerTask())
         }
 
-        player?.mediaPlayer?.setOnCompletionListener {
+        mediaPlayer?.mediaPlayer?.setOnCompletionListener {
             buttonPlay.setImageResource(R.drawable.play_icon)
-            secondsCount = 31L
+            binding.currentTrackTime.text = getString(R.string.current_track_time)
             isRunTime = false
         }
     }

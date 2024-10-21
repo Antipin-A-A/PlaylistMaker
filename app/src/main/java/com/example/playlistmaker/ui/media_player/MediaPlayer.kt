@@ -1,8 +1,8 @@
-package com.example.playlistmaker
-
+package com.example.playlistmaker.ui.media_player
 import android.media.MediaPlayer
+import com.example.playlistmaker.domain.api.reposirory.MediaPlayerRepository
 
-class Player(private val url: String, ) {
+class MediaPlayer(private val url: String, ): MediaPlayerRepository {
 
     var mediaPlayer = MediaPlayer()
 
@@ -17,17 +17,17 @@ class Player(private val url: String, ) {
         }
     }
 
-    fun startPlayer() {
+   override fun startPlayer() {
         mediaPlayer.start()
         playerState = STATE_PLAYING
     }
 
-    fun pausePlayer() {
+  override fun pausePlayer() {
         mediaPlayer.pause()
         playerState = STATE_PAUSED
     }
 
-    fun playbackControl() {
+  override  fun playbackControl() {
         when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()

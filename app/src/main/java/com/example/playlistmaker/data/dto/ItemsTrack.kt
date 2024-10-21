@@ -1,13 +1,15 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.data.dto
+
+import com.example.playlistmaker.data.model.TrackDto
 
 class ItemsTrack() {
-    fun itemsListTrack(items : MutableList<Track>, it : Track) {
+    fun itemsListTrack(items: MutableList<TrackDto>, it: TrackDto) {
         if (!items.contains(it)) {
             if (items.size < 10) {
                 items.add(it)
             } else {
                 items.removeLast()
-                items.add(0,it)
+                items.add(0, it)
             }
         } else {
             items.remove(it)

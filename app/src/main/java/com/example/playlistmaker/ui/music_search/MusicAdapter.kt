@@ -1,9 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.music_search
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.api.OnItemClickListener
+import com.example.playlistmaker.domain.modeles.Track
 
 class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
     RecyclerView.Adapter<MusicViewHolder>() {
@@ -19,7 +21,7 @@ class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
 
     override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
         holder.bind(tracks[position])
-        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(tracks[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(tracks[position]) }
     }
 
     override fun getItemCount(): Int {
