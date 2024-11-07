@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
     style="@style/LayoutStyle"
-    tools:context=".ui.music_search.SearchActivity">
+    tools:context=".search.ui.activity.SearchActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -89,20 +89,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/activity_music_adapter">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trackList2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textLookingForYou"
-            tools:listitem="@layout/activity_music_adapter">
+            tools:listitem="@layout/activity_music_adapter"
+            tools:visibility="invisible">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -138,24 +126,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/placeholderMessage" />
 
-        <Button
-            android:id="@+id/buttonClearHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/blackNight"
-            android:layout_marginTop="@dimen/indent_24dp"
-            android:text="@string/clear_hictory_text_button"
-            android:textAllCaps="false"
-            android:textColor="@color/white_Black"
-            android:textSize="@dimen/text_size_14sp"
-            android:visibility="gone"
-            app:cornerRadius="54dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trackList2"
-            tools:visibility="visible" />
-
         <TextView
             android:id="@+id/textLookingForYou"
             android:layout_width="match_parent"
@@ -169,7 +139,64 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="textLookingForYou"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trackList2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@id/barrier3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/barrier4"
+            tools:listitem="@layout/activity_music_adapter"
+            tools:visibility="visible">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="buttonClearHistory"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttonClearHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_24dp"
+            app:layout_constraintVertical_bias="0"
+            android:backgroundTint="@color/blackNight"
+            android:text="@string/clear_hictory_text_button"
+            android:textAllCaps="false"
+            android:textColor="@color/white_Black"
+            android:textSize="@dimen/text_size_14sp"
+            android:visibility="gone"
+            app:cornerRadius="54dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trackList2"
+            tools:visibility="visible" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
