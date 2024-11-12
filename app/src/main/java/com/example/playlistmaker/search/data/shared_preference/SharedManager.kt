@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.core.content.edit
 import com.example.playlistmaker.search.data.model.TrackDto
-import com.example.playlistmaker.search.data.dto.ItemsTrack
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -21,8 +20,7 @@ class SharedManager(context: Context) {
 
     fun saveTrackList(track: TrackDto) {
         val savedTrackList = getTrackDtoList().toMutableList()
-        val itemsTrack = ItemsTrack()
-        itemsTrack.itemsListTrack(savedTrackList, track)
+        itemsListTrack(savedTrackList, track)
         val createJsonFromFactsList = Gson().toJson(savedTrackList)
         sharedPreferences.edit { putString(FACTS_LIST_KEY, createJsonFromFactsList) }
     }
@@ -55,8 +53,28 @@ class SharedManager(context: Context) {
         return sharedPreferences.getBoolean(SWITCH_STATUS, false)
     }
 
-    fun getTrackDto(): TrackDto {
+    fun getTrackDto(): TrackDto? {
         val json = sharedPreferences.getString(NEW_FACT_TRACK_KEY, null)
-        return Gson().fromJson(json, TrackDto::class.java)
+        return if (!json.isNullOrEmpty()) {
+            Gson().fromJson(json, TrackDto::class.java)
+        } else {
+            null
+        }
+
+    }
+
+}
+
+private fun itemsListTrack(items: MutableList<TrackDto>, it: TrackDto) {
+    if (!items.contains(it)) {
+        if (items.size < 10) {
+            items.add(0, it)
+        } else {
+            items.removeLast()
+            items.add(0, it)
+        }
+    } else {
+        items.remove(it)
+        items.add(0, it)
     }
 }

@@ -62,7 +62,7 @@ class SearchActivityViewModel : ViewModel() {
     fun observeMediaState(): LiveData<TrackListState> = mediatorStateLiveData
 
 
-    private fun iTunesServiceSearch(searchText: String) {
+    fun iTunesServiceSearch(searchText: String) {
         if (searchText.isNotEmpty()) {
             renderState(TrackListState.Loading)
             trackIteractor.searchTrack(searchText,

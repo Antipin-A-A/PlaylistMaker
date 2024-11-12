@@ -3,7 +3,7 @@ package com.example.playlistmaker.player.data.impl
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.repository.MediaPlayerRepository
 
-class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPlayerRepository {
+class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
 
     override fun preparePlayer(url: String) {
@@ -41,7 +41,6 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPla
     override fun release() {
         playerState = STATE_DEFAULT
         mediaPlayer.release()
-
     }
 
     override fun setOnCompletionListener(function: () -> Unit) {
@@ -54,7 +53,7 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer: MediaPlayer) : MediaPla
         return mediaPlayer.currentPosition.toLong()
     }
 
-    companion object {
+   private companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2

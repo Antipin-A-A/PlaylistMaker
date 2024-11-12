@@ -28,19 +28,14 @@ class MusicActivity : AppCompatActivity() {
 
     private var mainThreadHandler: Handler? = null
     private var isRunTime = false
-    private var url: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setContext(applicationContext)
-        applicationContext
-
-        Log.i("Log1", "MusicActivity")
 
         mainThreadHandler = Handler(Looper.getMainLooper())
-
 
         viewModel = ViewModelProvider(
             this,
@@ -70,43 +65,44 @@ class MusicActivity : AppCompatActivity() {
             }
 
             buttonAdd.setOnClickListener {
-//                viewModel.playAudio(url)
                 snake(it, "Плейлист «BeSt SoNg EvEr!» создан")
 
             }
 
             buttonPlay.setOnClickListener {
-                     playerStart(url)
+                playerStart()
             }
 
         }
     }
 
     private fun content(track: TrackScreenState.Content) = with(binding) {
-        artistName.text = track.trackModel.artistName
-        collectionNameFirst.text = track.trackModel.trackName
-        collectionName.text = track.trackModel.collectionName
-        trackTime.text = track.trackModel.trackTimeMillis
-        releaseDate.text = track.trackModel.releaseDate
-        primaryGenreName.text = track.trackModel.primaryGenreName
-        country.text = track.trackModel.country
+        artistName.text = track.trackModel?.artistName ?: getString(R.string.artist_name)
+        collectionNameFirst.text =
+            track.trackModel?.trackName ?: getString(R.string.collection_name)
+        collectionName.text = track.trackModel?.collectionName ?: getString(R.string.albom)
+        trackTime.text = track.trackModel?.trackTimeMillis ?: getString(R.string.track_time)
+        releaseDate.text = track.trackModel?.releaseDate ?: getString(R.string.god)
+        primaryGenreName.text =
+            track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
+        country.text = track.trackModel?.country ?: getString(R.string.country)
 
-        val url = track.trackModel.previewUrl.toString()
-        Log.i("Log4", "$url")
+      //  val url = track.trackModel?.previewUrl.toString()
 
         Glide.with(this@MusicActivity)
-            .load(track.trackModel.getCoverArtwork())
+            .load(track.trackModel?.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .fitCenter()
             .transform(RoundedCorners(10))
             .into(imageView)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.release()
+    override fun onPause() {
+        super.onPause()
+        viewModel.pause()
         isRunTime = false
     }
+
 
     private fun snake(view: View, string: String) {
         val snack: Snackbar = Snackbar.make(view, string, Snackbar.LENGTH_LONG)
@@ -130,7 +126,7 @@ class MusicActivity : AppCompatActivity() {
         }
     }
 
-    private fun playerStart(url:String) = with(binding) {
+    private fun playerStart() = with(binding) {
         if (isRunTime) {
             viewModel.pause()
             isRunTime = false
@@ -149,6 +145,7 @@ class MusicActivity : AppCompatActivity() {
             isRunTime = false
         }
     }
+
     companion object {
         private const val DELAY = 1000L
     }

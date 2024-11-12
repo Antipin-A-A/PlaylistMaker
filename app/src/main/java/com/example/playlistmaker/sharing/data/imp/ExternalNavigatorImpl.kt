@@ -7,6 +7,7 @@ import com.example.playlistmaker.sharing.domain.api.interact.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.model.EmailData
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
+    /*По теории так надо, а так Intent выносить в отдельный класс не вижу смысла, */
 
     override fun shareLink(shareAppLink: String) {
         val intent = Intent(Intent.ACTION_SEND).apply {

@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.Creator.Creator
+import com.example.playlistmaker.search.domain.api.interactor.ThemeInteractor
+import com.example.playlistmaker.sharing.domain.api.interact.SharingInteractor
 
-class SettingsViewModel: ViewModel() {
+class SettingsViewModel(
+    private val providerTheme: ThemeInteractor,
+    private val providerSharing: SharingInteractor
+) : ViewModel() {
 
-    private val providerTheme by lazy { Creator.provideThemeInteractor() }
-    private val providerSharing by lazy { Creator.provideSharingInteractor() }
 
     fun getTheme(): Boolean {
         return providerTheme.getSwitchStatus()
@@ -34,7 +37,10 @@ class SettingsViewModel: ViewModel() {
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SettingsViewModel()
+                SettingsViewModel(
+                    providerTheme = Creator.provideThemeInteractor(),
+                    providerSharing = Creator.provideSharingInteractor()
+                )
             }
         }
     }

@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,9 +27,9 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SearchActivityViewModel
 
-    lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: ActivitySearchBinding
     private var statusString: String = INPUT_TEXT
-    lateinit var adapter: MusicAdapter
+    private lateinit var adapter: MusicAdapter
     private lateinit var adapter2: MusicAdapter
     private lateinit var trackList2: RecyclerView
     private var isClickAllowed = true
@@ -57,9 +57,7 @@ class SearchActivity : AppCompatActivity() {
         val onItemClickListener = OnItemClickListener { track ->
             if (clickDebounce()) {
                 viewModel.saveHistoryTrack(track)
-              //  val intent = Intent(this, MusicActivity::class.java)
                 viewModel.saveTrack(track)
-              //  intent.putExtra(NEW_FACT_KEY, createJsonFromFact(track))
                 startActivity(Intent(this, MusicActivity::class.java))
             }
         }
@@ -94,29 +92,25 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        binding.editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        binding.editText.addTextChangedListener(
+            onTextChanged = { p0: CharSequence?, _, _, _ ->
                 viewModel.searchDebounce(p0.toString())
                 if (binding.editText.hasFocus() && binding.editText.text.isNotEmpty()) {
                     viewModel.getHistoryTrackList()
                 }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
+            },
+            afterTextChanged = { _: Editable? ->
                 statusString = binding.editText.text.toString()
                 binding.buttonUpDate.isVisible = false
                 binding.placeholderMessage.isVisible = false
             }
 
-        })
+        )
+
 
         binding.buttonUpDate.setOnClickListener {
-            showLoading()
-
+            viewModel.iTunesServiceSearch(binding.editText.text.toString())
         }
 
         binding.buttonClearHistory.setOnClickListener {
@@ -208,11 +202,6 @@ class SearchActivity : AppCompatActivity() {
                 buttonUpDate.isVisible = false
             }
         }
-
-//    private fun createJsonFromFact(fact: Track): String {
-//        return Gson().toJson(fact)
-//    }
-
 
     companion object {
         const val INPUT_TEXT = ""

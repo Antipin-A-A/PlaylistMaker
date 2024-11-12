@@ -21,8 +21,10 @@ import com.example.playlistmaker.search.domain.api.reposirory.TrackStorageReposi
 import com.example.playlistmaker.search.domain.imp.ThemeInteractorImpl
 import com.example.playlistmaker.search.domain.imp.TracksInteractorImpl
 import com.example.playlistmaker.sharing.data.imp.ExternalNavigatorImpl
+import com.example.playlistmaker.sharing.data.imp.SharingRepositoryImp
 import com.example.playlistmaker.sharing.domain.api.interact.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.api.interact.SharingInteractor
+import com.example.playlistmaker.sharing.domain.api.reposytory.SharingRepository
 import com.example.playlistmaker.sharing.domain.imp.SharingInteractorImpl
 
 object Creator {
@@ -45,7 +47,7 @@ object Creator {
     }
 
     fun provideSharingInteractor(): SharingInteractor {
-        return SharingInteractorImpl(provideExternalNavigator(), appContext)
+        return SharingInteractorImpl(provideExternalNavigator(), provideSharingRepository())
     }
 
     private fun getTrackRepository(): TrackRepository {
@@ -72,6 +74,10 @@ object Creator {
 
     private fun provideExternalNavigator(): ExternalNavigator {
         return ExternalNavigatorImpl(appContext)
+    }
+
+    private fun provideSharingRepository(): SharingRepository {
+        return SharingRepositoryImp(appContext)
     }
 
 }

@@ -10,7 +10,7 @@ import com.example.playlistmaker.settings.ui.viewmodel.SettingsViewModel
 
 
 class SettingsActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: ActivitySettingsBinding
     private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

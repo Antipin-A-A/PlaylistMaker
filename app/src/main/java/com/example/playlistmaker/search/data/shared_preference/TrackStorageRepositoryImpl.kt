@@ -24,7 +24,7 @@ class TrackStorageRepositoryImpl(private val sharedManager: SharedManager) :
         sharedManager.removeTrackList()
     }
 
-    override fun loadTrackData(): Track {
-        return sharedManager.getTrackDto().toDomainModel()
+    override fun loadTrackData(): Track? {
+        return sharedManager.getTrackDto()?.toDomainModel()
     }
 }
