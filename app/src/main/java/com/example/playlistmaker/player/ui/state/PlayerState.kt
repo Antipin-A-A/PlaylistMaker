@@ -5,6 +5,6 @@ sealed interface PlayerState {
     data class Play(val startPlayer: Unit) : PlayerState
     data class Pause(val pausePlayer: Unit) : PlayerState
     data class Release(val release: Unit) : PlayerState
-    class SetOnComplet(onCompletionListener: Unit) : PlayerState
+    class SetOnComplete(val onCompletionListener: Unit) : PlayerState
 
 }

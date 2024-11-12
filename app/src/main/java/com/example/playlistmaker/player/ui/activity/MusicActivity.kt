@@ -4,7 +4,6 @@ package com.example.playlistmaker.player.ui.activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -53,6 +52,10 @@ class MusicActivity : AppCompatActivity() {
                 is TrackScreenState.Loading -> {
 
                 }
+
+                TrackScreenState.Complete -> {
+                    complete()
+                }
             }
         }
     }
@@ -78,16 +81,12 @@ class MusicActivity : AppCompatActivity() {
 
     private fun content(track: TrackScreenState.Content) = with(binding) {
         artistName.text = track.trackModel?.artistName ?: getString(R.string.artist_name)
-        collectionNameFirst.text =
-            track.trackModel?.trackName ?: getString(R.string.collection_name)
+        collectionNameFirst.text = track.trackModel?.trackName ?: getString(R.string.collection_name)
         collectionName.text = track.trackModel?.collectionName ?: getString(R.string.albom)
         trackTime.text = track.trackModel?.trackTimeMillis ?: getString(R.string.track_time)
         releaseDate.text = track.trackModel?.releaseDate ?: getString(R.string.god)
-        primaryGenreName.text =
-            track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
+        primaryGenreName.text = track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
         country.text = track.trackModel?.country ?: getString(R.string.country)
-
-      //  val url = track.trackModel?.previewUrl.toString()
 
         Glide.with(this@MusicActivity)
             .load(track.trackModel?.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
@@ -103,13 +102,11 @@ class MusicActivity : AppCompatActivity() {
         isRunTime = false
     }
 
-
     private fun snake(view: View, string: String) {
         val snack: Snackbar = Snackbar.make(view, string, Snackbar.LENGTH_LONG)
         snack.setTextColor(getResources().getColor(R.color.white_Black, theme))
         snack.show()
     }
-
 
     private fun createUpdateTimerTask(): Runnable {
         return object : Runnable {
@@ -139,11 +136,13 @@ class MusicActivity : AppCompatActivity() {
             mainThreadHandler?.post(createUpdateTimerTask())
         }
 
-        viewModel.setOnComplited {
-            binding.buttonPlay.setImageResource(R.drawable.play_icon)
-            binding.currentTrackTime.text = getString(R.string.current_track_time)
-            isRunTime = false
-        }
+        viewModel.setOnCompleted()
+    }
+
+    private fun complete() {
+        binding.buttonPlay.setImageResource(R.drawable.play_icon)
+        binding.currentTrackTime.text = getString(R.string.current_track_time)
+        isRunTime = false
     }
 
     companion object {

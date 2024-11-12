@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,6 @@ class MusicActivityViewModel(
     private val trackIteractor: TrackIteractor,
 ) : ViewModel() {
 
-
     private val stateMutable = MutableLiveData<PlayerState>()
     val state: LiveData<PlayerState> = stateMutable
 
@@ -34,9 +32,11 @@ class MusicActivityViewModel(
         screenStateLiveData.postValue(TrackScreenState.Content(trackIteractor.loadTrackData()))
     }
 
-    private fun preparePlayer() {
+    fun preparePlayer() {
         val url = trackIteractor.loadTrackData()?.previewUrl.toString()
-        stateMutable.value = PlayerState.PreparePlayer(mediaPlayerInteract.preparePlayer(url))
+        if (url != "null") {
+            stateMutable.value = PlayerState.PreparePlayer(mediaPlayerInteract.preparePlayer(url))
+        }
     }
 
     fun pause() {
@@ -55,10 +55,10 @@ class MusicActivityViewModel(
         stateMutable.value = PlayerState.Release(mediaPlayerInteract.release())
     }
 
-    fun setOnComplited(function: () -> Unit) {
+    fun setOnCompleted() {
         stateMutable.value =
-            PlayerState.SetOnComplet(mediaPlayerInteract.setOnCompletionListener {
-                function()
+            PlayerState.SetOnComplete(mediaPlayerInteract.setOnCompletionListener {
+                screenStateLiveData.postValue(TrackScreenState.Complete)
             })
     }
 
@@ -71,7 +71,7 @@ class MusicActivityViewModel(
         fun mediaViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MusicActivityViewModel(
-                   mediaPlayerInteract = Creator.provideMediaPlayerInteractor(),
+                    mediaPlayerInteract = Creator.provideMediaPlayerInteractor(),
                     trackIteractor = Creator.provideTrackInteractor(),
                 )
             }
