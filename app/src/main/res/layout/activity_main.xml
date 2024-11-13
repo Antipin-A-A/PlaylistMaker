@@ -9,7 +9,7 @@
     android:paddingEnd="@dimen/size_16dp"
     android:paddingTop="@dimen/indent_14dp"
     android:paddingBottom="@dimen/indent_28dp"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".main.activity.MainActivity">
 
     <TextView
         android:id="@+id/textView"
