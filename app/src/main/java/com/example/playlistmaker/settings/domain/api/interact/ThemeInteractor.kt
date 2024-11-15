@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.domain.api.interactor
+package com.example.playlistmaker.settings.domain.api.interact
 
 interface ThemeInteractor {
     fun switchIsChecked(isChecked: Boolean)

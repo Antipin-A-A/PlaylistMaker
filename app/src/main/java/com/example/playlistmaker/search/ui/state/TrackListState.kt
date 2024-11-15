@@ -16,7 +16,7 @@ sealed interface TrackListState {
         val message: String
     ) : TrackListState
 
-    data class getHistoryList(
+    data class GetHistoryList(
         val track: List<Track>
     ) : TrackListState
 }

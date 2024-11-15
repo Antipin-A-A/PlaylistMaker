@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation (libs.koin.android)
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)

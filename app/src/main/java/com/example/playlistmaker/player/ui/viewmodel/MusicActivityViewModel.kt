@@ -3,10 +3,6 @@ package com.example.playlistmaker.player.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Creator.Creator
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
@@ -67,14 +63,4 @@ class MusicActivityViewModel(
         release()
     }
 
-    companion object {
-        fun mediaViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MusicActivityViewModel(
-                    mediaPlayerInteract = Creator.provideMediaPlayerInteractor(),
-                    trackIteractor = Creator.provideTrackInteractor(),
-                )
-            }
-        }
-    }
 }

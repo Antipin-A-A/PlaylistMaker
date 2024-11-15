@@ -1,7 +1,6 @@
-package com.example.playlistmaker.search.util
+package com.example.playlistmaker.app
 
 import androidx.appcompat.app.AppCompatDelegate
-
 
 object AppTheme {
     fun switchTheme(isChecked: Boolean) {

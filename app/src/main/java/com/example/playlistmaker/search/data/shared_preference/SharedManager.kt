@@ -2,6 +2,7 @@ package com.example.playlistmaker.search.data.shared_preference
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.example.playlistmaker.search.data.model.TrackDto
 import com.google.gson.Gson
@@ -12,11 +13,11 @@ const val FACTS_LIST_KEY = "FACTS_LIST_KEY"
 const val SWITCH_STATUS = "SWITCH_STATUS"
 const val NEW_FACT_TRACK_KEY = "NEW_FACT_TRACK_KEY"
 
-class SharedManager(context: Context) {
+class SharedManager(private val sharedPreferences: SharedPreferences) {
 
 
-    private val sharedPreferences =
-        context.getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
+//    private val sharedPreferences =
+//        context.getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
 
     fun saveTrackList(track: TrackDto) {
         val savedTrackList = getTrackDtoList().toMutableList()
