@@ -7,17 +7,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.Creator.Creator
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
 
-class SearchActivityViewModel : ViewModel() {
-
-    private val trackIteractor by lazy { Creator.provideTrackInteractor() }
+class SearchActivityViewModel(
+    private val trackIteractor:TrackIteractor
+) : ViewModel() {
 
     private val stateMutable = MutableLiveData<TrackListState>()
     val state: LiveData<TrackListState> = stateMutable
@@ -38,7 +34,7 @@ class SearchActivityViewModel : ViewModel() {
     }
 
     fun getHistoryTrackList() {
-        renderState(TrackListState.getHistoryList(track = trackIteractor.loadTracksList()))
+        renderState(TrackListState.GetHistoryList(track = trackIteractor.loadTracksList()))
     }
 
 
@@ -53,7 +49,7 @@ class SearchActivityViewModel : ViewModel() {
                 is TrackListState.Content -> trackState
                 is TrackListState.Error -> trackState
                 is TrackListState.Empty -> trackState
-                is TrackListState.getHistoryList -> trackState
+                is TrackListState.GetHistoryList -> trackState
             }
 
         }
@@ -72,19 +68,17 @@ class SearchActivityViewModel : ViewModel() {
                         if (foundTreks != null) {
                             trackSearch.addAll(foundTreks)
                         }
-                        if (errorMessage != null) {
-                            renderState(TrackListState.Error(errorMessage))
-                        } else if (trackSearch.isEmpty() && searchText.isNotEmpty()) {
-                            renderState(TrackListState.Empty(errorMessage.toString()))
-                        } else {
-                            renderState(
-                                TrackListState.Content(
-                                    track = trackSearch
-                                )
-                            )
-
+                        when{
+                            errorMessage != null ->{
+                                renderState(TrackListState.Error(errorMessage))
+                            }
+                            trackSearch.isEmpty() && searchText.isNotEmpty() ->{
+                                renderState(TrackListState.Empty(errorMessage.toString()))
+                            }
+                            else -> {
+                                renderState(TrackListState.Content(trackSearch))
+                            }
                         }
-
                     }
                 })
         } else {
@@ -119,11 +113,5 @@ class SearchActivityViewModel : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 1000L
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun searchViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchActivityViewModel()
-            }
-        }
     }
 }

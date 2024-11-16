@@ -10,10 +10,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.Creator.Creator.setContext
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.player.ui.activity.MusicActivity
@@ -21,11 +19,12 @@ import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
 import com.example.playlistmaker.search.ui.viewmodel.SearchActivityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SearchActivityViewModel
+    private val viewModel by viewModel<SearchActivityViewModel>()
 
     private lateinit var binding: ActivitySearchBinding
     private var statusString: String = INPUT_TEXT
@@ -39,18 +38,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContext(applicationContext)
-        applicationContext
 
-        viewModel = ViewModelProvider(
-            this,
-            SearchActivityViewModel.searchViewModelFactory()
-        )[SearchActivityViewModel::class.java]
-
-        viewModel.observeMediaState().observe(this) {
-
-        }
-
+        viewModel.observeMediaState().observe(this) {}
 
         trackList2 = findViewById(R.id.trackList2)
 
@@ -92,7 +81,6 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-
         binding.editText.addTextChangedListener(
             onTextChanged = { p0: CharSequence?, _, _, _ ->
                 viewModel.searchDebounce(p0.toString())
@@ -107,7 +95,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
         )
-
 
         binding.buttonUpDate.setOnClickListener {
             viewModel.iTunesServiceSearch(binding.editText.text.toString())
@@ -137,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
                 R.drawable.intent_mode
             )
 
-            is TrackListState.getHistoryList -> viewGroupTrackList2(state.track)
+            is TrackListState.GetHistoryList -> viewGroupTrackList2(state.track)
         }
     }
 

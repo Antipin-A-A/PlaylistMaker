@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.domain.api.reposirory
+package com.example.playlistmaker.settings.domain.api.repository
 
 interface ThemeRepository {
     fun switchIsChecked(isChecked: Boolean)

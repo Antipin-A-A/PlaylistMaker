@@ -6,22 +6,21 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Creator.Creator.setContext
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMusicBinding
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicActivityViewModel
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
 class MusicActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MusicActivityViewModel
+    private val viewModel by viewModel<MusicActivityViewModel>()
 
     private lateinit var binding: ActivityMusicBinding
 
@@ -32,14 +31,8 @@ class MusicActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setContext(applicationContext)
 
         mainThreadHandler = Handler(Looper.getMainLooper())
-
-        viewModel = ViewModelProvider(
-            this,
-            MusicActivityViewModel.mediaViewModelFactory()
-        )[MusicActivityViewModel::class.java]
 
         init()
 

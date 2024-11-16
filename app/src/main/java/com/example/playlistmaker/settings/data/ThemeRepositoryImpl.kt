@@ -1,8 +1,8 @@
-package com.example.playlistmaker.search.data.Themes
+package com.example.playlistmaker.settings.data
 
 import com.example.playlistmaker.search.data.shared_preference.SharedManager
-import com.example.playlistmaker.search.domain.api.reposirory.ThemeRepository
-import com.example.playlistmaker.search.util.AppTheme
+import com.example.playlistmaker.settings.domain.api.repository.ThemeRepository
+import com.example.playlistmaker.app.AppTheme
 
 class ThemeRepositoryImpl(private val sharedManager: SharedManager) :
     ThemeRepository {
