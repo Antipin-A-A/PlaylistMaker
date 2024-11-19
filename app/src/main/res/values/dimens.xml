@@ -26,4 +26,7 @@
     <dimen name="indent_20dp">20dp</dimen>
     <dimen name="indent_30dp">30dp</dimen>
     <dimen name="indent_26dp">26dp</dimen>
+    <dimen name="indent_106dp">106dp</dimen>
+    <dimen name="indent_54dp">54dp</dimen>
+    <dimen name="indent_46dp">46dp</dimen>
 </resources>

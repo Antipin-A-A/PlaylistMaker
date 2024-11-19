@@ -33,4 +33,8 @@
     <string name="albom">Альбом</string>
     <string name="dlitelnost">Длительность</string>
     <string name="current_track_time">00:00</string>
+    <string name="Mediateka">Медиатека</string>
+    <string name="mediateka_null">Ваша медиатека пуста</string>
+    <string name="playlists_null">Вы не создали \nни одного плейлиста</string>
+    <string name="new_playlist_text_button">Новый плейлист</string>
 </resources>
