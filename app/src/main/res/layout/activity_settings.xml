@@ -18,62 +18,30 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <FrameLayout
-        style="@style/FrameStyleSetting"
-        android:layout_marginTop="24dp">
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_button"
+        style="@style/TextStyleSetting"
+        android:checked="false"
+        android:text="@string/night_theme"
+        app:thumbTint="@color/colorThumbTint"
+        app:trackTint="@color/colorTrackTint" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_button"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center|end"
-            android:checked="false"
-            app:thumbTint="@color/colorThumbTint"
-            app:trackTint="@color/colorTrackTint" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_share"
+        style="@style/TextStyleSetting"
+        android:drawableEnd="@drawable/light_mode_share"
+        android:text="@string/share_app" />
 
-        <TextView
-            style="@style/TextStyleSetting"
-            android:text="@string/night_theme" />
-    </FrameLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_support"
+        style="@style/TextStyleSetting"
+        android:drawableEnd="@drawable/light_mode_support"
+        android:text="@string/write_service" />
 
-    <FrameLayout
-        style="@style/FrameStyleSetting">
-
-        <TextView
-            style="@style/TextStyleSetting"
-            android:text="@string/share_app" />
-
-        <ImageView
-            android:id="@+id/button_share"
-            style="@style/ImageViewStyleSetting"
-            app:srcCompat="@drawable/light_mode_share" />
-    </FrameLayout>
-
-    <FrameLayout
-        style="@style/FrameStyleSetting">
-
-        <ImageView
-            android:id="@+id/button_support"
-            style="@style/ImageViewStyleSetting"
-            app:srcCompat="@drawable/light_mode_support" />
-
-        <TextView
-            style="@style/TextStyleSetting"
-            android:text="@string/write_service" />
-    </FrameLayout>
-
-    <FrameLayout
-        style="@style/FrameStyleSetting">
-
-        <ImageView
-            android:id="@+id/button_arrow"
-            style="@style/ImageViewStyleSetting"
-            app:srcCompat="@drawable/light_mode_arrow" />
-
-        <TextView
-            style="@style/TextStyleSetting"
-            android:text="@string/user_agreement" />
-    </FrameLayout>
-
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/button_arrow"
+        style="@style/TextStyleSetting"
+        android:drawableEnd="@drawable/light_mode_arrow"
+        android:text="@string/user_agreement" />
 
 </LinearLayout>

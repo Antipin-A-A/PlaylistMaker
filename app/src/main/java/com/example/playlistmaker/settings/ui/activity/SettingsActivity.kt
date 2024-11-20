@@ -21,8 +21,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun initSetting() = with(binding) {
-
-        switchButton.isChecked = viewModel.getTheme()
+        viewModel.state.observe(this@SettingsActivity) {
+            switchButton.isChecked = it
+        }
 
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
