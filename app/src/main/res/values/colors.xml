@@ -16,6 +16,6 @@
     <color name="colorTrackTint">#E6E8EB</color>
     <color name="colorTextTrack">#000000</color>
     <color name="colorTextNameTime">#AEAFB4</color>
-    <color name="white_Black">#FFFFFF</color>
+    <color name="background">#FFFFFF</color>
     <color name="gray_only">#AEAFB4</color>
 </resources>

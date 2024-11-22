@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         app:tabIndicatorColor="@color/blackNight"
+        android:background="@color/background"
         app:tabMode="fixed"
         app:tabTextAppearance="@style/TabLayoutStyle"
         app:tabTextColor="@color/blackNight" />
