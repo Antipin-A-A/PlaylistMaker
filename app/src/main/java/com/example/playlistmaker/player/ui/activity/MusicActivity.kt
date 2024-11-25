@@ -97,7 +97,7 @@ class MusicActivity : AppCompatActivity() {
 
     private fun snake(view: View, string: String) {
         val snack: Snackbar = Snackbar.make(view, string, Snackbar.LENGTH_LONG)
-        snack.setTextColor(getResources().getColor(R.color.white_Black, theme))
+        snack.setTextColor(getResources().getColor(R.color.background, theme))
         snack.show()
     }
 

@@ -10,6 +10,6 @@ class ThemeInteractorImpl(private val repository: ThemeRepository) : ThemeIntera
     }
 
     override fun getSwitchStatus(): Boolean {
-        return repository.getSwitchStatus()
+      return  repository.getSwitchStatus()
     }
 }

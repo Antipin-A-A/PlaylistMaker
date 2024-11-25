@@ -1,6 +1,7 @@
 package com.example.playlistmaker.app
 
 import android.app.Application
+import com.example.playlistmaker.di.mediaModule
 import com.example.playlistmaker.di.playerModule
 import com.example.playlistmaker.di.searchModule
 import com.example.playlistmaker.di.settingModule
@@ -13,14 +14,13 @@ import org.koin.core.context.GlobalContext.startKoin
 class App : Application() {
 
     private val themeInteractor: ThemeInteractor by inject()
-   // private val themeInteractor by lazy { Creator.provideThemeInteractor() }
 
     override fun onCreate() {
         super.onCreate()
 
         startKoin {
             androidContext(this@App)
-            modules(searchModule, playerModule, settingModule, sharingModule)
+            modules(searchModule, playerModule, settingModule, sharingModule, mediaModule)
         }
 
         AppTheme.switchTheme(themeInteractor.getSwitchStatus())

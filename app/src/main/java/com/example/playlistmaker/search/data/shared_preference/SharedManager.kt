@@ -15,10 +15,6 @@ const val NEW_FACT_TRACK_KEY = "NEW_FACT_TRACK_KEY"
 
 class SharedManager(private val sharedPreferences: SharedPreferences) {
 
-
-//    private val sharedPreferences =
-//        context.getSharedPreferences(PRACTICUM_EXAMPLE_PREFERENCES, MODE_PRIVATE)
-
     fun saveTrackList(track: TrackDto) {
         val savedTrackList = getTrackDtoList().toMutableList()
         itemsListTrack(savedTrackList, track)
