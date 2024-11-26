@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.activity.MusicActivity
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
@@ -22,60 +25,67 @@ import com.example.playlistmaker.search.ui.viewmodel.SearchActivityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModel<SearchActivityViewModel>()
 
-    private lateinit var binding: ActivitySearchBinding
+
     private var statusString: String = INPUT_TEXT
     private lateinit var adapter: MusicAdapter
-    private lateinit var adapter2: MusicAdapter
-    private lateinit var trackList2: RecyclerView
+    private lateinit var adapterTrackListHistory: MusicAdapter
+    private lateinit var trackListHistory: RecyclerView
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.observeMediaState().observe(this) {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        trackList2 = findViewById(R.id.trackList2)
+        viewModel.observeMediaState().observe(viewLifecycleOwner) {}
+
+        trackListHistory = view.findViewById(R.id.trackList2)
 
         val onItemClickListener = OnItemClickListener { track ->
             if (clickDebounce()) {
                 viewModel.saveHistoryTrack(track)
                 viewModel.saveTrack(track)
-                startActivity(Intent(this, MusicActivity::class.java))
+                startActivity(Intent(requireContext(), MusicActivity::class.java))
             }
         }
 
-        adapter2 = MusicAdapter(onItemClickListener)
-        trackList2.adapter = adapter2
+        adapterTrackListHistory = MusicAdapter(onItemClickListener)
+        trackListHistory.adapter = adapterTrackListHistory
 
         adapter = MusicAdapter(onItemClickListener)
         binding.trackList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.trackList.adapter = adapter
 
         binding.buttonCleanSearch.setOnClickListener {
             binding.editText.setText("")
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+               context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.buttonCleanSearch.windowToken, 0)
             adapter.notifyDataSetChanged()
             binding.buttonUpDate.isVisible = false
             binding.placeholderMessage.isVisible = false
         }
 
-        binding.toolbar.setNavigationOnClickListener() {
-            onBackPressedDispatcher.onBackPressed()
-        }
 
         binding.editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                viewModel.state.observe(this) {
+                viewModel.state.observe(viewLifecycleOwner) {
                     render(it)
                 }
             }
@@ -102,11 +112,17 @@ class SearchActivity : AppCompatActivity() {
 
         binding.buttonClearHistory.setOnClickListener {
             viewModel.removeHistoryTrackList()
-            trackList2.isVisible = false
+            trackListHistory.isVisible = false
             binding.textLookingForYou.isVisible = false
             binding.buttonClearHistory.isVisible = false
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     private fun render(state: TrackListState) {
         when (state) {
@@ -153,9 +169,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun viewGroupTrackList2(track: List<Track>) = with(binding) {
-        adapter2.tracks = track.toMutableList()
+        adapterTrackListHistory.tracks = track.toMutableList()
         trackList.isVisible = false
-        if (adapter2.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
+        if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
             trackList2.isVisible = false
             textLookingForYou.isVisible = false
             buttonClearHistory.isVisible = false
@@ -163,7 +179,7 @@ class SearchActivity : AppCompatActivity() {
             trackList2.isVisible = true
             textLookingForYou.isVisible = true
             buttonClearHistory.isVisible = true
-            adapter2.notifyDataSetChanged()
+            adapterTrackListHistory.notifyDataSetChanged()
         }
 
     }

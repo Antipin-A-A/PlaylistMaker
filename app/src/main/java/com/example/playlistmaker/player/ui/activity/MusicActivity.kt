@@ -91,7 +91,9 @@ class MusicActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.pause()
+        if (isRunTime) {
+            viewModel.pause()
+        }
         isRunTime = false
     }
 
