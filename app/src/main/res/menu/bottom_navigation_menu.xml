@@ -7,7 +7,7 @@
         android:icon="@drawable/light_mode_search"/>
 
     <item
-        android:id="@+id/mediaFragment2"
+        android:id="@+id/mediaFragment"
         android:title="@string/mediateka"
         android:icon="@drawable/baseline_library_music_24"/>
 

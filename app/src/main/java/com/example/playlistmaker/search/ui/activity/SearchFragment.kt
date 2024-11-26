@@ -27,15 +27,16 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModel<SearchActivityViewModel>()
 
 
     private var statusString: String = INPUT_TEXT
     private lateinit var adapter: MusicAdapter
-    private lateinit var adapter2: MusicAdapter
-    private lateinit var trackList2: RecyclerView
+    private lateinit var adapterTrackListHistory: MusicAdapter
+    private lateinit var trackListHistory: RecyclerView
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
@@ -44,7 +45,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -53,7 +54,7 @@ class SearchFragment : Fragment() {
 
         viewModel.observeMediaState().observe(viewLifecycleOwner) {}
 
-        trackList2 = view.findViewById(R.id.trackList2)
+        trackListHistory = view.findViewById(R.id.trackList2)
 
         val onItemClickListener = OnItemClickListener { track ->
             if (clickDebounce()) {
@@ -63,8 +64,8 @@ class SearchFragment : Fragment() {
             }
         }
 
-        adapter2 = MusicAdapter(onItemClickListener)
-        trackList2.adapter = adapter2
+        adapterTrackListHistory = MusicAdapter(onItemClickListener)
+        trackListHistory.adapter = adapterTrackListHistory
 
         adapter = MusicAdapter(onItemClickListener)
         binding.trackList.layoutManager =
@@ -111,10 +112,15 @@ class SearchFragment : Fragment() {
 
         binding.buttonClearHistory.setOnClickListener {
             viewModel.removeHistoryTrackList()
-            trackList2.isVisible = false
+            trackListHistory.isVisible = false
             binding.textLookingForYou.isVisible = false
             binding.buttonClearHistory.isVisible = false
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 
@@ -163,9 +169,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun viewGroupTrackList2(track: List<Track>) = with(binding) {
-        adapter2.tracks = track.toMutableList()
+        adapterTrackListHistory.tracks = track.toMutableList()
         trackList.isVisible = false
-        if (adapter2.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
+        if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
             trackList2.isVisible = false
             textLookingForYou.isVisible = false
             buttonClearHistory.isVisible = false
@@ -173,7 +179,7 @@ class SearchFragment : Fragment() {
             trackList2.isVisible = true
             textLookingForYou.isVisible = true
             buttonClearHistory.isVisible = true
-            adapter2.notifyDataSetChanged()
+            adapterTrackListHistory.notifyDataSetChanged()
         }
 
     }
