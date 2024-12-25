@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     style="@style/LayoutStyle"
-    tools:context=".settings.ui.activity.SettingsActivity">
+    tools:context=".settings.ui.activity.SettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/dark_mode_arrow_back"
         app:title="@string/system_text"
         app:titleMargin="8dp"
         app:titleTextAppearance="@style/ToolbarStyle">

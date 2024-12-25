@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
     style="@style/LayoutStyle"
-    tools:context=".search.ui.activity.SearchActivity">
+    tools:context=".search.ui.activity.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/dark_mode_arrow_back"
         app:title="@string/search_text"
         app:titleMargin="8dp"
         app:titleTextAppearance="@style/ToolbarStyle">

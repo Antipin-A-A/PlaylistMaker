@@ -28,7 +28,7 @@ class MusicActivityViewModel(
         screenStateLiveData.postValue(TrackScreenState.Content(trackIteractor.loadTrackData()))
     }
 
-    fun preparePlayer() {
+    private fun preparePlayer() {
         val url = trackIteractor.loadTrackData()?.previewUrl.toString()
         if (url != "null") {
             stateMutable.value = PlayerState.PreparePlayer(mediaPlayerInteract.preparePlayer(url))
