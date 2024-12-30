@@ -1,15 +1,16 @@
 package com.example.playlistmaker.search.ui.viewmodel
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SearchActivityViewModel(
     private val trackIteractor:TrackIteractor
@@ -22,8 +23,8 @@ class SearchActivityViewModel(
         getHistoryTrackList()
     }
 
-    private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
+    private  var searchJob: Job? = null
 
     fun saveHistoryTrack(track: Track) {
         trackIteractor.saveTrackList(track)
@@ -61,28 +62,33 @@ class SearchActivityViewModel(
     fun iTunesServiceSearch(searchText: String) {
         if (searchText.isNotEmpty()) {
             renderState(TrackListState.Loading)
-            trackIteractor.searchTrack(searchText,
-                object : TrackIteractor.TrackConsumer {
-                    override fun consume(foundTreks: List<Track>?, errorMessage: String?) {
-                        val trackSearch = mutableListOf<Track>()
-                        if (foundTreks != null) {
-                            trackSearch.addAll(foundTreks)
-                        }
-                        when{
-                            errorMessage != null ->{
-                                renderState(TrackListState.Error(errorMessage))
-                            }
-                            trackSearch.isEmpty() && searchText.isNotEmpty() ->{
-                                renderState(TrackListState.Empty(errorMessage.toString()))
-                            }
-                            else -> {
-                                renderState(TrackListState.Content(trackSearch))
-                            }
-                        }
+            viewModelScope.launch {
+                trackIteractor
+                    .searchTrack(searchText)
+                    .collect{pair ->
+                        processResult(pair.first, pair.second, searchText)
                     }
-                })
+            }
         } else {
             getHistoryTrackList()
+        }
+    }
+
+    private fun processResult(foundTreks: List<Track>?, errorMessage: String?, searchText: String) {
+        val trackSearch = mutableListOf<Track>()
+        if (foundTreks != null) {
+            trackSearch.addAll(foundTreks)
+        }
+        when{
+            errorMessage != null ->{
+                renderState(TrackListState.Error(errorMessage))
+            }
+            trackSearch.isEmpty() && searchText.isNotEmpty() ->{
+                renderState(TrackListState.Empty(errorMessage.toString()))
+            }
+            else -> {
+                renderState(TrackListState.Content(trackSearch))
+            }
         }
     }
 
@@ -95,23 +101,20 @@ class SearchActivityViewModel(
         if (latestSearchText == changedText) {
             return
         }
-        this.latestSearchText = changedText
-        val searchRunnable = Runnable { iTunesServiceSearch(changedText) }
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
-    }
-
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        latestSearchText = changedText
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            iTunesServiceSearch(changedText)
+        }
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 1000L
-        private val SEARCH_REQUEST_TOKEN = Any()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchJob?.cancel()
     }
 }
