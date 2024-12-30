@@ -32,4 +32,8 @@ class MediaPlayerInteractImpl(private val repository: MediaPlayerRepository): Me
        return repository.currentPosition()
     }
 
+    override fun isPlaying(): Boolean {
+        return repository.isPlaying()
+    }
+
 }

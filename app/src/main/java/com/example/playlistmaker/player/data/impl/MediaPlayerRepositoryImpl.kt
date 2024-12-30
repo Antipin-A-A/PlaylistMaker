@@ -6,6 +6,7 @@ import com.example.playlistmaker.player.domain.api.repository.MediaPlayerReposit
 class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
 
+
     override fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
@@ -53,7 +54,11 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         return mediaPlayer.currentPosition.toLong()
     }
 
-   private companion object {
+    override fun isPlaying(): Boolean {
+        return mediaPlayer.isPlaying
+    }
+
+    private companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2

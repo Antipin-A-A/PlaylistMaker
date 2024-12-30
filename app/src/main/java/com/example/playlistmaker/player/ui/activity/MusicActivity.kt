@@ -4,6 +4,7 @@ package com.example.playlistmaker.player.ui.activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -24,7 +25,6 @@ class MusicActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMusicBinding
 
-    private var mainThreadHandler: Handler? = null
     private var isRunTime = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,23 +32,30 @@ class MusicActivity : AppCompatActivity() {
         binding = ActivityMusicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mainThreadHandler = Handler(Looper.getMainLooper())
-
         init()
 
         viewModel.getScreenStateLiveData().observe(this) { screenState ->
             when (screenState) {
+                is TrackScreenState.Loading -> {
+                    Log.i("Log1", " Loading")
+                }
+
                 is TrackScreenState.Content -> {
                     content(screenState)
+                    Log.i("Log2", " Content")
                 }
 
-                is TrackScreenState.Loading -> {
-
+                is TrackScreenState.TimeTrack -> {
+                    binding.currentTrackTime.text = screenState.time
+                    Log.i("Log3", "TimeTrack")
                 }
 
-                TrackScreenState.Complete -> {
+                is TrackScreenState.Complete -> {
                     complete()
+                    Log.i("Log4", "Complete")
                 }
+
+
             }
         }
     }
@@ -74,11 +81,13 @@ class MusicActivity : AppCompatActivity() {
 
     private fun content(track: TrackScreenState.Content) = with(binding) {
         artistName.text = track.trackModel?.artistName ?: getString(R.string.artist_name)
-        collectionNameFirst.text = track.trackModel?.trackName ?: getString(R.string.collection_name)
+        collectionNameFirst.text =
+            track.trackModel?.trackName ?: getString(R.string.collection_name)
         collectionName.text = track.trackModel?.collectionName ?: getString(R.string.albom)
         trackTime.text = track.trackModel?.trackTimeMillis ?: getString(R.string.track_time)
         releaseDate.text = track.trackModel?.releaseDate ?: getString(R.string.god)
-        primaryGenreName.text = track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
+        primaryGenreName.text =
+            track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
         country.text = track.trackModel?.country ?: getString(R.string.country)
 
         Glide.with(this@MusicActivity)
@@ -103,45 +112,25 @@ class MusicActivity : AppCompatActivity() {
         snack.show()
     }
 
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                if (isRunTime) {
-                    val trackTime = SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(viewModel.position())
-                    binding.currentTrackTime.text = trackTime.toString()
-                    mainThreadHandler?.postDelayed(this, DELAY)
-                }
-            }
-        }
-    }
-
     private fun playerStart() = with(binding) {
         if (isRunTime) {
             viewModel.pause()
             isRunTime = false
             buttonPlay.setImageResource(R.drawable.play_icon)
-            mainThreadHandler?.removeCallbacks(createUpdateTimerTask())
         } else {
             viewModel.start()
             isRunTime = true
             buttonPlay.setImageResource(R.drawable.pause_icon)
-            mainThreadHandler?.post(createUpdateTimerTask())
         }
 
         viewModel.setOnCompleted()
     }
 
     private fun complete() {
+        isRunTime = false
         binding.buttonPlay.setImageResource(R.drawable.play_icon)
         binding.currentTrackTime.text = getString(R.string.current_track_time)
-        isRunTime = false
-    }
 
-    companion object {
-        private const val DELAY = 1000L
     }
 
 }
