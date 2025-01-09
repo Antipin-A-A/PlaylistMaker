@@ -8,4 +8,5 @@ interface MediaPlayerRepository {
     fun release()
     fun setOnCompletionListener(function: () -> Unit)
     fun currentPosition(): Long
+    fun isPlaying(): Boolean
 }
