@@ -2,60 +2,66 @@ package com.example.playlistmaker.player.ui.activity
 
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityMusicBinding
+import com.example.playlistmaker.databinding.FragmentMusicBinding
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicActivityViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
-class MusicActivity : AppCompatActivity() {
+class MusicFragment : Fragment() {
 
-    private val viewModel by viewModel<MusicActivityViewModel>()
+    private var _binding: FragmentMusicBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var binding: ActivityMusicBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMusicBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
     private var isRunTime = false
+    private val viewModel by viewModel<MusicActivityViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMusicBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         init()
 
-        viewModel.getScreenStateLiveData().observe(this) { screenState ->
+        viewModel.getScreenStateLiveData().observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 is TrackScreenState.Loading -> {
-                    Log.i("Log1", " Loading")
                 }
 
                 is TrackScreenState.Content -> {
                     content(screenState)
-                    Log.i("Log2", " Content")
                 }
 
                 is TrackScreenState.TimeTrack -> {
                     binding.currentTrackTime.text = screenState.time
-                    Log.i("Log3", "TimeTrack")
                 }
 
                 is TrackScreenState.Complete -> {
                     complete()
-                    Log.i("Log4", "Complete")
                 }
-
-
+            }
+        }
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.buttonLike.setImageResource(R.drawable.haed_red)
+            } else {
+                binding.buttonLike.setImageResource(R.drawable.head_with)
             }
         }
     }
@@ -64,7 +70,7 @@ class MusicActivity : AppCompatActivity() {
     private fun init() {
         binding.apply {
             toolbar.setNavigationOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
+                findNavController().navigateUp()
             }
 
             buttonAdd.setOnClickListener {
@@ -76,6 +82,9 @@ class MusicActivity : AppCompatActivity() {
                 playerStart()
             }
 
+            buttonLike.setOnClickListener {
+                viewModel.onFavoriteClicked()
+            }
         }
     }
 
@@ -90,7 +99,7 @@ class MusicActivity : AppCompatActivity() {
             track.trackModel?.primaryGenreName ?: getString(R.string.primary_genre_name)
         country.text = track.trackModel?.country ?: getString(R.string.country)
 
-        Glide.with(this@MusicActivity)
+        Glide.with(this@MusicFragment)
             .load(track.trackModel?.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
             .placeholder(R.drawable.placeholder)
             .fitCenter()
@@ -108,7 +117,7 @@ class MusicActivity : AppCompatActivity() {
 
     private fun snake(view: View, string: String) {
         val snack: Snackbar = Snackbar.make(view, string, Snackbar.LENGTH_LONG)
-        snack.setTextColor(getResources().getColor(R.color.background, theme))
+        snack.setTextColor(getResources().getColor(R.color.background))
         snack.show()
     }
 
