@@ -1,15 +1,20 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.base_room.domain.api.RoomInteract
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
+import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -17,6 +22,7 @@ import java.util.Locale
 class MusicActivityViewModel(
     private val mediaPlayerInteract: MediaPlayerInteract,
     private val trackIteractor: TrackIteractor,
+    private val roomInteract: RoomInteract
 ) : ViewModel() {
 
     private var timerJob: Job? = null
@@ -27,9 +33,59 @@ class MusicActivityViewModel(
     private var screenStateLiveData = MutableLiveData<TrackScreenState>(TrackScreenState.Loading)
     fun getScreenStateLiveData(): LiveData<TrackScreenState> = screenStateLiveData
 
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite: LiveData<Boolean> get() = _isFavorite
+
     init {
         preparePlayer()
         getTrack()
+        checkIsTrackFavorite()
+        _isFavorite.value = false
+    }
+
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            if (_isFavorite.value == true) {
+                _isFavorite.value = false
+                deleteListTrack(roomInteract.getTracksRoom(), trackIteractor.loadTrackData())
+                roomInteract.deleteTrackRoom(trackIteractor.loadTrackData())
+            } else {
+                trackIteractor.loadTrackData().isFavorite = true
+                roomInteract.saveTrackRoom(trackIteractor.loadTrackData())
+                _isFavorite.value = true
+            }
+        }
+    }
+
+    private fun checkIsTrackFavorite() {
+        viewModelScope.launch {
+            check(roomInteract.getTracksRoom(), trackIteractor.loadTrackData())
+        }
+    }
+
+    private suspend fun check(resultList: Flow<List<Track>>, track: Track): Boolean? {
+        resultList.collect { idFavorites ->
+            idFavorites.forEach {
+                if (track.trackId == it.trackId) {
+                    track.isFavorite = true
+                    _isFavorite.value = true
+                }
+            }
+        }
+        return _isFavorite.value
+    }
+
+    private suspend fun deleteListTrack(resultList: Flow<List<Track>>, track: Track) {
+        resultList.collect { idFavorites ->
+            idFavorites.forEach {
+                if (track.trackId == it.trackId) {
+                    track.id = it.id
+                    roomInteract.deleteTrackRoom(track)
+                } else {
+                    roomInteract.deleteTrackRoom(track)
+                }
+            }
+        }
     }
 
     private fun getTrack() {
@@ -37,7 +93,7 @@ class MusicActivityViewModel(
     }
 
     private fun preparePlayer() {
-        val url = trackIteractor.loadTrackData()?.previewUrl.toString()
+        val url = trackIteractor.loadTrackData().previewUrl.toString()
         if (url != "null") {
             stateMutable.value = PlayerState.PreparePlayer(mediaPlayerInteract.preparePlayer(url))
         }
@@ -79,13 +135,14 @@ class MusicActivityViewModel(
     }
 
     private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(position())?: "00:00"
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(position()) ?: "00:00"
     }
 
     override fun onCleared() {
         super.onCleared()
         release()
     }
+
     companion object {
         private const val DELAY = 300L
     }

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +14,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.MusicActivity
+import com.example.playlistmaker.player.ui.activity.MusicFragment
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
@@ -33,8 +36,6 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchActivityViewModel>()
 
-
-    private var statusString: String = INPUT_TEXT
     private lateinit var adapter: MusicAdapter
     private lateinit var adapterTrackListHistory: MusicAdapter
     private lateinit var trackListHistory: RecyclerView
@@ -52,6 +53,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.state.observe(viewLifecycleOwner) {
+            render(it)
+        }
+
         viewModel.observeMediaState().observe(viewLifecycleOwner) {}
 
         trackListHistory = view.findViewById(R.id.trackList2)
@@ -60,7 +65,9 @@ class SearchFragment : Fragment() {
             if (clickDebounce()) {
                 viewModel.saveHistoryTrack(track)
                 viewModel.saveTrack(track)
-                startActivity(Intent(requireContext(), MusicActivity::class.java))
+                findNavController().navigate(
+                R.id.action_searchFragment_to_musicFragment
+                )
             }
         }
 
@@ -80,30 +87,22 @@ class SearchFragment : Fragment() {
             adapter.notifyDataSetChanged()
             binding.buttonUpDate.isVisible = false
             binding.placeholderMessage.isVisible = false
-        }
-
-
-        binding.editText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                viewModel.state.observe(viewLifecycleOwner) {
-                    render(it)
-                }
-            }
+          //  binding.trackList2.isVisible = true
         }
 
         binding.editText.addTextChangedListener(
             onTextChanged = { p0: CharSequence?, _, _, _ ->
-                viewModel.searchDebounce(p0.toString())
-                if (binding.editText.hasFocus() && binding.editText.text.isNotEmpty()) {
+                viewModel.searchDebounce(p0?.toString()?:"")
+                if (binding.editText.hasFocus() && binding.editText.text.isEmpty()) {
                     viewModel.getHistoryTrackList()
+//                    viewModel.searchDebounce(changedText = p0.toString())
                 }
             },
             afterTextChanged = { _: Editable? ->
-                statusString = binding.editText.text.toString()
+             //   statusString = binding.editText.text.toString()
                 binding.buttonUpDate.isVisible = false
                 binding.placeholderMessage.isVisible = false
             }
-
         )
 
         binding.buttonUpDate.setOnClickListener {
@@ -123,7 +122,6 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-
     private fun render(state: TrackListState) {
         when (state) {
             is TrackListState.Loading -> showLoading()
@@ -133,13 +131,11 @@ class SearchFragment : Fragment() {
                 "",
                 R.drawable.search_error_mode
             )
-
             is TrackListState.Error -> showMessage(
                 getString(R.string.errorWifi),
                 "1",
                 R.drawable.intent_mode
             )
-
             is TrackListState.GetHistoryList -> viewGroupTrackList2(state.track)
         }
     }
@@ -158,6 +154,7 @@ class SearchFragment : Fragment() {
     private fun showContent(track: List<Track>) = with(binding) {
         trackList.isVisible = true
         trackList2.isVisible = false
+        buttonCleanSearch.isVisible = true
         placeholderMessage.isVisible = false
         textLookingForYou.isVisible = false
         buttonClearHistory.isVisible = false
@@ -171,18 +168,21 @@ class SearchFragment : Fragment() {
     private fun viewGroupTrackList2(track: List<Track>) = with(binding) {
         adapterTrackListHistory.tracks = track.toMutableList()
         trackList.isVisible = false
-        if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
-            trackList2.isVisible = false
-            textLookingForYou.isVisible = false
-            buttonClearHistory.isVisible = false
-        } else {
-            trackList2.isVisible = true
-            textLookingForYou.isVisible = true
-            buttonClearHistory.isVisible = true
-            adapterTrackListHistory.notifyDataSetChanged()
+        binding.editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus || binding.editText.text.isEmpty()) {
+                if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
+                    trackList2.isVisible = false
+                    textLookingForYou.isVisible = false
+                    buttonClearHistory.isVisible = false
+                } else {
+                    trackList2.isVisible = true
+                    textLookingForYou.isVisible = true
+                    buttonClearHistory.isVisible = true
+                    adapterTrackListHistory.notifyDataSetChanged()
+                }
+            }
         }
-
-    }
+        }
 
     private fun showMessage(text: String, additionalMessage: String, drawable: Int) =
         with(binding) {
@@ -207,13 +207,10 @@ class SearchFragment : Fragment() {
         }
 
     companion object {
-        const val INPUT_TEXT = ""
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-
     }
 
     private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
@@ -221,6 +218,6 @@ class SearchFragment : Fragment() {
                 isClickAllowed = true
             }
         }
-        return current
+        return true
     }
 }

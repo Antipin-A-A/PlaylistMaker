@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
+import com.example.playlistmaker.search.Object.ERROR_CONNECT
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,7 +39,6 @@ class SearchActivityViewModel(
         renderState(TrackListState.GetHistoryList(track = trackIteractor.loadTracksList()))
     }
 
-
     fun removeHistoryTrackList() {
         trackIteractor.removeTrackList()
     }
@@ -58,7 +58,6 @@ class SearchActivityViewModel(
 
     fun observeMediaState(): LiveData<TrackListState> = mediatorStateLiveData
 
-
     fun iTunesServiceSearch(searchText: String) {
         if (searchText.isNotEmpty()) {
             renderState(TrackListState.Loading)
@@ -66,7 +65,7 @@ class SearchActivityViewModel(
                 trackIteractor
                     .searchTrack(searchText)
                     .collect{pair ->
-                        processResult(pair.first, pair.second, searchText)
+                        processResult(pair.first, pair.second)
                     }
             }
         } else {
@@ -74,24 +73,27 @@ class SearchActivityViewModel(
         }
     }
 
-    private fun processResult(foundTreks: List<Track>?, errorMessage: String?, searchText: String) {
+    private fun processResult(foundTreks: List<Track>?, errorMessage: String?) {
         val trackSearch = mutableListOf<Track>()
         if (foundTreks != null) {
             trackSearch.addAll(foundTreks)
         }
         when{
             errorMessage != null ->{
-                renderState(TrackListState.Error(errorMessage))
+                if (errorMessage == "$ERROR_CONNECT"){
+                    renderState(TrackListState.Error(errorMessage))
+                }else{
+                    renderState(TrackListState.Empty)
+                }
             }
-            trackSearch.isEmpty() && searchText.isNotEmpty() ->{
-                renderState(TrackListState.Empty(errorMessage.toString()))
+            trackSearch.isEmpty()->{
+                renderState(TrackListState.Empty)
             }
             else -> {
                 renderState(TrackListState.Content(trackSearch))
             }
         }
     }
-
 
     private fun renderState(state: TrackListState) {
         stateMutable.postValue(state)

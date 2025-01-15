@@ -141,6 +141,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            app:layout_constraintHeight_max="500dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@id/barrier3"
@@ -156,9 +157,10 @@
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             app:barrierDirection="top"
             app:constraint_referenced_ids="buttonClearHistory"
+            android:layout_marginBottom="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -167,13 +169,12 @@
             style="@style/ButtonStyle2"
             android:text="@string/clear_hictory_text_button"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/trackList2"
             app:layout_constraintVertical_bias="0"
             tools:visibility="visible" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

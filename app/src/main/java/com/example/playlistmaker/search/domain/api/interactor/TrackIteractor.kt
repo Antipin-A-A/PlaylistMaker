@@ -14,5 +14,5 @@ interface TrackIteractor {
 
     fun removeTrackList()
 
-    fun loadTrackData(): Track?
+    fun loadTrackData(): Track
 }
