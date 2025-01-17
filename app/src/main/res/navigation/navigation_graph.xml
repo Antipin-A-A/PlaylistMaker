@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_playlists" />
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.example.playlistmaker.main.activity.MainActivity"
+        android:name="com.example.playlistmaker.main.activity.RootActivity"
         android:label="activity_music_adapter"
         tools:layout="@layout/activity_music_adapter" />
     <fragment

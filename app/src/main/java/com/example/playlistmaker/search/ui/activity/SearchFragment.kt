@@ -1,11 +1,8 @@
 package com.example.playlistmaker.search.ui.activity
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.activity.MusicFragment
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
 import com.example.playlistmaker.search.ui.viewmodel.SearchActivityViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,11 +33,12 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchActivityViewModel>()
 
+    private var statusString: String = INPUT_TEXT
     private lateinit var adapter: MusicAdapter
     private lateinit var adapterTrackListHistory: MusicAdapter
     private lateinit var trackListHistory: RecyclerView
     private var isClickAllowed = true
-
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,13 +58,14 @@ class SearchFragment : Fragment() {
         viewModel.observeMediaState().observe(viewLifecycleOwner) {}
 
         trackListHistory = view.findViewById(R.id.trackList2)
+        bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
 
         val onItemClickListener = OnItemClickListener { track ->
             if (clickDebounce()) {
                 viewModel.saveHistoryTrack(track)
                 viewModel.saveTrack(track)
                 findNavController().navigate(
-                R.id.action_searchFragment_to_musicFragment
+                    R.id.action_searchFragment_to_musicFragment
                 )
             }
         }
@@ -82,24 +81,23 @@ class SearchFragment : Fragment() {
         binding.buttonCleanSearch.setOnClickListener {
             binding.editText.setText("")
             val inputMethodManager =
-               context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.buttonCleanSearch.windowToken, 0)
             adapter.notifyDataSetChanged()
             binding.buttonUpDate.isVisible = false
             binding.placeholderMessage.isVisible = false
-          //  binding.trackList2.isVisible = true
+            trackListHistoryIsVisible()
         }
 
         binding.editText.addTextChangedListener(
             onTextChanged = { p0: CharSequence?, _, _, _ ->
-                viewModel.searchDebounce(p0?.toString()?:"")
+                viewModel.searchDebounce(p0?.toString() ?: "")
                 if (binding.editText.hasFocus() && binding.editText.text.isEmpty()) {
                     viewModel.getHistoryTrackList()
-//                    viewModel.searchDebounce(changedText = p0.toString())
                 }
             },
             afterTextChanged = { _: Editable? ->
-             //   statusString = binding.editText.text.toString()
+                //     statusString = binding.editText.text.toString()
                 binding.buttonUpDate.isVisible = false
                 binding.placeholderMessage.isVisible = false
             }
@@ -112,8 +110,7 @@ class SearchFragment : Fragment() {
         binding.buttonClearHistory.setOnClickListener {
             viewModel.removeHistoryTrackList()
             trackListHistory.isVisible = false
-            binding.textLookingForYou.isVisible = false
-            binding.buttonClearHistory.isVisible = false
+            binding.groupTrackList2.isVisible = false
         }
     }
 
@@ -131,33 +128,33 @@ class SearchFragment : Fragment() {
                 "",
                 R.drawable.search_error_mode
             )
+
             is TrackListState.Error -> showMessage(
                 getString(R.string.errorWifi),
                 "1",
                 R.drawable.intent_mode
             )
-            is TrackListState.GetHistoryList -> viewGroupTrackList2(state.track)
+
+            is TrackListState.GetHistoryList -> viewGroupTrackListHistory(state.track)
         }
     }
 
     private fun showLoading() = with(binding) {
+        bottomNavigationView.isVisible = true
         trackList.isVisible = false
-        trackList2.isVisible = false
+        groupTrackList2.isVisible = false
         placeholderMessage.isVisible = false
         progressBar.isVisible = true
         buttonCleanSearch.isVisible = true
         buttonUpDate.isVisible = false
-        textLookingForYou.isVisible = false
-        buttonClearHistory.isVisible = false
     }
 
     private fun showContent(track: List<Track>) = with(binding) {
+        bottomNavigationView.isVisible = false
         trackList.isVisible = true
-        trackList2.isVisible = false
+        groupTrackList2.isVisible = false
         buttonCleanSearch.isVisible = true
         placeholderMessage.isVisible = false
-        textLookingForYou.isVisible = false
-        buttonClearHistory.isVisible = false
         progressBar.isVisible = false
         buttonUpDate.isVisible = false
         adapter.tracks.clear()
@@ -165,59 +162,63 @@ class SearchFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun viewGroupTrackList2(track: List<Track>) = with(binding) {
+    private fun viewGroupTrackListHistory(track: List<Track>) = with(binding) {
+        bottomNavigationView.isVisible = true
         adapterTrackListHistory.tracks = track.toMutableList()
         trackList.isVisible = false
         binding.editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus || binding.editText.text.isEmpty()) {
-                if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
-                    trackList2.isVisible = false
-                    textLookingForYou.isVisible = false
-                    buttonClearHistory.isVisible = false
-                } else {
-                    trackList2.isVisible = true
-                    textLookingForYou.isVisible = true
-                    buttonClearHistory.isVisible = true
-                    adapterTrackListHistory.notifyDataSetChanged()
-                }
+                trackListHistoryIsVisible()
             }
         }
-        }
-
-    private fun showMessage(text: String, additionalMessage: String, drawable: Int) =
-        with(binding) {
-            progressBar.isVisible = false
-            trackList.isVisible = false
-            trackList2.isVisible = false
-            placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0)
-
-            if (text.isNotEmpty()) {
-                placeholderMessage.isVisible = true
-                adapter.tracks.clear()
-                adapter.notifyDataSetChanged()
-                placeholderMessage.text = text
-                buttonUpDate.isVisible = false
-                if (additionalMessage.isNotEmpty()) {
-                    buttonUpDate.isVisible = true
-                }
-            } else {
-                placeholderMessage.isVisible = false
-                buttonUpDate.isVisible = false
-            }
-        }
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    private fun clickDebounce(): Boolean {
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
+    private fun trackListHistoryIsVisible() = with(binding) {
+        if (adapterTrackListHistory.tracks.isEmpty() || binding.editText.text.isNotEmpty()) {
+            groupTrackList2.isVisible = false
+        } else {
+            groupTrackList2.isVisible = true
+            adapterTrackListHistory.notifyDataSetChanged()
         }
-        return true
     }
+
+
+private fun showMessage(text: String, additionalMessage: String, drawable: Int) =
+    with(binding) {
+        bottomNavigationView.isVisible = true
+        progressBar.isVisible = false
+        trackList.isVisible = false
+        trackList2.isVisible = false
+        placeholderMessage.setCompoundDrawablesWithIntrinsicBounds(0, drawable, 0, 0)
+
+        if (text.isNotEmpty()) {
+            placeholderMessage.isVisible = true
+            adapter.tracks.clear()
+            adapter.notifyDataSetChanged()
+            placeholderMessage.text = text
+            buttonUpDate.isVisible = false
+            if (additionalMessage.isNotEmpty()) {
+                buttonUpDate.isVisible = true
+            }
+        } else {
+            placeholderMessage.isVisible = false
+            buttonUpDate.isVisible = false
+        }
+    }
+
+companion object {
+    const val INPUT_TEXT = ""
+    private const val CLICK_DEBOUNCE_DELAY = 1000L
+}
+
+private fun clickDebounce(): Boolean {
+    if (isClickAllowed) {
+        isClickAllowed = false
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(CLICK_DEBOUNCE_DELAY)
+            isClickAllowed = true
+        }
+    }
+    return true
+}
 }
