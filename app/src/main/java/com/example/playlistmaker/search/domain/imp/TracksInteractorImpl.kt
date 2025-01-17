@@ -39,7 +39,7 @@ class TracksInteractorImpl(
         repositoryStorage.removeTrack()
     }
 
-    override fun loadTrackData(): Track? {
+    override fun loadTrackData(): Track {
         return repositoryStorage.loadTrackData()
     }
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.search.ui.activity
+package com.example.movie.ui.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,26 +7,23 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
 
-class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
-
-    RecyclerView.Adapter<MusicViewHolder>() {
+class FavoriteAdapter (private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<FavoriteViewHolder>() {
 
     var tracks = mutableListOf<Track>()
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_music_adapter, parent, false)
-        return MusicViewHolder(view)
+        return FavoriteViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MusicViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener { onItemClickListener.onItemClick(tracks[position]) }
     }
 
-    override fun getItemCount(): Int {
-        return tracks.size
-    }
+    override fun getItemCount(): Int = tracks.size
+
+
 
 }

@@ -18,6 +18,6 @@ val playerModule = module {
     factory<MediaPlayerInteract> {
         MediaPlayerInteractImpl(get())
     }
-    viewModel { MusicActivityViewModel(get(),get()) }
+    viewModel { MusicActivityViewModel(get(),get(), get()) }
 
 }

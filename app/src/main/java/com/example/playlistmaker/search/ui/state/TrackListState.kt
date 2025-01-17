@@ -10,11 +10,10 @@ sealed interface TrackListState {
     ) : TrackListState
     data class Error(
         val errorMessage: String
+
     ) : TrackListState
 
-    data class Empty(
-        val message: String
-    ) : TrackListState
+    data object Empty : TrackListState
 
     data class GetHistoryList(
         val track: List<Track>

@@ -7,5 +7,5 @@ interface TrackStorageRepository {
     fun saveTrack(track: Track)
     fun loadTracksList(): List<Track>
     fun removeTrack()
-    fun loadTrackData(): Track?
+    fun loadTrackData(): Track
 }

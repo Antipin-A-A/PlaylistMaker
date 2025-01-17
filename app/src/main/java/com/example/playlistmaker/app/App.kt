@@ -1,6 +1,7 @@
 package com.example.playlistmaker.app
 
 import android.app.Application
+import com.example.playlistmaker.di.baseRoomModule
 import com.example.playlistmaker.di.mediaModule
 import com.example.playlistmaker.di.playerModule
 import com.example.playlistmaker.di.searchModule
@@ -20,7 +21,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(searchModule, playerModule, settingModule, sharingModule, mediaModule)
+            modules(searchModule, playerModule, settingModule, sharingModule, mediaModule, baseRoomModule)
         }
 
         AppTheme.switchTheme(themeInteractor.getSwitchStatus())
