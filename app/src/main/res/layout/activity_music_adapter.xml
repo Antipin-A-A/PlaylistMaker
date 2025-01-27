@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/size_8dp"
         android:layout_marginEnd="@dimen/size_8dp"
         android:layout_marginBottom="@dimen/size_8dp"
-        android:src="@drawable/image" />
+        android:src="@drawable/empty_image_group" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,7 +33,6 @@
             android:textSize="@dimen/text_size_16sp"
             tools:text="Yesterday (Remastered 2009)" />
 
-
         <TextView
             android:id="@+id/artistNameAndTime"
             style="@style/TextStyleSearchMusic"
@@ -42,7 +41,6 @@
             tools:text="@string/name_artist_time" />
 
     </LinearLayout>
-
 
     <ImageView
         android:id="@+id/arrowForward"

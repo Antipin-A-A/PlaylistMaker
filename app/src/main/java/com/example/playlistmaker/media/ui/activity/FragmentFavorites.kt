@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.base_room.ui.viewmodel.FavoriteState
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
+import com.example.playlistmaker.media.ui.viewmodel.FavoriteState
 import com.example.playlistmaker.media.ui.viewmodel.FavoritesViewModel
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
@@ -39,10 +39,11 @@ class FragmentFavorites : Fragment() {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onItemClickListener = OnItemClickListener { track ->
+        val onItemClickListener = OnItemClickListener<Track> { track ->
             if (clickDebounce()) {
                 viewModel.saveTrack(track)
                 findNavController().navigate(
@@ -71,26 +72,26 @@ class FragmentFavorites : Fragment() {
     private fun render(state: FavoriteState) {
         when (state) {
             is FavoriteState.Content -> showContent(state.movies)
-            is FavoriteState.Empty -> showEmpty(state.message)
+            is FavoriteState.Empty -> showEmpty(getString(R.string.mediateka_null))
             is FavoriteState.Loading -> showLoading()
         }
     }
 
-    private fun showLoading()=with(binding) {
+    private fun showLoading() = with(binding) {
         trackList.isVisible = false
         placeholderMessage.isVisible = false
     }
 
-    private fun showEmpty(message: String)=with(binding) {
+    private fun showEmpty(message: String) = with(binding) {
         trackList.isVisible = false
         placeholderMessage.isVisible = true
         binding.placeholderMessage.text = message
     }
 
-    private fun showContent(tracks: List<Track>)=with(binding) {
-      binding.trackList.visibility = View.VISIBLE
+    private fun showContent(tracks: List<Track>) = with(binding) {
+        binding.trackList.visibility = View.VISIBLE
         placeholderMessage.visibility = View.GONE
-    //    progressBar.visibility = View.GONE
+        //    progressBar.visibility = View.GONE
 
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)

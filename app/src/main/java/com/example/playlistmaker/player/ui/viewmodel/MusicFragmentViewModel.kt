@@ -1,29 +1,40 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.base_room.domain.api.PlayListInteract
 import com.example.playlistmaker.base_room.domain.api.RoomInteract
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
+import com.example.playlistmaker.playlist.domain.model.PlayList
+import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MusicActivityViewModel(
+class MusicFragmentViewModel(
     private val mediaPlayerInteract: MediaPlayerInteract,
     private val trackIteractor: TrackIteractor,
-    private val roomInteract: RoomInteract
+    private val roomInteract: RoomInteract,
+    private val playListInteract: PlayListInteract
 ) : ViewModel() {
+
+    private val _playLists = MutableLiveData<List<PlayList>>()
+    val playLists: LiveData<List<PlayList>> get() = _playLists
+
+    private val _message = MutableLiveData<String>()
+    val message: LiveData<String> get() = _message
+
+    private val stateLiveData = MutableLiveData<PlayListState>()
+    fun observeState(): LiveData<PlayListState> = stateLiveData
 
     private var timerJob: Job? = null
 
@@ -41,6 +52,7 @@ class MusicActivityViewModel(
         getTrack()
         checkIsTrackFavorite()
         _isFavorite.value = false
+        fillData()
     }
 
     fun onFavoriteClicked() {
@@ -136,6 +148,58 @@ class MusicActivityViewModel(
 
     private fun getCurrentPlayerPosition(): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(position()) ?: "00:00"
+    }
+
+    fun fillData() {
+        renderState(PlayListState.Loading)
+        viewModelScope.launch {
+            playListInteract
+                .getPlayList()
+                .collect { playlist ->
+                    processResult(playlist, message = String.toString())
+                }
+        }
+    }
+
+    private fun processResult(playlist: List<PlayList>, message: String) {
+        if (playlist.isEmpty()) {
+            renderState(PlayListState.Empty(message))
+        } else {
+            renderState(PlayListState.Content(playlist))
+        }
+    }
+
+    private fun renderState(state: PlayListState) {
+        stateLiveData.postValue(state)
+    }
+
+    fun saveFillData(playlistId: Int) {
+        viewModelScope.launch {
+            addTrackToPlaylist(playlistId)
+        }
+    }
+
+    private suspend fun addTrackToPlaylist(playlistId: Int) {
+        val trackId = trackIteractor.loadTrackData().trackId?.toInt()!!
+
+        val playList = playListInteract.getPlayListById(playlistId)
+        playListInteract.insertInTableAllTracks(trackIteractor.loadTrackData())
+
+        if (playList != null) {
+            val trackIds = playList.listTracksId?.toMutableList() ?: mutableListOf()
+
+            if (trackIds.contains(trackId)) {
+                _message.value = "Трек уже добавлен в плейлист ${playList.listName}"
+            } else {
+                trackIds.add(trackId)
+                val updatedPlayList = playList.copy(
+                    listTracksId = trackIds,
+                    countTracks = trackIds.size
+                )
+                playListInteract.updatePlayList(updatedPlayList)
+                _message.value = "Трек добавлен в плейлист ${playList.listName}"
+            }
+        }
     }
 
     override fun onCleared() {

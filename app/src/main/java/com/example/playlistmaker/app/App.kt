@@ -11,6 +11,7 @@ import com.example.playlistmaker.settings.domain.api.interact.ThemeInteractor
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
+import com.example.playlistmaker.di.playListModule
 
 class App : Application() {
 
@@ -21,7 +22,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(searchModule, playerModule, settingModule, sharingModule, mediaModule, baseRoomModule)
+            modules(searchModule, playerModule, settingModule, sharingModule, mediaModule, baseRoomModule, playListModule)
         }
 
         AppTheme.switchTheme(themeInteractor.getSwitchStatus())

@@ -7,7 +7,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
 
-class MusicAdapter(private val onItemClickListener: OnItemClickListener) :
+class MusicAdapter(private val onItemClickListener: OnItemClickListener<Track>) :
 
     RecyclerView.Adapter<MusicViewHolder>() {
 

@@ -8,6 +8,7 @@ sealed interface TrackListState {
     data class Content(
         val track: List<Track>
     ) : TrackListState
+
     data class Error(
         val errorMessage: String
 
