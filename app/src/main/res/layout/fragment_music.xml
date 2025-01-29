@@ -244,7 +244,6 @@
     <LinearLayout
         android:id="@+id/standard_bottom_sheet2"
         style="@style/LayoutStyle"
-        android:paddingHorizontal="@dimen/indent_12dp"
         app:behavior_hideable="true"
         app:behavior_peekHeight="440dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -273,7 +272,7 @@
             android:id="@+id/playList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/indent_32dp"
+            android:layout_marginTop="@dimen/indent_24dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/music_playlist_adapter"

@@ -5,7 +5,7 @@ import com.example.playlistmaker.settings.domain.api.interact.ThemeInteractor
 import com.example.playlistmaker.settings.domain.api.repository.ThemeRepository
 import com.example.playlistmaker.settings.domain.imp.ThemeInteractorImpl
 import com.example.playlistmaker.settings.ui.viewmodel.SettingsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val settingModule = module {

@@ -165,7 +165,7 @@ class MusicFragmentViewModel(
         if (playlist.isEmpty()) {
             renderState(PlayListState.Empty(message))
         } else {
-            renderState(PlayListState.Content(playlist))
+            renderState(PlayListState.Content(playlist.reversed()))
         }
     }
 
@@ -193,8 +193,8 @@ class MusicFragmentViewModel(
             } else {
                 trackIds.add(trackId)
                 val updatedPlayList = playList.copy(
-                    listTracksId = trackIds,
-                    countTracks = trackIds.size
+//                    listTracksId = trackIds,
+//                    countTracks = trackIds.size
                 )
                 playListInteract.updatePlayList(updatedPlayList)
                 _message.value = "Трек добавлен в плейлист ${playList.listName}"
