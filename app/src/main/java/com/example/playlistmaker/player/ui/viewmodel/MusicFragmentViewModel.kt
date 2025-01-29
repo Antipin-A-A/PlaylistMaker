@@ -33,8 +33,8 @@ class MusicFragmentViewModel(
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
 
-    private val stateLiveData = MutableLiveData<PlayListState>()
-    fun observeState(): LiveData<PlayListState> = stateLiveData
+    private val stateLiveData = MutableLiveData<PlayListStateForMusic>()
+    fun observeState(): LiveData<PlayListStateForMusic> = stateLiveData
 
     private var timerJob: Job? = null
 
@@ -151,25 +151,22 @@ class MusicFragmentViewModel(
     }
 
     fun fillData() {
-        renderState(PlayListState.Loading)
+        renderState(PlayListStateForMusic.Loading)
         viewModelScope.launch {
             playListInteract
                 .getPlayList()
                 .collect { playlist ->
-                    processResult(playlist, message = String.toString())
+                    processResult(playlist)
                 }
         }
     }
 
-    private fun processResult(playlist: List<PlayList>, message: String) {
-        if (playlist.isEmpty()) {
-            renderState(PlayListState.Empty(message))
-        } else {
-            renderState(PlayListState.Content(playlist.reversed()))
-        }
+    private fun processResult(playlist: List<PlayList>) {
+        renderState(PlayListStateForMusic.Content(playlist.reversed()))
     }
 
-    private fun renderState(state: PlayListState) {
+
+    private fun renderState(state: PlayListStateForMusic) {
         stateLiveData.postValue(state)
     }
 
@@ -193,8 +190,8 @@ class MusicFragmentViewModel(
             } else {
                 trackIds.add(trackId)
                 val updatedPlayList = playList.copy(
-//                    listTracksId = trackIds,
-//                    countTracks = trackIds.size
+                    listTracksId = trackIds,
+                    countTracks = trackIds.size
                 )
                 playListInteract.updatePlayList(updatedPlayList)
                 _message.value = "Трек добавлен в плейлист ${playList.listName}"

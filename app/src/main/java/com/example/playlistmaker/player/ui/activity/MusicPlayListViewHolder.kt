@@ -23,7 +23,7 @@ class MusicPlayListViewHolder(item: View) : RecyclerView.ViewHolder(item) {
         listName.text = item.listName
 
         countTrack.text =
-            itemView.context.getString(R.string.count_track, item.listTracksId?.size.toString())
+            itemView.context.getString(R.string.count_track, item.listTracksId?.filterNotNull()?.size.toString())
 
         Glide.with(itemView)
             .load(item.urlImage)

@@ -16,6 +16,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMusicBinding
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicFragmentViewModel
+import com.example.playlistmaker.player.ui.viewmodel.PlayListStateForMusic
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
@@ -209,11 +210,10 @@ class MusicFragment : Fragment() {
 
     }
 
-    private fun render(state: PlayListState) {
+    private fun render(state: PlayListStateForMusic) {
         when (state) {
-            is PlayListState.Content -> showContent(state.playlist)
-            is PlayListState.Empty -> TODO()
-            is PlayListState.Loading -> showLoading()
+            is PlayListStateForMusic.Content -> showContent(state.playlist)
+            is PlayListStateForMusic.Loading -> showLoading()
         }
     }
 
