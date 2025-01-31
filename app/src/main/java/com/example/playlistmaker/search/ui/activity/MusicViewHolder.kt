@@ -26,7 +26,7 @@ class MusicViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
         Glide.with(itemView)
             .load(item.artworkUrl100)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.empty_image_group)
             .fitCenter()
             .transform(RoundedCorners(10))
             .into(imageMusicGroup)

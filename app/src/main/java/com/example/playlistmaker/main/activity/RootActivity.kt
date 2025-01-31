@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityRootBinding
+import com.example.playlistmaker.playlist.ui.fragment.FragmentNewPlayList
 
 class RootActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRootBinding
@@ -24,8 +25,17 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.musicFragment -> { binding.bottomNavigation.isVisible = false }
-                else -> { binding.bottomNavigation.isVisible = true }
+                R.id.musicFragment -> {
+                    binding.bottomNavigation.isVisible = false
+                }
+
+                R.id.fragmentNewPlayList -> {
+                    binding.bottomNavigation.isVisible = false
+                }
+
+                else -> {
+                    binding.bottomNavigation.isVisible = true
+                }
             }
         }
     }

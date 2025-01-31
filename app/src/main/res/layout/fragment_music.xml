@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     style="@style/LayoutStyle"
     tools:context=".player.ui.activity.MusicFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -56,7 +61,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@drawable/placeholder" />
+        app:srcCompat="@drawable/empty_image_group" />
 
     <TextView
         android:id="@+id/collectionNameFirst"
@@ -133,7 +138,7 @@
     <TextView
         android:id="@+id/textViewTime"
         style="@style/TextStyleCategory"
-        android:text="@string/dlitelnost"
+        android:text="@string/duration"
         android:layout_marginTop="@dimen/indent_30dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewAlbum"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart16"
@@ -222,11 +227,57 @@
         style="@style/TextStyleCategory"
         android:textColor="@color/blackNight"
         android:gravity="end"
-        android:text="@string/track_time"
+        android:text="@string/duration"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewTime"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/guidelineEnd"
         app:layout_constraintStart_toEndOf="@+id/barrier3" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <View android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/standard_bottom_sheet2"
+        style="@style/LayoutStyle"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="440dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="@dimen/indent_50dp"
+            android:layout_height="@dimen/size_4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/size_8dp"
+            android:background="@drawable/rounder" />
+
+        <TextView
+            style="@style/TextStyleMedium500"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="@string/add_in_playlist"
+            android:textSize="19sp" />
+
+        <Button
+            android:id="@+id/buttonNewPlayList"
+            style="@style/ButtonStyle2"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/new_playlist_text_button" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/indent_24dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/music_playlist_adapter"
+            tools:visibility="visible">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

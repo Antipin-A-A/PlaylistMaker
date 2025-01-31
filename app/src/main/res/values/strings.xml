@@ -12,7 +12,6 @@
     <string name="string_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="string_email_tittle">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="url_share">https://practicum.yandex.ru/android-developer/?from=catalog/</string>
-    <string name="text_hint_search">Поиск</string>
     <string name="mail_address_user">digitex150@yandex.ru</string>
     <string name="editText" />
     <string name="name_artist_time">%1$s • %2$s</string>
@@ -26,12 +25,11 @@
     <string name="primary_genre_name">Жанр</string>
     <string name="country">Страна</string>
     <string name="artist_name">Исполнитель</string>
-    <string name="track_time">Длительность</string>
     <string name="Strana">Страна</string>
     <string name="ganr">Жанр</string>
     <string name="god">Год</string>
     <string name="albom">Альбом</string>
-    <string name="dlitelnost">Длительность</string>
+    <string name="duration">Длительность</string>
     <string name="current_track_time">00:00</string>
     <string name="Mediateka">Медиатека</string>
     <string name="mediateka_null">Ваша медиатека пуста</string>
@@ -39,4 +37,10 @@
     <string name="new_playlist_text_button">Новый плейлист</string>
     <string name="favorites_tracks_text">Избранные треки</string>
     <string name="playlists_text">Плейлисты</string>
+    <string name="new_play_list">Новый плейлист</string>
+    <string name="greate">Создать</string>
+    <string name="title">Название*</string>
+    <string name="description">Описание</string>
+    <string name="count_track">%1$s треков</string>
+    <string name="add_in_playlist">Добавить в плейлист</string>
 </resources>

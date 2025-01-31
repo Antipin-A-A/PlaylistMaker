@@ -17,7 +17,7 @@ import com.example.playlistmaker.search.domain.api.reposirory.TrackStorageReposi
 import com.example.playlistmaker.search.domain.imp.TracksInteractorImpl
 import com.example.playlistmaker.search.ui.viewmodel.SearchActivityViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
     val searchModule = module {
@@ -39,7 +39,7 @@ import org.koin.dsl.module
         }
 
         single<TrackRepository> {
-            TrackRepositoryImpl(get(),get())
+            TrackRepositoryImpl(get())
         }
 
         single<TrackStorageRepository> {
@@ -49,6 +49,7 @@ import org.koin.dsl.module
         single<TrackIteractor> {
             TracksInteractorImpl(get(),get())
         }
+
         viewModel {
             SearchActivityViewModel(get())
         }

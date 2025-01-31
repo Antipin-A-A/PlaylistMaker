@@ -29,4 +29,6 @@
     <dimen name="indent_106dp">106dp</dimen>
     <dimen name="indent_54dp">54dp</dimen>
     <dimen name="indent_46dp">46dp</dimen>
+    <dimen name="indent_32dp">32dp</dimen>
+    <dimen name="indent_50dp">50dp</dimen>
 </resources>

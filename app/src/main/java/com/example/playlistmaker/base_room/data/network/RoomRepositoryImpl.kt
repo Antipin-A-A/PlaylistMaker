@@ -1,6 +1,5 @@
 package com.example.playlistmaker.base_room.data.network
 
-import android.util.Log
 import com.example.playlistmaker.base_room.data.bd.AppDataBase
 import com.example.playlistmaker.base_room.data.bd.TrackEntity
 import com.example.playlistmaker.base_room.data.convector.TrackDbConvertor
@@ -27,8 +26,8 @@ class RoomRepositoryImpl(
         emit(convertFromTracksListEntity(tracks))
     }
 
-    private fun convertFromTracksListEntity(movies: List<TrackEntity>): List<Track> {
-        return movies.map { track -> trackDbConvertor.mapToDomain(track) }
+    private fun convertFromTracksListEntity(trackEntities: List<TrackEntity>): List<Track> {
+        return trackEntities.map { track -> trackDbConvertor.mapToDomain(track) }
     }
 }
 

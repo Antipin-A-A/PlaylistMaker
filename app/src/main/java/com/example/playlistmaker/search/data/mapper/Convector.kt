@@ -1,5 +1,11 @@
 package com.example.playlistmaker.search.data.mapper
 
+import android.net.Uri
+import android.os.Environment
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.net.toUri
+import com.google.gson.Gson
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -38,4 +44,14 @@ object Convector {
             url
         }
     }
+
+    fun fromJsonPlayList(string: String): MutableList<Int?>? {
+        val gson= Gson()
+      return gson.fromJson(string, mutableListOf<Int?>()::class.java)
+    }
+    fun toJsonPlayList(string: String): String? {
+        val gson = Gson()
+        return gson.toJson(string)
+    }
+
 }

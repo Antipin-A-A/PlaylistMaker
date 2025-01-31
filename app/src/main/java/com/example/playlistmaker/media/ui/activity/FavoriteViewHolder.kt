@@ -1,4 +1,4 @@
-package com.example.movie.ui.history
+package com.example.playlistmaker.media.ui.activity
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +25,7 @@ class FavoriteViewHolder(item: View) : RecyclerView.ViewHolder(item){
 
         Glide.with(itemView)
             .load(item.artworkUrl100)
-            .placeholder(R.drawable.image)
+            .placeholder(R.drawable.empty_image_group)
             .fitCenter()
             .transform(RoundedCorners(10))
             .into(imageMusicGroup)

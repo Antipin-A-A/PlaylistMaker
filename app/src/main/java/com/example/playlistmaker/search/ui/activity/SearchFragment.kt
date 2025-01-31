@@ -60,7 +60,7 @@ class SearchFragment : Fragment() {
         trackListHistory = view.findViewById(R.id.trackList2)
         bottomNavigationView = requireActivity().findViewById(R.id.bottomNavigation)
 
-        val onItemClickListener = OnItemClickListener { track ->
+        val onItemClickListener = OnItemClickListener<Track> { track ->
             if (clickDebounce()) {
                 viewModel.saveHistoryTrack(track)
                 viewModel.saveTrack(track)
