@@ -18,7 +18,6 @@ import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicFragmentViewModel
 import com.example.playlistmaker.player.ui.viewmodel.PlayListStateForMusic
 import com.example.playlistmaker.playlist.domain.model.PlayList
-import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar

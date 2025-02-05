@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.api.OnItemLongClickListener
 import com.example.playlistmaker.search.domain.modeles.Track

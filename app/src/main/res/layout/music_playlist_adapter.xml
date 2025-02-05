@@ -14,6 +14,7 @@
         android:layout_marginTop="@dimen/indent_8dp"
         android:layout_marginEnd="@dimen/indent_8dp"
         android:layout_marginBottom="@dimen/indent_8dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/empty_image_group" />
 
     <LinearLayout

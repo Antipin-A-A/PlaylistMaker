@@ -31,6 +31,7 @@
         android:layout_marginEnd="@dimen/indent_24dp"
         android:adjustViewBounds="true"
         android:background="@drawable/dotted_line"
+        android:importantForAccessibility="no"
         android:scaleType="centerInside"
         android:src="@drawable/vector"
         app:layout_constraintDimensionRatio="1:1"

@@ -10,7 +10,6 @@ import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.sharing.domain.api.interact.ExternalNavigator
-import com.example.playlistmaker.sharing.domain.api.interact.SharingInteractor
 import kotlinx.coroutines.launch
 
 class ScreenPlaylistViewModel(

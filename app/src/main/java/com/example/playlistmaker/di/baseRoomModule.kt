@@ -14,7 +14,6 @@ import com.example.playlistmaker.base_room.domain.imp.PlayListInteractImpl
 import com.example.playlistmaker.base_room.domain.imp.RoomInteractImpl
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val baseRoomModule = module {

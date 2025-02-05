@@ -1,8 +1,6 @@
 package com.example.playlistmaker.media.ui.activity
 
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +14,6 @@ import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.viewmodel.PlaylistsViewModel
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
-import com.example.playlistmaker.screenplaylist.ui.fragment.ScreenPlaylistFragment
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
