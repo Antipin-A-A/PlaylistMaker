@@ -33,6 +33,7 @@ class MusicFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: MusicPlayListAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     private var isClickAllowed = true
 
@@ -99,9 +100,7 @@ class MusicFragment : Fragment() {
 
             val overlay = binding.overlay
 
-            val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2).apply {
-                state = BottomSheetBehavior.STATE_HIDDEN
-            }
+            bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2)
 
             buttonAdd.setOnClickListener {
                 viewModel.fillData()
@@ -117,6 +116,7 @@ class MusicFragment : Fragment() {
             }
 
             buttonNewPlayList.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 findNavController().navigate(
                     R.id.action_musicFragment_to_fragmentNewPlayList
                 )
@@ -152,7 +152,6 @@ class MusicFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             binding.playList.adapter = adapter
         }
-
     }
 
     private fun content(track: TrackScreenState.Content) = with(binding) {
@@ -174,6 +173,12 @@ class MusicFragment : Fragment() {
             .into(imageView)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
 
     override fun onPause() {
         super.onPause()

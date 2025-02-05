@@ -1,5 +1,6 @@
 package com.example.playlistmaker.search.domain.api.interactor
 
+import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.flow.Flow
 
@@ -15,4 +16,7 @@ interface TrackIteractor {
     fun removeTrackList()
 
     fun loadTrackData(): Track
+
+    fun savePlaylist(playlist: PlayList)
+    fun getPlaylistDto(): PlayList
 }

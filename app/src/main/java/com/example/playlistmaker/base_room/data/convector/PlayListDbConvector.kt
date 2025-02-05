@@ -5,7 +5,7 @@ import com.example.playlistmaker.base_room.data.bd.PlayListEntity
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.google.gson.Gson
 
-class PlayListDbConvector(private val gson: Gson) {
+class PlayListDbConvector {
 
     fun mapToData(playlist: PlayList): PlayListEntity {
         return PlayListEntity(

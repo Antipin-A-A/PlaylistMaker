@@ -10,7 +10,6 @@ import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.playlist.domain.model.PlayList
-import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.Job
@@ -154,7 +153,7 @@ class MusicFragmentViewModel(
         renderState(PlayListStateForMusic.Loading)
         viewModelScope.launch {
             playListInteract
-                .getPlayList()
+                .getAllPlayList()
                 .collect { playlist ->
                     processResult(playlist)
                 }

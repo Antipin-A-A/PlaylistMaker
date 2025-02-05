@@ -43,7 +43,7 @@ import org.koin.dsl.module
         }
 
         single<TrackStorageRepository> {
-            TrackStorageRepositoryImpl(get())
+            TrackStorageRepositoryImpl(get(), get())
         }
 
         single<TrackIteractor> {

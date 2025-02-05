@@ -1,6 +1,8 @@
 package com.example.playlistmaker.media.ui.activity
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.media.ui.viewmodel.PlaylistsViewModel
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
+import com.example.playlistmaker.screenplaylist.ui.fragment.ScreenPlaylistFragment
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,12 +44,12 @@ class FragmentPlaylists : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onItemClickListener = OnItemClickListener<PlayList> { track ->
+        val onItemClickListener = OnItemClickListener<PlayList> { playlist ->
             if (clickDebounce()) {
-//          //      viewModel.saveTrack(track)
-//                findNavController().navigate(
-//                    R.id.action_mediaFragment_to_musicFragment
-//                )
+                viewModel.saveTrack(playlist)
+                findNavController().navigate(
+                    R.id.action_mediaFragment_to_screenPlaylistFragment,
+                )
             }
         }
 
@@ -61,8 +64,11 @@ class FragmentPlaylists : Fragment() {
         }
 
         binding.buttonNewPlayList.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("source", "mediaFragment") // Укажите источник
+            }
             findNavController().navigate(
-                R.id.action_mediaFragment_to_fragmentNewPlayList
+                R.id.action_mediaFragment_to_fragmentNewPlayList, bundle
             )
         }
     }

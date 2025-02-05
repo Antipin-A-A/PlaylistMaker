@@ -34,14 +34,13 @@ val baseRoomModule = module {
     factory { TrackDbConvertor() }
 
     factory<PlayListReposytory> {
-        PlayListRepositoryImp(get(), get())
+        PlayListRepositoryImp(get(), get(), get())
     }
     factory <PlayListInteract>{
         PlayListInteractImpl(get())
     }
 
-    factory { PlayListDbConvector(get()) }
-
+    factory { PlayListDbConvector() }
 
     factory { Gson() }
 }

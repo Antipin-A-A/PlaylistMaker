@@ -13,12 +13,14 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.playlist.ui.viewmodel.NewPlayListViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -33,7 +35,6 @@ class FragmentNewPlayList : Fragment() {
     private var uri: Uri? = null
 
     companion object {
-        fun newInstance() = FragmentNewPlayList()
     }
 
     val viewModel by activityViewModel<NewPlayListViewModel>()
@@ -48,6 +49,16 @@ class FragmentNewPlayList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            val source = it.getString("source")
+            val playlistName = it.getString("listName", "") // Значение по умолчанию -1
+            val description = it.getString("description", "")
+            val image = it.getString("Image")
+            val playListId = it.getString("playlistId")
+
+            handleSource(source, playlistName, description, image, playListId.toString())
+        }
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -86,31 +97,88 @@ class FragmentNewPlayList : Fragment() {
 
             }
         )
+    }
 
-        binding.buttonCreate.setOnClickListener {
-            viewModel.savePlayList(
-                binding.textInputName.text.toString(),
-                binding.textInputDescription.text.toString(), uri
-            )
-            toast(binding.textInputName.text.toString())
-            findNavController().navigateUp()
-        }
+    private fun handleSource(
+        source: String?,
+        playlistName: String?,
+        description: String?,
+        image: String?,
+        playListId: String
+    ) {
+        when (source) {
+            "mediaFragment" -> {
+                binding.buttonCreate.setText(R.string.greate)
 
-        binding.toolbar.setNavigationOnClickListener {
-            if (binding.textInputName.text.isNullOrEmpty() && binding.textInputDescription.text.isNullOrEmpty() && uri == null) {
-                findNavController().navigateUp()
-            } else {
-                dialog()
+                binding.buttonCreate.setOnClickListener {
+                    viewModel.savePlayList(
+                        binding.textInputName.text.toString(),
+                        binding.textInputDescription.text.toString(),
+                        uri
+                    )
+                    toast(binding.textInputName.text.toString())
+                    findNavController().navigateUp()
+                }
+
+                binding.toolbar.setNavigationOnClickListener {
+                    if (binding.textInputName.text.isNullOrEmpty() && binding.textInputDescription.text.isNullOrEmpty() && uri == null) {
+                        findNavController().navigateUp()
+                    } else {
+                        dialog()
+                    }
+                }
+
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    viewLifecycleOwner,
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            dialog()
+                        }
+                    })
+            }
+
+            "screenPlaylist" -> {
+                binding.buttonCreate.setText(R.string.save)
+                binding.buttonCreate.isEnabled = true
+                binding.textInputName.setText(playlistName)
+                binding.textInputDescription.setText(description)
+                Log.i("IMAGE", "IMAGE = $image")
+                Glide.with(this)
+                    .load(image?.toUri())
+                    .placeholder(R.drawable.vector)
+                    .skipMemoryCache(true)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(10),
+                    )
+                    .into(binding.pickerImage)
+
+                binding.buttonCreate.setOnClickListener {
+                    viewModel.updatePlaylist(
+                        playListId.toInt(),
+                        binding.textInputName.text.toString(),
+                        binding.textInputDescription.text.toString(),
+                        uri
+                    )
+                    toast(binding.textInputName.text.toString())
+                    findNavController().navigateUp()
+                }
+
+                binding.toolbar.setNavigationOnClickListener {
+                    findNavController().navigateUp()
+                }
+
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    viewLifecycleOwner,
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                        }
+                    })
+            }
+
+            else -> {
             }
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    dialog()
-                }
-            })
     }
 
     override fun onDestroyView() {
@@ -119,7 +187,8 @@ class FragmentNewPlayList : Fragment() {
     }
 
     private fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
+        val filePath =
+            File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "myalbum")
 
         if (!filePath.exists()) {
             filePath.mkdirs()

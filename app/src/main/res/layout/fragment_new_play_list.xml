@@ -15,9 +15,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/dark_mode_arrow_back"
+        app:navigationIcon="@drawable/dark_mode_arrow"
         app:title="@string/new_play_list"
-        app:titleMargin="8dp"
+        app:titleMargin="@dimen/indent_8dp"
         app:titleTextAppearance="@style/ToolbarStyle">
 
     </androidx.appcompat.widget.Toolbar>
@@ -58,7 +58,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         style="@style/TextInputLayout"
-        android:layout_marginTop="@dimen/size_16dp"
+        android:layout_marginTop="@dimen/indent_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
@@ -75,8 +75,8 @@
         style="@style/ButtonStyle3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_16dp"
-        android:layout_marginEnd="@dimen/size_16dp"
+        android:layout_marginStart="@dimen/indent_16dp"
+        android:layout_marginEnd="@dimen/indent_16dp"
         android:layout_marginBottom="@dimen/indent_32dp"
         android:background="@drawable/button_background"
         android:enabled="false"

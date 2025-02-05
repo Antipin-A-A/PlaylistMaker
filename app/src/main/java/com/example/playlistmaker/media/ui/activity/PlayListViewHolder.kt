@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.ui.activity
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,5 +34,6 @@ class PlayListViewHolder(item: View) : RecyclerView.ViewHolder(item) {
                 RoundedCorners(10),
             )
             .into(imageMusicGroup)
+        Log.i("LogAdapter", "itemView = ${item.urlImage}")
     }
 }

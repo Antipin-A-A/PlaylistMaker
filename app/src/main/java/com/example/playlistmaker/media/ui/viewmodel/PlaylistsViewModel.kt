@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.base_room.domain.api.PlayListInteract
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
+import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(
-    private val playListInteract: PlayListInteract
+    private val playListInteract: PlayListInteract,
+    private val trackIteractor: TrackIteractor
 ) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<PlayListState>()
@@ -21,7 +23,7 @@ class PlaylistsViewModel(
         renderState(PlayListState.Loading)
         viewModelScope.launch {
             playListInteract
-                .getPlayList()
+                .getAllPlayList()
                 .collect { playlist ->
                     processResult(playlist, message = String.toString())
                 }
@@ -38,6 +40,10 @@ class PlaylistsViewModel(
 
     private fun renderState(state: PlayListState) {
         stateLiveData.postValue(state)
+    }
+
+    fun saveTrack(playList: PlayList) {
+        trackIteractor.savePlaylist(playList)
     }
 }
 
