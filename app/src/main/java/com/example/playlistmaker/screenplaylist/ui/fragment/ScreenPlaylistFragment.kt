@@ -94,8 +94,6 @@ class ScreenPlaylistFragment : Fragment() {
         }
 
 
-        // sheetBehavior(binding.standardBottomSheet2)
-
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -107,7 +105,8 @@ class ScreenPlaylistFragment : Fragment() {
         }
         binding.buttonDots.setOnClickListener {
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_COLLAPSED
-         //   binding.bottomSheetBehaviorMenu.isVisible = true
+            binding.overlay.isVisible = true
+           binding.bottomSheetBehaviorMenu.isVisible = true
             sheetBehavior()
             actionBehaviorButton()
         }
@@ -172,10 +171,12 @@ class ScreenPlaylistFragment : Fragment() {
     private fun actionBehaviorButton() = with(binding) {
         textShareBehavior.setOnClickListener {
             binding.bottomSheetBehaviorMenu.isVisible = false
+            binding.overlay.isVisible = false
             viewModel.sharePlayList()
         }
 
         textInformationBehavior.setOnClickListener {
+            binding.overlay.isVisible = false
             binding.bottomSheetBehaviorMenu.isVisible = false
             val bundle = Bundle().apply {
                 putString("source", "screenPlaylist")
@@ -224,6 +225,13 @@ class ScreenPlaylistFragment : Fragment() {
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (bottomSheetBehaviorMenu.state != BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
+        }
     }
 
     override fun onDestroyView() {

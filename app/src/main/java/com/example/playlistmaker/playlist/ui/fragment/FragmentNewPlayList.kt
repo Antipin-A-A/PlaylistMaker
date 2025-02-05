@@ -172,6 +172,7 @@ class FragmentNewPlayList : Fragment() {
                     viewLifecycleOwner,
                     object : OnBackPressedCallback(true) {
                         override fun handleOnBackPressed() {
+                            findNavController().navigateUp()
                         }
                     })
             }
