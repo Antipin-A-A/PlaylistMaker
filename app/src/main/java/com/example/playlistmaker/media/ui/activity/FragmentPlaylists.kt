@@ -1,7 +1,6 @@
 package com.example.playlistmaker.media.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,22 +78,17 @@ class FragmentPlaylists : Fragment() {
     }
 
     private fun showLoading() = with(binding) {
-
         playList.isVisible = false
         placeholderMessage.isVisible = false
-        adapter?.notifyDataSetChanged()
     }
 
     private fun showEmpty(message: String) = with(binding) {
-
-        adapter?.notifyDataSetChanged()
         playList.isVisible = false
         placeholderMessage.isVisible = true
         binding.placeholderMessage.text = message
     }
 
     private fun showContent(playList: List<PlayList>) = with(binding) {
-
         binding.playList.visibility = View.VISIBLE
         placeholderMessage.visibility = View.GONE
         adapter.playLists.clear()
