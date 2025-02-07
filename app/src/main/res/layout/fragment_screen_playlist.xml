@@ -121,7 +121,6 @@
         style="@style/LayoutStyle"
         android:background="@drawable/bottom_sheet_bg"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_constraintTop_toTopOf="@+id/buttonDots"
         app:layout_constraintBottom_toBottomOf="parent"

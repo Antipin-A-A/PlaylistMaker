@@ -50,9 +50,7 @@ class ScreenPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomSheetBehaviorPlayList = BottomSheetBehavior.from(binding.bottomSheetBehaviorPlayList)
-        bottomSheetBehaviorPlayList.state = BottomSheetBehavior.STATE_COLLAPSED
-
+        behaviorCoordinate()
         bottomSheetBehaviorMenu = BottomSheetBehavior.from(binding.bottomSheetBehaviorMenu)
         bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -106,9 +104,11 @@ class ScreenPlaylistFragment : Fragment() {
         binding.buttonShare.setOnClickListener {
             if (binding.trackList.isVisible) {
                 viewModel.sharePlayList()
-            }else{
-                Toast.makeText(requireContext(),
-                    getString(R.string.playlist_isEmpty_for_share),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.playlist_isEmpty_for_share), Toast.LENGTH_SHORT
+                ).show()
             }
         }
         binding.buttonDots.setOnClickListener {
@@ -225,6 +225,7 @@ class ScreenPlaylistFragment : Fragment() {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         overlay.visibility = View.GONE
                     }
+
                     else -> {
                         overlay.visibility = View.VISIBLE
                     }
@@ -232,6 +233,26 @@ class ScreenPlaylistFragment : Fragment() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+    }
+
+    private fun behaviorCoordinate() {
+        val headerPosition = IntArray(2)
+        bottomSheetBehaviorPlayList = BottomSheetBehavior.from(binding.bottomSheetBehaviorPlayList)
+        bottomSheetBehaviorPlayList.state = BottomSheetBehavior.STATE_COLLAPSED
+        binding.bottomSheetBehaviorPlayList.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+
+                binding.buttonDots.getLocationOnScreen(headerPosition)
+                val headerHeight = binding.buttonDots.height
+                val peekHeight = headerPosition[1] - (headerHeight * 14)
+                bottomSheetBehaviorPlayList.peekHeight = peekHeight
+
+                binding.bottomSheetBehaviorPlayList.viewTreeObserver.removeOnGlobalLayoutListener(
+                    this
+                )
+            }
         })
     }
 
