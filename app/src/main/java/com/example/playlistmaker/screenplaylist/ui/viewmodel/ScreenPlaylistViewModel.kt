@@ -1,6 +1,5 @@
 package com.example.playlistmaker.screenplaylist.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,8 +16,8 @@ class ScreenPlaylistViewModel(
     private val playListInteract: PlayListInteract,
     private val externalNavigator: ExternalNavigator
 ) : ViewModel() {
-    private var playlistId: Int = 0
-    private lateinit var playList:PlayList
+    private var idPlaylist: Int = 0
+    private lateinit var playList: PlayList
     private lateinit var currentPlayListTracks: List<Track>
 
     private val stateTrackLiveData = MutableLiveData<TrackListStateScreen>()
@@ -30,42 +29,40 @@ class ScreenPlaylistViewModel(
     private val stateString = MutableLiveData<String>()
     fun observeString(): LiveData<String> = stateString
 
+
     init {
-        getPlayListId()
+        getPlaylist()
     }
+
 
     fun saveTrack(track: Track) {
         trackIteractor.saveTrack(track)
-    }
-
-    fun deleteTrack(idtrack: String) {
-        viewModelScope.launch {
-            deleteTrackIfNotInPlaylists(idtrack)
-        }
     }
 
     fun getPlaylist() {
         renderStatePlayList(PlayListScreenState.Loading)
         renderState(TrackListStateScreen.Loading)
         viewModelScope.launch {
-            result(playlistId)
+            resultPlaylist()
+            resultTrack()
         }
     }
 
-    private fun getPlayListId(): Int {
-        viewModelScope.launch {
-            val id = trackIteractor.getPlaylistDto().id
-            playlistId = id
-        }
-        return playlistId
-    }
-
-    private suspend fun result(playlistId: Int) {
-        playList = playListInteract.getPlayListById(playlistId) //загрузили plylist из room
+    private suspend fun resultPlaylist() {
+        idPlaylist = trackIteractor.getCurrentPlaylist().id
+        playList = playListInteract.getPlayListById(idPlaylist)
         renderStatePlayList(PlayListScreenState.Content(playList))
+    }
+
+    fun deleteTrack(idtrack: String) {
+        viewModelScope.launch {
+            deleteTrackIfNotInPlaylists(idtrack)
+            getPlaylist()
+        }
+    }
+    private suspend fun resultTrack() {
         playList.let {
             it.listTracksId?.let { it1 -> loadTracks(it1) }
-
         }
     }
 
@@ -74,7 +71,7 @@ class ScreenPlaylistViewModel(
     }
 
     private suspend fun loadTracks(trackIds: List<Int?>) {
-        currentPlayListTracks = playListInteract.getTracksByIds(trackIds.filterNotNull()) // Получение треков по ID
+        currentPlayListTracks = playListInteract.getTracksByIds(trackIds.filterNotNull())
         val totalDurationInSeconds = currentPlayListTracks.sumOf { track ->
             val (minutes, seconds) = track.trackTimeMillis!!.split(":").map { it.toInt() }
             minutes * 60 + seconds
@@ -84,14 +81,13 @@ class ScreenPlaylistViewModel(
         if (currentPlayListTracks.isEmpty()) {
             renderState(TrackListStateScreen.Empty)
         } else {
-            renderState(TrackListStateScreen.Content(currentPlayListTracks))
+            renderState(TrackListStateScreen.Content(currentPlayListTracks.reversed()))
         }
     }
 
     private fun renderState(state: TrackListStateScreen) {
         stateTrackLiveData.postValue(state)
     }
-
     //удалить трек
     private suspend fun deleteTrackIfNotInPlaylists(trackId: String) {
         val playlists = playListInteract.getAllPlayList()
@@ -100,47 +96,23 @@ class ScreenPlaylistViewModel(
                 playlistId.listTracksId?.contains(trackId.toInt()) == true
             }
             val trackIds = playList.listTracksId?.toMutableList() ?: mutableListOf()
+
             if (!isTrackInAnyPlaylist) {
                 val trackToDelete = playListInteract.getTrackById(trackId.toInt())
                 playListInteract.deleteTrackInAllTracksEntity(trackToDelete)
-
-                trackIds.remove(trackId.toInt())
-                val updatedPlayList = playList.copy(
-                    listTracksId = trackIds,
-                    countTracks = trackIds.size
-                )
-                playListInteract.updatePlayList(updatedPlayList)
-
-            } else {
-                trackIds.remove(trackId.toInt())
-                val updatedPlayList = playList.copy(
-                    listTracksId = trackIds,
-                    countTracks = trackIds.size
-                )
-                playListInteract.updatePlayList(updatedPlayList)
-
             }
+            trackIds.remove(trackId.toInt())
+            val updatedPlayList = playList.copy(
+                listTracksId = trackIds,
+                countTracks = trackIds.size
+            )
+            playListInteract.updatePlayList(updatedPlayList)
         }
     }
 
     fun deleteList() {
         viewModelScope.launch {
-            deletePlayList(playList)
-        }
-    }
-
-    private suspend fun deletePlayList(playList: PlayList) {
-        val allPlaylist = playListInteract.getAllPlayList()
-        allPlaylist.collect { idFavorites ->
-            idFavorites.forEach {
-                if (playList.id == it.id) {
-                    playList.id = it.id
-                    Log.i("log 3", "trackToDelete = $playlistId, playList.id = ${playList.id}")// Удаляем трек
-                    playListInteract.deletePlayList(playList)
-                } else {
-                    playListInteract.deletePlayList(playList)
-                }
-            }
+            playListInteract.deletePlayList(playList)
         }
     }
 
@@ -149,6 +121,7 @@ class ScreenPlaylistViewModel(
     }
 
     private fun messageGenerator(): String {
+
         val message = buildString {
             this.append("плейлист ${playList.listName}")
             if (!playList.description.isNullOrEmpty()) {
@@ -166,5 +139,6 @@ class ScreenPlaylistViewModel(
         return message
     }
 }
+
 
 

@@ -18,5 +18,6 @@ interface TrackIteractor {
     fun loadTrackData(): Track
 
     fun savePlaylist(playlist: PlayList)
-    fun getPlaylistDto(): PlayList
+
+    fun getCurrentPlaylist(): PlayList
 }

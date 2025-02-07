@@ -61,11 +61,6 @@ class SharedManager(private val sharedPreferences: SharedPreferences) {
 
     fun getTrackDto(): TrackDto {
         val json = sharedPreferences.getString(NEW_FACT_TRACK_KEY, null)
-        /*        return if (!json.isNullOrEmpty()) {
-                    Gson().fromJson(json, TrackDto::class.java)
-                } else {
-                    null
-                }*/
         return Gson().fromJson(json, TrackDto::class.java)
     }
 

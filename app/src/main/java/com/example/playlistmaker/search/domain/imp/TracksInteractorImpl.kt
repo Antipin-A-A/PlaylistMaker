@@ -48,8 +48,7 @@ class TracksInteractorImpl(
         repositoryStorage.savePlaylist(playlist)
     }
 
-    override fun getPlaylistDto(): PlayList {
-        return repositoryStorage.getPlaylistDto()
+    override fun getCurrentPlaylist(): PlayList {
+        return repositoryStorage.getCurrentPlaylist()
     }
-
 }

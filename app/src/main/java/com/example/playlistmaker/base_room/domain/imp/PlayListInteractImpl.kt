@@ -1,13 +1,13 @@
 package com.example.playlistmaker.base_room.domain.imp
 
 import com.example.playlistmaker.base_room.domain.api.PlayListInteract
-import com.example.playlistmaker.base_room.domain.api.PlayListReposytory
+import com.example.playlistmaker.base_room.domain.api.PlayListRepository
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.flow.Flow
 
 class PlayListInteractImpl(
-    private val playListReposytory: PlayListReposytory
+    private val playListReposytory: PlayListRepository
 ) : PlayListInteract {
     override suspend fun savePlayList(playList: PlayList) {
         playListReposytory.savePlayList(playList)
@@ -29,9 +29,6 @@ class PlayListInteractImpl(
         playListReposytory.insertInTableAllTracks(tracks)
     }
 
-    override suspend fun getAllTrack(): Flow<List<Track>> {
-      return  playListReposytory.getAllTrack()
-    }
 
     override suspend fun getTracksByIds(listId: List<Int>): List<Track> {
         return playListReposytory.getTracksByIds(listId)

@@ -7,7 +7,7 @@ import com.example.playlistmaker.base_room.data.convector.TrackDbConvertor
 import com.example.playlistmaker.base_room.data.network.PlayListRepositoryImp
 import com.example.playlistmaker.base_room.data.network.RoomRepositoryImpl
 import com.example.playlistmaker.base_room.domain.api.PlayListInteract
-import com.example.playlistmaker.base_room.domain.api.PlayListReposytory
+import com.example.playlistmaker.base_room.domain.api.PlayListRepository
 import com.example.playlistmaker.base_room.domain.api.RoomInteract
 import com.example.playlistmaker.base_room.domain.api.RoomRepository
 import com.example.playlistmaker.base_room.domain.imp.PlayListInteractImpl
@@ -32,7 +32,7 @@ val baseRoomModule = module {
 
     factory { TrackDbConvertor() }
 
-    factory<PlayListReposytory> {
+    factory<PlayListRepository> {
         PlayListRepositoryImp(get(), get(), get())
     }
     factory <PlayListInteract>{

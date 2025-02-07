@@ -52,7 +52,7 @@ class FragmentNewPlayList : Fragment() {
 
         arguments?.let {
             val source = it.getString("source")
-            val playlistName = it.getString("listName", "") // Значение по умолчанию -1
+            val playlistName = it.getString("listName", "")
             val description = it.getString("description", "")
             val image = it.getString("Image")
             val playListId = it.getString("playlistId")
@@ -107,7 +107,49 @@ class FragmentNewPlayList : Fragment() {
         playListId: String
     ) {
         when (source) {
-            "mediaFragment" -> {
+            "screenPlaylist" -> {
+                binding.buttonCreate.setText(R.string.save)
+                binding.buttonCreate.isEnabled = true
+                binding.textInputName.setText(playlistName)
+                binding.textInputDescription.setText(description)
+
+                this.uri = image?.toUri()
+
+                Glide.with(this)
+                    .load(image?.toUri())
+                    .placeholder(R.drawable.vector)
+                    .skipMemoryCache(true)
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(10),
+                    )
+                    .into(binding.pickerImage)
+
+                binding.buttonCreate.setOnClickListener {
+                    viewModel.updatePlaylist(
+                        playListId.toInt(),
+                        binding.textInputName.text.toString(),
+                        binding.textInputDescription.text.toString(),
+                        uri
+                    )
+                    toast(getString(R.string.playlist_save, binding.textInputName.text.toString()))
+                    findNavController().navigateUp()
+                }
+
+                binding.toolbar.setNavigationOnClickListener {
+                    findNavController().navigateUp()
+                }
+
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    viewLifecycleOwner,
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            findNavController().navigateUp()
+                        }
+                    })
+            }
+
+            else -> {
                 binding.buttonCreate.setText(R.string.greate)
 
                 binding.buttonCreate.setOnClickListener {
@@ -116,7 +158,7 @@ class FragmentNewPlayList : Fragment() {
                         binding.textInputDescription.text.toString(),
                         uri
                     )
-                    toast(binding.textInputName.text.toString())
+                    toast(getString(R.string.playlist_create, binding.textInputName.text.toString()))
                     findNavController().navigateUp()
                 }
 
@@ -135,49 +177,6 @@ class FragmentNewPlayList : Fragment() {
                             dialog()
                         }
                     })
-            }
-
-            "screenPlaylist" -> {
-                binding.buttonCreate.setText(R.string.save)
-                binding.buttonCreate.isEnabled = true
-                binding.textInputName.setText(playlistName)
-                binding.textInputDescription.setText(description)
-                Log.i("IMAGE", "IMAGE = $image")
-                Glide.with(this)
-                    .load(image?.toUri())
-                    .placeholder(R.drawable.vector)
-                    .skipMemoryCache(true)
-                    .transform(
-                        CenterCrop(),
-                        RoundedCorners(10),
-                    )
-                    .into(binding.pickerImage)
-
-                binding.buttonCreate.setOnClickListener {
-                    viewModel.updatePlaylist(
-                        playListId.toInt(),
-                        binding.textInputName.text.toString(),
-                        binding.textInputDescription.text.toString(),
-                        uri
-                    )
-                    toast(binding.textInputName.text.toString())
-                    findNavController().navigateUp()
-                }
-
-                binding.toolbar.setNavigationOnClickListener {
-                    findNavController().navigateUp()
-                }
-
-                requireActivity().onBackPressedDispatcher.addCallback(
-                    viewLifecycleOwner,
-                    object : OnBackPressedCallback(true) {
-                        override fun handleOnBackPressed() {
-                            findNavController().navigateUp()
-                        }
-                    })
-            }
-
-            else -> {
             }
         }
     }
@@ -219,7 +218,8 @@ class FragmentNewPlayList : Fragment() {
     }
 
     private fun toast(string: String) {
-        Toast.makeText(requireContext(), "Плейлист [$string] создан", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(),
+            string, Toast.LENGTH_SHORT).show()
     }
 
 }

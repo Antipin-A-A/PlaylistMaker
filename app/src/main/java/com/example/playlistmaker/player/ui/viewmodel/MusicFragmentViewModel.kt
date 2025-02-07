@@ -26,9 +26,6 @@ class MusicFragmentViewModel(
     private val playListInteract: PlayListInteract
 ) : ViewModel() {
 
-    private val _playLists = MutableLiveData<List<PlayList>>()
-    //  val playLists: LiveData<List<PlayList>> get() = _playLists
-
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
 

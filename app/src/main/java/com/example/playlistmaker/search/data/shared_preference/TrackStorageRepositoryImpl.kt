@@ -35,7 +35,7 @@ class TrackStorageRepositoryImpl(private val sharedManager: SharedManager,privat
        sharedManager.savePlaylist(playListDbConvector.mapToData(playlist))
     }
 
-  override  fun getPlaylistDto(): PlayList {
+  override  fun getCurrentPlaylist(): PlayList {
         return sharedManager.getPlaylist().mapToDomain()
     }
 }

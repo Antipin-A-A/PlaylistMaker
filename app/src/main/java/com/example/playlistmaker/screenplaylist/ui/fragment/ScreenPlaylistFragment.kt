@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -43,7 +45,6 @@ class ScreenPlaylistFragment : Fragment() {
     ): View {
         _binding = FragmentScreenPlaylistBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,7 +56,18 @@ class ScreenPlaylistFragment : Fragment() {
         bottomSheetBehaviorMenu = BottomSheetBehavior.from(binding.bottomSheetBehaviorMenu)
         bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
 
+        viewModel.observeTrackState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+        viewModel.observePlayListState().observe(viewLifecycleOwner) {
+            renderPlayList(it)
+        }
+
         viewModel.getPlaylist()
+
+        binding.namePlayList.setOnClickListener {
+            bottomSheetBehaviorPlayList.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
 
         val onItemClickListener = OnItemClickListener<Track> { track ->
             if (clickDebounce()) {
@@ -65,17 +77,17 @@ class ScreenPlaylistFragment : Fragment() {
                 )
             }
         }
+
         val onItemLongClickListener = OnItemLongClickListener { track ->
             if (clickDebounce()) {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Хотите удалить трек?")
+                    .setTitle(getString(R.string.want_delete_track))
                     .setMessage("")
-                    .setNegativeButton("Нет") { dialog, which ->
+                    .setNegativeButton(getString(R.string.no)) { dialog, which ->
                     }
-                    .setPositiveButton("Да") { dialog, which ->
+                    .setPositiveButton(getString(R.string.yes)) { dialog, which ->
                         viewModel.deleteTrack(track.trackId.toString())
                         viewModel.getPlaylist()
-                        adapter.notifyDataSetChanged()
                     }
                     .show()
             }
@@ -86,13 +98,6 @@ class ScreenPlaylistFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.trackList.adapter = adapter
 
-        viewModel.observeTrackState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-        viewModel.observePlayListState().observe(viewLifecycleOwner) {
-            renderPlayList(it)
-        }
-
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -101,16 +106,18 @@ class ScreenPlaylistFragment : Fragment() {
         binding.buttonShare.setOnClickListener {
             if (binding.trackList.isVisible) {
                 viewModel.sharePlayList()
+            }else{
+                Toast.makeText(requireContext(),
+                    getString(R.string.playlist_isEmpty_for_share),Toast.LENGTH_SHORT).show()
             }
         }
         binding.buttonDots.setOnClickListener {
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_COLLAPSED
             binding.overlay.isVisible = true
-           binding.bottomSheetBehaviorMenu.isVisible = true
+            binding.bottomSheetBehaviorMenu.isVisible = true
             sheetBehavior()
             actionBehaviorButton()
         }
-
     }
 
     private fun render(state: TrackListStateScreen) {
@@ -126,6 +133,7 @@ class ScreenPlaylistFragment : Fragment() {
     }
 
     private fun showContent(track: List<Track>) = with(binding) {
+        emptyPlayliast.isVisible = false
         trackList.isVisible = true
         adapter.tracks.clear()
         adapter.tracks.addAll(track)
@@ -134,6 +142,7 @@ class ScreenPlaylistFragment : Fragment() {
 
     private fun empty() = with(binding) {
         trackList.isVisible = false
+        emptyPlayliast.isVisible = true
     }
 
     private fun renderPlayList(state: PlayListScreenState) {
@@ -148,10 +157,10 @@ class ScreenPlaylistFragment : Fragment() {
         namePlaylistBehavior.text = playList.listName ?: getString(R.string.artist_name)
         description.text = playList.description ?: ""
         val countTrack = playList.listTracksId?.filterNotNull()?.size.toString()
-        viewModel.observeString().observe(viewLifecycleOwner) {
-            timeAndQuantity.text = getString(R.string.count_track_time, countTrack, it)
+        viewModel.observeString().observe(viewLifecycleOwner) { time ->
+            timeAndQuantity.text = getString(R.string.count_track_time, time, countTrack)
         }
-        countTracksBehavior.text = playList.listTracksId?.filterNotNull()?.size.toString()
+        countTracksBehavior.text = playList.listTracksId?.size.toString()
 
         IMAGE = playList.urlImage.toString()
         PLAYLISTID = playList.id.toString()
@@ -169,6 +178,7 @@ class ScreenPlaylistFragment : Fragment() {
     }
 
     private fun actionBehaviorButton() = with(binding) {
+
         textShareBehavior.setOnClickListener {
             binding.bottomSheetBehaviorMenu.isVisible = false
             binding.overlay.isVisible = false
@@ -190,16 +200,15 @@ class ScreenPlaylistFragment : Fragment() {
                 R.id.action_screenPlaylistFragment_to_fragmentNewPlayList, bundle
 
             )
-
         }
 
         textDeleteBehavior.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Хотите удалить плейлист?")
+                .setTitle(getString(R.string.want_delete_playlist))
                 .setMessage("")
-                .setNegativeButton("Нет") { dialog, which ->
+                .setNegativeButton(getString(R.string.no)) { dialog, which ->
                 }
-                .setPositiveButton("Да") { dialog, which ->
+                .setPositiveButton(getString(R.string.yes)) { dialog, which ->
                     viewModel.deleteList()
                     findNavController().navigateUp()
                 }
@@ -218,7 +227,6 @@ class ScreenPlaylistFragment : Fragment() {
                     }
                     else -> {
                         overlay.visibility = View.VISIBLE
-                        //  adapter.notifyDataSetChanged()
                     }
                 }
             }

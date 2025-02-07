@@ -10,9 +10,8 @@ interface PlayListInteract {
     suspend fun getAllPlayList(): Flow<List<PlayList>>
     suspend fun getPlayListById(playlistId: Int): PlayList
     suspend fun insertInTableAllTracks(tracks: Track)
-    suspend fun getAllTrack():Flow<List<Track>>
-    suspend fun getTracksByIds(listId:List<Int>):List<Track>
+    suspend fun getTracksByIds(listId: List<Int>): List<Track>
     suspend fun deleteTrackInAllTracksEntity(tracks: Track)
-    suspend fun getTrackById(trackId:Int?):Track
+    suspend fun getTrackById(trackId: Int?): Track
     suspend fun deletePlayList(playList: PlayList)
 }

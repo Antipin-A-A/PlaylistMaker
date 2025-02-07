@@ -116,8 +116,11 @@ class MusicFragment : Fragment() {
 
             buttonNewPlayList.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                val bundle = Bundle().apply {
+                    putString("source", "mediaFragment")
+                }
                 findNavController().navigate(
-                    R.id.action_musicFragment_to_fragmentNewPlayList
+                    R.id.action_musicFragment_to_fragmentNewPlayList,bundle
                 )
             }
 
@@ -128,7 +131,6 @@ class MusicFragment : Fragment() {
                         BottomSheetBehavior.STATE_HIDDEN -> {
                             overlay.visibility = View.GONE
                         }
-
                         else -> {
                             overlay.visibility = View.VISIBLE
                             adapter.notifyDataSetChanged()

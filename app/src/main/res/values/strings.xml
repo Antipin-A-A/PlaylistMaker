@@ -50,4 +50,12 @@
     <string name="delet">Удалить плейлист</string>
     <string name="save">Сохранить</string>
     <string name="nameList">Название листа</string>
+    <string name="want_delete_playlist">Хотите удалить плейлист?</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
+    <string name="want_delete_track">Хотите удалить трек?</string>
+    <string name="playlist_create">Плейлист [%1$s] создан</string>
+    <string name="playlist_save">Плейлист [%1$s] сохранен</string>
+    <string name="empty_playlist_for_screen_fragment">в этом плейлисте нет треков</string>
+    <string name="playlist_isEmpty_for_share">в данном плейлисте нет списка треков, которым можно поделиться</string>
 </resources>

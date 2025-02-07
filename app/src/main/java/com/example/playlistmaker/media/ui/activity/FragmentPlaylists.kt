@@ -1,6 +1,7 @@
 package com.example.playlistmaker.media.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,28 +42,33 @@ class FragmentPlaylists : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.state.observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+    //    viewModel.observeState().observe(viewLifecycleOwner){}
+
+        viewModel.fillData()
+
         val onItemClickListener = OnItemClickListener<PlayList> { playlist ->
             if (clickDebounce()) {
+ //               viewModel.deleteList(playlist)
                 viewModel.saveTrack(playlist)
                 findNavController().navigate(
                     R.id.action_mediaFragment_to_screenPlaylistFragment,
                 )
             }
         }
-
         adapter = PlayListAdapter(onItemClickListener)
         binding.playList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playList.adapter = adapter
 
-        viewModel.fillData()
 
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
+
 
         binding.buttonNewPlayList.setOnClickListener {
             val bundle = Bundle().apply {
-                putString("source", "mediaFragment") // Укажите источник
+                putString("source", "mediaFragment")
             }
             findNavController().navigate(
                 R.id.action_mediaFragment_to_fragmentNewPlayList, bundle
@@ -79,17 +85,22 @@ class FragmentPlaylists : Fragment() {
     }
 
     private fun showLoading() = with(binding) {
+
         playList.isVisible = false
         placeholderMessage.isVisible = false
+        adapter?.notifyDataSetChanged()
     }
 
     private fun showEmpty(message: String) = with(binding) {
+
+        adapter?.notifyDataSetChanged()
         playList.isVisible = false
         placeholderMessage.isVisible = true
         binding.placeholderMessage.text = message
     }
 
     private fun showContent(playList: List<PlayList>) = with(binding) {
+
         binding.playList.visibility = View.VISIBLE
         placeholderMessage.visibility = View.GONE
         adapter.playLists.clear()

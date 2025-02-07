@@ -26,9 +26,6 @@ class NewPlayListViewModel(
         }
     }
 
-//    fun updatePlaylist(playlistId: Int?, listName: String, description: String?, urlImage: Uri?) {
-//        // Логика обновления плейлиста
-//    }
 
    fun updatePlaylist(
         playlistId: Int,

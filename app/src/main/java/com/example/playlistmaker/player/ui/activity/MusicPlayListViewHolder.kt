@@ -14,11 +14,11 @@ class MusicPlayListViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     private val binding = MusicPlaylistAdapterBinding.bind(item)
 
     fun bind(item: PlayList) = with(binding) {
-        val countTracks = if (item.listName?.length!! > 20) {
-            item.listName.take(17) + "..."
-        } else {
-            item.listName.toString()
-        }
+//        val countTracks = if (item.listName?.length!! > 20) {
+//            item.listName.take(17) + "..."
+//        } else {
+//            item.listName.toString()
+//        }
 
         listName.text = item.listName
 

@@ -4,7 +4,7 @@ import com.example.playlistmaker.base_room.data.bd.AppDataBase
 import com.example.playlistmaker.base_room.data.bd.PlayListEntity
 import com.example.playlistmaker.base_room.data.convector.PlayListDbConvector
 import com.example.playlistmaker.base_room.data.convector.TrackDbConvertor
-import com.example.playlistmaker.base_room.domain.api.PlayListReposytory
+import com.example.playlistmaker.base_room.domain.api.PlayListRepository
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ class PlayListRepositoryImp(
     private val appDataBase: AppDataBase,
     private val playListDbConvector: PlayListDbConvector,
     private val trackDbConvertor: TrackDbConvertor
-) : PlayListReposytory {
+) : PlayListRepository {
     override suspend fun savePlayList(playList: PlayList) {
         appDataBase.playListDao().insertPlayList(playListDbConvector.mapToData(playList))
     }
@@ -40,10 +40,6 @@ class PlayListRepositoryImp(
         saveTrack(listTracks, tracks)
     }
 
-    override suspend fun getAllTrack(): Flow<List<Track>> = flow {
-        val result = appDataBase.allTracksDao().getTracks()
-        emit(result.map { it.mapToDomain() })
-    }
 
     override suspend fun getTracksByIds(listId: List<Int>): List<Track>{
         val result = appDataBase.allTracksDao().getTracksByIds(listId)
