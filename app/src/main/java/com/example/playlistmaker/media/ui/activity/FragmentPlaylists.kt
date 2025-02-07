@@ -46,13 +46,10 @@ class FragmentPlaylists : Fragment() {
             render(it)
         }
 
-    //    viewModel.observeState().observe(viewLifecycleOwner){}
-
         viewModel.fillData()
 
         val onItemClickListener = OnItemClickListener<PlayList> { playlist ->
             if (clickDebounce()) {
- //               viewModel.deleteList(playlist)
                 viewModel.saveTrack(playlist)
                 findNavController().navigate(
                     R.id.action_mediaFragment_to_screenPlaylistFragment,
@@ -62,9 +59,6 @@ class FragmentPlaylists : Fragment() {
         adapter = PlayListAdapter(onItemClickListener)
         binding.playList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playList.adapter = adapter
-
-
-
 
         binding.buttonNewPlayList.setOnClickListener {
             val bundle = Bundle().apply {
