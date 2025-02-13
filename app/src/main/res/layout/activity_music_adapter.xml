@@ -12,9 +12,10 @@
         android:layout_width="@dimen/indent_45dp"
         android:layout_height="@dimen/indent_45dp"
         android:layout_marginStart="@dimen/indent_13dp"
-        android:layout_marginTop="@dimen/size_8dp"
-        android:layout_marginEnd="@dimen/size_8dp"
-        android:layout_marginBottom="@dimen/size_8dp"
+        android:layout_marginTop="@dimen/indent_8dp"
+        android:layout_marginEnd="@dimen/indent_8dp"
+        android:layout_marginBottom="@dimen/indent_8dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/empty_image_group" />
 
     <LinearLayout
@@ -46,6 +47,7 @@
         android:id="@+id/arrowForward"
         style="@style/ImageViewStyleSetting"
         android:layout_marginEnd="@dimen/indent_12dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/light_mode_arrow"
         app:tint="@color/colorTextNameTime" />
 

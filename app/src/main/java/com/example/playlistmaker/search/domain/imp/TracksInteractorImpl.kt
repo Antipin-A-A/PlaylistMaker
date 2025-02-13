@@ -1,6 +1,7 @@
 package com.example.playlistmaker.search.domain.imp
 
 
+import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.data.network.Resource
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.api.reposirory.TrackRepository
@@ -43,4 +44,11 @@ class TracksInteractorImpl(
         return repositoryStorage.loadTrackData()
     }
 
+    override fun savePlaylist(playlist: PlayList) {
+        repositoryStorage.savePlaylist(playlist)
+    }
+
+    override fun getCurrentPlaylist(): PlayList {
+        return repositoryStorage.getCurrentPlaylist()
+    }
 }

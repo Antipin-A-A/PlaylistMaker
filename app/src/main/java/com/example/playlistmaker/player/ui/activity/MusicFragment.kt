@@ -18,7 +18,6 @@ import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicFragmentViewModel
 import com.example.playlistmaker.player.ui.viewmodel.PlayListStateForMusic
 import com.example.playlistmaker.playlist.domain.model.PlayList
-import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
@@ -33,6 +32,7 @@ class MusicFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: MusicPlayListAdapter
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     private var isClickAllowed = true
 
@@ -99,9 +99,7 @@ class MusicFragment : Fragment() {
 
             val overlay = binding.overlay
 
-            val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2).apply {
-                state = BottomSheetBehavior.STATE_HIDDEN
-            }
+            bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2)
 
             buttonAdd.setOnClickListener {
                 viewModel.fillData()
@@ -117,8 +115,12 @@ class MusicFragment : Fragment() {
             }
 
             buttonNewPlayList.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                val bundle = Bundle().apply {
+                    putString("source", "mediaFragment")
+                }
                 findNavController().navigate(
-                    R.id.action_musicFragment_to_fragmentNewPlayList
+                    R.id.action_musicFragment_to_fragmentNewPlayList,bundle
                 )
             }
 
@@ -129,7 +131,6 @@ class MusicFragment : Fragment() {
                         BottomSheetBehavior.STATE_HIDDEN -> {
                             overlay.visibility = View.GONE
                         }
-
                         else -> {
                             overlay.visibility = View.VISIBLE
                             adapter.notifyDataSetChanged()
@@ -152,7 +153,6 @@ class MusicFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             binding.playList.adapter = adapter
         }
-
     }
 
     private fun content(track: TrackScreenState.Content) = with(binding) {
@@ -174,6 +174,12 @@ class MusicFragment : Fragment() {
             .into(imageView)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
 
     override fun onPause() {
         super.onPause()

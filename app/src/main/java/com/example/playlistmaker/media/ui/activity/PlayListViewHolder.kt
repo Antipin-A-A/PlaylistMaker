@@ -1,5 +1,6 @@
 package com.example.playlistmaker.media.ui.activity
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,11 +15,6 @@ class PlayListViewHolder(item: View) : RecyclerView.ViewHolder(item) {
     private val binding = PlayListAdapterBinding.bind(item)
 
     fun bind(item: PlayList) = with(binding) {
-        val countTracks = if (item.listName?.length!! > 20) {
-            item.listName.take(17) + "..."
-        } else {
-            item.listName.toString()
-        }
 
         listName.text = item.listName
 
@@ -33,5 +29,6 @@ class PlayListViewHolder(item: View) : RecyclerView.ViewHolder(item) {
                 RoundedCorners(10),
             )
             .into(imageMusicGroup)
+        Log.i("LogAdapter", "itemView = ${item.urlImage}")
     }
 }

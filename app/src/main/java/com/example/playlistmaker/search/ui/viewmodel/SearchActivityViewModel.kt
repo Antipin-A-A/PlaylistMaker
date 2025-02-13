@@ -52,7 +52,6 @@ class SearchActivityViewModel(
                 is TrackListState.Empty -> trackState
                 is TrackListState.GetHistoryList -> trackState
             }
-
         }
     }
 

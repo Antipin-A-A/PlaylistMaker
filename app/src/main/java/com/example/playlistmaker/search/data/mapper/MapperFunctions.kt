@@ -1,5 +1,8 @@
 package com.example.playlistmaker.search.data.mapper
 
+import androidx.core.net.toUri
+import com.example.playlistmaker.base_room.data.bd.PlayListEntity
+import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.data.model.TrackDto
 import com.example.playlistmaker.search.domain.modeles.Track
 
@@ -31,5 +34,17 @@ fun Track.toDataModel(): TrackDto {
         primaryGenreName = this.primaryGenreName,
         country = this.country,
         previewUrl = this.previewUrl
+    )
+
+}
+
+fun PlayListEntity.mapToDomain(): PlayList {
+    return PlayList(
+        this.id,
+        this.listName,
+        this.description,
+        this.urlImage?.toUri(),
+        this.listTracksId,
+        this.countTracks,
     )
 }

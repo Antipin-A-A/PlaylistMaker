@@ -9,7 +9,11 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromStringToList(data: String?): List<Int?>? {
-        return data?.split(",")?.map { it.toIntOrNull() }
+    fun fromStringToList(data: String?): List<Int>? {
+        return if (data == ""){
+            emptyList()
+        }else{
+            data?.split(",")?.map { it.toInt() }
+        }
     }
 }

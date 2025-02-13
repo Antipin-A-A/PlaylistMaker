@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_mediaFragment_to_fragmentNewPlayList"
             app:destination="@id/fragmentNewPlayList" />
+        <action
+            android:id="@+id/action_mediaFragment_to_screenPlaylistFragment"
+            app:destination="@id/screenPlaylistFragment" />
 
     </fragment>
 
@@ -51,7 +54,11 @@
         android:id="@+id/fragmentPlaylists"
         android:name="com.example.playlistmaker.media.ui.activity.FragmentPlaylists"
         android:label="fragment_playlists"
-        tools:layout="@layout/fragment_playlists" />
+        tools:layout="@layout/fragment_playlists" >
+        <action
+            android:id="@+id/action_fragmentPlaylists_to_screenPlaylistFragment"
+            app:destination="@id/screenPlaylistFragment" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.playlistmaker.main.activity.RootActivity"
@@ -70,5 +77,21 @@
         android:id="@+id/fragmentNewPlayList"
         android:name="com.example.playlistmaker.playlist.ui.fragment.FragmentNewPlayList"
         android:label="fragment_new_play_list"
-        tools:layout="@layout/fragment_new_play_list" />
+        tools:layout="@layout/fragment_new_play_list" >
+        <action
+            android:id="@+id/action_fragmentNewPlayList_to_screenPlaylistFragment"
+            app:destination="@id/screenPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/screenPlaylistFragment"
+        android:name="com.example.playlistmaker.screenplaylist.ui.fragment.ScreenPlaylistFragment"
+        android:label="fragment_screen_playlist"
+        tools:layout="@layout/fragment_screen_playlist" >
+        <action
+            android:id="@+id/action_screenPlaylistFragment_to_musicFragment"
+            app:destination="@id/musicFragment" />
+        <action
+            android:id="@+id/action_screenPlaylistFragment_to_fragmentNewPlayList"
+            app:destination="@id/fragmentNewPlayList" />
+    </fragment>
 </navigation>

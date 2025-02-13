@@ -41,28 +41,30 @@ class FragmentPlaylists : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onItemClickListener = OnItemClickListener<PlayList> { track ->
-            if (clickDebounce()) {
-//          //      viewModel.saveTrack(track)
-//                findNavController().navigate(
-//                    R.id.action_mediaFragment_to_musicFragment
-//                )
-            }
+        viewModel.state.observe(viewLifecycleOwner) {
+            render(it)
         }
 
+        viewModel.fillData()
+
+        val onItemClickListener = OnItemClickListener<PlayList> { playlist ->
+            if (clickDebounce()) {
+                viewModel.saveTrack(playlist)
+                findNavController().navigate(
+                    R.id.action_mediaFragment_to_screenPlaylistFragment,
+                )
+            }
+        }
         adapter = PlayListAdapter(onItemClickListener)
         binding.playList.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.playList.adapter = adapter
 
-        viewModel.fillData()
-
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-
         binding.buttonNewPlayList.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("source", "mediaFragment")
+            }
             findNavController().navigate(
-                R.id.action_mediaFragment_to_fragmentNewPlayList
+                R.id.action_mediaFragment_to_fragmentNewPlayList, bundle
             )
         }
     }

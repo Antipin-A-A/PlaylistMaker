@@ -18,4 +18,5 @@
     <color name="colorTextNameTime">#AEAFB4</color>
     <color name="background">#FFFFFF</color>
     <color name="gray_only">#AEAFB4</color>
+    <color name="overlay">#99000000</color>
 </resources>

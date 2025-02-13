@@ -10,7 +10,6 @@ import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.playlist.domain.model.PlayList
-import com.example.playlistmaker.playlist.ui.viewmodel.PlayListState
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.Job
@@ -26,9 +25,6 @@ class MusicFragmentViewModel(
     private val roomInteract: RoomInteract,
     private val playListInteract: PlayListInteract
 ) : ViewModel() {
-
-    private val _playLists = MutableLiveData<List<PlayList>>()
-    val playLists: LiveData<List<PlayList>> get() = _playLists
 
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
@@ -154,7 +150,7 @@ class MusicFragmentViewModel(
         renderState(PlayListStateForMusic.Loading)
         viewModelScope.launch {
             playListInteract
-                .getPlayList()
+                .getAllPlayList()
                 .collect { playlist ->
                     processResult(playlist)
                 }
@@ -182,20 +178,18 @@ class MusicFragmentViewModel(
         val playList = playListInteract.getPlayListById(playlistId)
         playListInteract.insertInTableAllTracks(trackIteractor.loadTrackData())
 
-        if (playList != null) {
-            val trackIds = playList.listTracksId?.toMutableList() ?: mutableListOf()
+        val trackIds = playList.listTracksId?.toMutableList() ?: mutableListOf()
 
-            if (trackIds.contains(trackId)) {
-                _message.value = "Трек уже добавлен в плейлист ${playList.listName}"
-            } else {
-                trackIds.add(trackId)
-                val updatedPlayList = playList.copy(
-                    listTracksId = trackIds,
-                    countTracks = trackIds.size
-                )
-                playListInteract.updatePlayList(updatedPlayList)
-                _message.value = "Трек добавлен в плейлист ${playList.listName}"
-            }
+        if (trackIds.contains(trackId)) {
+            _message.value = "Трек уже добавлен в плейлист ${playList.listName}"
+        } else {
+            trackIds.add(trackId)
+            val updatedPlayList = playList.copy(
+                listTracksId = trackIds,
+                countTracks = trackIds.size
+            )
+            playListInteract.updatePlayList(updatedPlayList)
+            _message.value = "Трек добавлен в плейлист ${playList.listName}"
         }
     }
 

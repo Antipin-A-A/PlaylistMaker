@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/dark_mode_arrow_back"
+        app:navigationIcon="@drawable/dark_mode_arrow"
         app:titleMargin="8dp"
         app:titleTextAppearance="@style/ToolbarStyle">
 
@@ -29,8 +29,8 @@
         android:id="@+id/guidelineStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_8dp"
-        android:layout_marginEnd="@dimen/size_8dp"
+        android:layout_marginStart="@dimen/indent_8dp"
+        android:layout_marginEnd="@dimen/indent_8dp"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/indent_24dp" />
 
@@ -38,10 +38,10 @@
         android:id="@+id/guidelineStart16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_8dp"
-        android:layout_marginEnd="@dimen/size_8dp"
+        android:layout_marginStart="@dimen/indent_8dp"
+        android:layout_marginEnd="@dimen/indent_8dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/size_16dp" />
+        app:layout_constraintGuide_begin="@dimen/indent_16dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineEnd"
@@ -55,6 +55,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/indent_26dp"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/collectionNameFirst"
         app:layout_constraintDimensionRatio="1:1"
@@ -88,6 +89,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="4dp"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toTopOf="@+id/currentTrackTime"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -99,6 +101,7 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:background="@drawable/round_button"
+        android:importantForAccessibility="no"
         android:src="@drawable/albom_with"
         app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"
         app:layout_constraintStart_toStartOf="@+id/guidelineStart"
@@ -109,6 +112,7 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:background="@drawable/round_button"
+        android:importantForAccessibility="no"
         android:src="@drawable/head_with"
         app:layout_constraintBottom_toBottomOf="@+id/buttonPlay"
         app:layout_constraintEnd_toStartOf="@+id/guidelineEnd"
@@ -238,7 +242,7 @@
     <View android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#99000000"
+        android:background="@color/overlay"
         android:visibility="gone"/>
 
     <LinearLayout
@@ -246,13 +250,14 @@
         style="@style/LayoutStyle"
         app:behavior_hideable="true"
         app:behavior_peekHeight="440dp"
+        android:background="@drawable/bottom_sheet_bg"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
             android:layout_width="@dimen/indent_50dp"
-            android:layout_height="@dimen/size_4dp"
+            android:layout_height="@dimen/indent_4dp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/size_8dp"
+            android:layout_marginTop="@dimen/indent_8dp"
             android:background="@drawable/rounder" />
 
         <TextView
