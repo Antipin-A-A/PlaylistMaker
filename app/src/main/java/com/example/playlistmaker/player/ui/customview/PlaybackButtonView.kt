@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
@@ -65,9 +64,22 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         super.performClick()
-        isPlaying = !isPlaying
-        invalidate()
         return true
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                performClick()
+                isPlaying = !isPlaying
+                invalidate()
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
     }
 
 
