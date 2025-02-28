@@ -64,6 +64,8 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         super.performClick()
+        isPlaying = !isPlaying
+        invalidate()
         return true
     }
 
@@ -74,8 +76,6 @@ class PlaybackButtonView @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP -> {
                 performClick()
-                isPlaying = !isPlaying
-                invalidate()
                 return true
             }
         }
