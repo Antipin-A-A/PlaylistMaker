@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,8 @@ class MusicFragmentViewModel(
     private val playListInteract: PlayListInteract
 ) : ViewModel() {
 
+
+
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
 
@@ -42,6 +45,9 @@ class MusicFragmentViewModel(
 
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> get() = _isFavorite
+
+    private val _isPlaying = MutableLiveData(false)
+    val isPlaying: LiveData<Boolean> = _isPlaying
 
     init {
         preparePlayer()
@@ -100,6 +106,18 @@ class MusicFragmentViewModel(
         screenStateLiveData.postValue(TrackScreenState.Content(trackIteractor.loadTrackData()))
     }
 
+    fun togglePlayback() {
+        _isPlaying.value = !_isPlaying.value!!
+        if (_isPlaying.value!!) {
+            start()
+            Log.i("Log3" ,"pause, isRunTime =${_isPlaying.value}")
+        } else {
+            pause()
+            Log.i("Log4" ,"pause, isRunTime =${_isPlaying.value}")
+        }
+        setOnCompleted()
+    }
+
     private fun preparePlayer() {
         val url = trackIteractor.loadTrackData().previewUrl.toString()
         if (url != "null") {
@@ -110,9 +128,10 @@ class MusicFragmentViewModel(
     fun pause() {
         stateMutable.value = PlayerState.Pause(mediaPlayerInteract.pausePlayer())
         timerJob?.cancel()
+        _isPlaying.value = false
     }
 
-    fun start() {
+    private fun start() {
         stateMutable.value = PlayerState.Play(mediaPlayerInteract.play())
         startTime()
     }
@@ -125,11 +144,12 @@ class MusicFragmentViewModel(
         stateMutable.value = PlayerState.Release(mediaPlayerInteract.release())
     }
 
-    fun setOnCompleted() {
+    private fun setOnCompleted() {
         stateMutable.value =
             PlayerState.SetOnComplete(mediaPlayerInteract.setOnCompletionListener {
                 timerJob?.cancel()
                 screenStateLiveData.postValue(TrackScreenState.Complete)
+                _isPlaying.value = false
             })
     }
 

@@ -2,7 +2,9 @@ package com.example.playlistmaker.player.ui.activity
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -14,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMusicBinding
+import com.example.playlistmaker.player.ui.customview.PlaybackButtonView
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.player.ui.viewmodel.MusicFragmentViewModel
 import com.example.playlistmaker.player.ui.viewmodel.PlayListStateForMusic
@@ -45,14 +48,13 @@ class MusicFragment : Fragment() {
         return binding.root
     }
 
-    private var isRunTime = false
+  //  private var isRunTime = false
     private val viewModel by viewModel<MusicFragmentViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         init()
-
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -89,16 +91,20 @@ class MusicFragment : Fragment() {
                 binding.buttonLike.setImageResource(R.drawable.head_with)
             }
         }
+
+        viewModel.isPlaying.observe(viewLifecycleOwner) { isPlaying ->
+            binding.buttonPlay.setPlaying(isPlaying)
+        }
     }
 
     private fun init() {
+
         binding.apply {
             toolbar.setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
 
             val overlay = binding.overlay
-
             bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet2)
 
             buttonAdd.setOnClickListener {
@@ -106,8 +112,12 @@ class MusicFragment : Fragment() {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
 
-            buttonPlay.setOnClickListener {
-                playerStart()
+            buttonPlay.setOnTouchListener { view, event ->
+                if (event.action == MotionEvent.ACTION_UP) {
+                    view.performClick()
+                   viewModel.togglePlayback()
+                }
+                true
             }
 
             buttonLike.setOnClickListener {
@@ -120,7 +130,7 @@ class MusicFragment : Fragment() {
                     putString("source", "mediaFragment")
                 }
                 findNavController().navigate(
-                    R.id.action_musicFragment_to_fragmentNewPlayList,bundle
+                    R.id.action_musicFragment_to_fragmentNewPlayList, bundle
                 )
             }
 
@@ -131,6 +141,7 @@ class MusicFragment : Fragment() {
                         BottomSheetBehavior.STATE_HIDDEN -> {
                             overlay.visibility = View.GONE
                         }
+
                         else -> {
                             overlay.visibility = View.VISIBLE
                             adapter.notifyDataSetChanged()
@@ -183,10 +194,8 @@ class MusicFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if (isRunTime) {
+        binding.buttonPlay.setPlaying(false)
             viewModel.pause()
-        }
-        isRunTime = false
     }
 
     private fun snake(string: String) {
@@ -195,25 +204,9 @@ class MusicFragment : Fragment() {
         snack.show()
     }
 
-    private fun playerStart() = with(binding) {
-        if (isRunTime) {
-            viewModel.pause()
-            isRunTime = false
-            buttonPlay.setImageResource(R.drawable.play_icon)
-        } else {
-            viewModel.start()
-            isRunTime = true
-            buttonPlay.setImageResource(R.drawable.pause_icon)
-        }
-
-        viewModel.setOnCompleted()
-    }
 
     private fun complete() {
-        isRunTime = false
-        binding.buttonPlay.setImageResource(R.drawable.play_icon)
         binding.currentTrackTime.text = getString(R.string.current_track_time)
-
     }
 
     private fun render(state: PlayListStateForMusic) {
