@@ -30,5 +30,11 @@ class MusicViewHolder(item: View) : RecyclerView.ViewHolder(item){
             .fitCenter()
             .transform(RoundedCorners(10))
             .into(imageMusicGroup)
+
+        if (item.isFavorite) {
+            favorite.visibility = View.VISIBLE
+        } else {
+            favorite.visibility = View.GONE
+        }
     }
 }

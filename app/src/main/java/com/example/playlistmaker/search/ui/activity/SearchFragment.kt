@@ -1,12 +1,15 @@
 package com.example.playlistmaker.search.ui.activity
 
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -15,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
+import com.example.playlistmaker.app.ConnectBroadcastReceiver
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.api.OnItemClickListener
 import com.example.playlistmaker.search.domain.modeles.Track
@@ -28,6 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
+    private val connectBroadcastReceiver = ConnectBroadcastReceiver()
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
@@ -112,6 +117,21 @@ class SearchFragment : Fragment() {
             trackListHistory.isVisible = false
             binding.groupTrackList2.isVisible = false
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ContextCompat.registerReceiver(
+            requireContext(),
+            connectBroadcastReceiver,
+            IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+       requireContext().unregisterReceiver(connectBroadcastReceiver)
     }
 
     override fun onDestroyView() {
@@ -221,4 +241,6 @@ private fun clickDebounce(): Boolean {
     }
     return true
 }
+
+
 }

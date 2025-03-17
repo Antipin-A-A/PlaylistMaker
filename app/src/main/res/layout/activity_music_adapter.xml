@@ -7,48 +7,66 @@
     android:orientation="horizontal"
     tools:context=".main.activity.RootActivity">
 
-    <ImageView
-        android:id="@+id/imageMusicGroup"
-        android:layout_width="@dimen/indent_45dp"
-        android:layout_height="@dimen/indent_45dp"
-        android:layout_marginStart="@dimen/indent_13dp"
-        android:layout_marginTop="@dimen/indent_8dp"
-        android:layout_marginEnd="@dimen/indent_8dp"
-        android:layout_marginBottom="@dimen/indent_8dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/empty_image_group" />
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/indent_66dp"
-        android:layout_marginTop="@dimen/indent_14dp"
-        android:layout_marginEnd="@dimen/indent_44dp"
-        android:layout_marginBottom="@dimen/indent_14dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/trackName"
-            style="@style/TextStyleSearchMusic"
-            android:ellipsize="end"
-            android:textSize="@dimen/text_size_16sp"
-            tools:text="Yesterday (Remastered 2009)" />
 
-        <TextView
-            android:id="@+id/artistNameAndTime"
-            style="@style/TextStyleSearchMusic"
-            android:textColor="@color/colorTextNameTime"
-            android:textSize="@dimen/text_size_11sp"
-            tools:text="@string/name_artist_time" />
+        <ImageView
+            android:id="@+id/imageMusicGroup"
+            android:layout_width="@dimen/indent_45dp"
+            android:layout_height="@dimen/indent_45dp"
+            android:layout_marginStart="@dimen/indent_13dp"
+            android:layout_marginTop="@dimen/indent_8dp"
+            android:layout_marginEnd="@dimen/indent_8dp"
+            android:layout_marginBottom="@dimen/indent_8dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/empty_image_group" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/indent_66dp"
+            android:layout_marginTop="@dimen/indent_14dp"
+            android:layout_marginEnd="@dimen/indent_44dp"
+            android:layout_marginBottom="@dimen/indent_14dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/trackName"
+                style="@style/TextStyleSearchMusic"
+                android:ellipsize="end"
+                android:textSize="@dimen/text_size_16sp"
+                tools:text="Yesterday (Remastered 2009)" />
+
+            <TextView
+                android:id="@+id/artistNameAndTime"
+                style="@style/TextStyleSearchMusic"
+                android:textColor="@color/colorTextNameTime"
+                android:textSize="@dimen/text_size_11sp"
+                tools:text="@string/name_artist_time" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/arrowForward"
+            style="@style/ImageViewStyleSetting"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="@dimen/indent_12dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/light_mode_arrow"
+            app:tint="@color/colorTextNameTime" />
+
+    </FrameLayout>
 
     <ImageView
-        android:id="@+id/arrowForward"
-        style="@style/ImageViewStyleSetting"
+        android:id="@+id/favorite"
+        android:layout_width="@dimen/indent_14dp"
+        android:layout_height="@dimen/indent_14dp"
+        android:layout_gravity="start|center_vertical"
         android:layout_marginEnd="@dimen/indent_12dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/light_mode_arrow"
-        app:tint="@color/colorTextNameTime" />
+        android:src="@drawable/haed_red"
+        android:translationX="51dp"
+        android:translationY="-22dp" />
 
 </FrameLayout>

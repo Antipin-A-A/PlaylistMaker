@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.base_room.domain.api.PlayListInteract
 import com.example.playlistmaker.base_room.domain.api.RoomInteract
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
+import com.example.playlistmaker.player.service.AudioPlayerControl
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TrackScreenState
 import com.example.playlistmaker.playlist.domain.model.PlayList
@@ -26,8 +27,6 @@ class MusicFragmentViewModel(
     private val roomInteract: RoomInteract,
     private val playListInteract: PlayListInteract
 ) : ViewModel() {
-
-
 
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
@@ -56,6 +55,59 @@ class MusicFragmentViewModel(
         _isFavorite.value = false
         fillData()
     }
+
+//    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+//        this.audioPlayerControl = audioPlayerControl
+//
+//        viewModelScope.launch {
+//            audioPlayerControl.getPlayerState().collect {
+//                screenStateLiveData.postValue(it)
+//            }
+//        }
+//    }
+//
+//    fun onPlayerButtonClicked() {
+//        _isPlaying.value = !_isPlaying.value!!
+//        if (_isPlaying.value!!) {
+//           start()
+//            Log.i("Log1", "${audioPlayerControl?.startPlayer()},_isPlaying = ${_isPlaying.value} ")
+//
+//        } else {
+//           pause()
+//            Log.i("Log2", "${audioPlayerControl?.pausePlayer()}, _isPlaying = ${_isPlaying.value} ")
+//        }
+//       // setOnCompleted()
+//        Log.i("Log3", " _isPlaying = ${_isPlaying.value} ")
+//        /*        if (playerState.value is PlayerState.Playing) {
+//                    audioPlayerControl?.pausePlayer()
+//                } else {
+//                    audioPlayerControl?.startPlayer()
+//                }*/
+//    }
+//    fun start(){
+//        audioPlayerControl?.startPlayer()
+//    }
+//
+//    fun pause() {
+//        _isPlaying.value = false
+//        audioPlayerControl?.setOnCompleted()
+//        Log.i("Log4", " _isPlaying = ${_isPlaying.value} ")
+//    }
+//
+//    fun time(): String {
+//        val time = audioPlayerControl?.time().toString()
+//        Log.i("Log5", " _isPlaying = ${_isPlaying.value} , time = $time")
+//        return time
+//    }
+//
+//     fun setOnCompleted() {
+//        _isPlaying.value = false
+//        audioPlayerControl?.setOnCompleted()
+//        Log.i("LogComlet", " _isPlaying = ${_isPlaying.value} ")
+//    }
+//    fun removeAudioPlayerControl() {
+//        audioPlayerControl = null
+//    }
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
@@ -215,7 +267,8 @@ class MusicFragmentViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        release()
+     //   audioPlayerControl = null
+            release()
     }
 
     companion object {

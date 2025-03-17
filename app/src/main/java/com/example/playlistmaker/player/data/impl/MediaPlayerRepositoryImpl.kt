@@ -5,8 +5,6 @@ import com.example.playlistmaker.player.domain.api.repository.MediaPlayerReposit
 
 class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
-
-
     override fun preparePlayer(url: String) {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
