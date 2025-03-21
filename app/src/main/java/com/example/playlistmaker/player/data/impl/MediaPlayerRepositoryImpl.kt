@@ -2,44 +2,69 @@ package com.example.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.repository.MediaPlayerRepository
+import com.example.playlistmaker.player.ui.state.PlayerState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 
+    private var _playerState: PlayerState = PlayerState.DEFAULT
+
+    //   private var _playerState = MutableStateFlow<PlayerState>(PlayerState.DEFAULT)
+    override val playerState = _playerState
+
     override fun preparePlayer(url: String) {
+
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
+            _playerState = PlayerState.PREPARED
+            //  _playerState.value = PlayerState.PREPARED
         }
-        mediaPlayer.setOnCompletionListener {
+        mediaPlayer.setOnErrorListener { _, what, extra ->
+            _playerState = PlayerState.PREPARED
+            //   _playerState.value = PlayerState.PREPARED
+            false
         }
+
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = STATE_PLAYING
+        _playerState = PlayerState.PLAYING
+        //_playerState.value = PlayerState.PLAYING
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = STATE_PAUSED
-    }
-
-    override fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
+        _playerState = PlayerState.PAUSED
+        //  _playerState.value = PlayerState.PAUSED
     }
 
     override fun release() {
-        playerState = STATE_DEFAULT
         mediaPlayer.release()
+        _playerState = PlayerState.DEFAULT
+        //  _playerState.value = PlayerState.DEFAULT
+    }
+
+    override fun currentPosition(): Long = mediaPlayer.currentPosition.toLong()
+
+    override fun playbackControl() {
+        when (_playerState) {
+            PlayerState.DEFAULT -> {}
+            PlayerState.PAUSED -> {
+                startPlayer()
+            }
+
+            PlayerState.PLAYING -> {
+                pausePlayer()
+            }
+
+            PlayerState.PREPARED -> {
+                startPlayer()
+            }
+        }
     }
 
     override fun setOnCompletionListener(function: () -> Unit) {
@@ -48,20 +73,7 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPla
         }
     }
 
-    override fun currentPosition(): Long {
-        return mediaPlayer.currentPosition.toLong()
-    }
-
     override fun isPlaying(): Boolean {
         return mediaPlayer.isPlaying
     }
-
-    private companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
-
-    private var playerState = STATE_DEFAULT
 }

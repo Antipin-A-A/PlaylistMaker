@@ -10,19 +10,21 @@ import com.example.playlistmaker.base_room.domain.api.RoomInteract
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.service.AudioPlayerControl
 import com.example.playlistmaker.player.ui.state.PlayerState
-import com.example.playlistmaker.player.ui.state.TrackScreenState
+import com.example.playlistmaker.player.ui.state.TimeTrack
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MusicFragmentViewModel(
-    private val mediaPlayerInteract: MediaPlayerInteract,
     private val trackIteractor: TrackIteractor,
     private val roomInteract: RoomInteract,
     private val playListInteract: PlayListInteract
@@ -34,13 +36,14 @@ class MusicFragmentViewModel(
     private val stateLiveData = MutableLiveData<PlayListStateForMusic>()
     fun observeState(): LiveData<PlayListStateForMusic> = stateLiveData
 
-    private var timerJob: Job? = null
+//    private var timerJob: Job? = null
 
-    private val stateMutable = MutableLiveData<PlayerState>()
-    val state: LiveData<PlayerState> = stateMutable
+    private val _playerState = MutableLiveData<PlayerState>()
+    val observePlayerState: LiveData<PlayerState> = _playerState
 
-    private var screenStateLiveData = MutableLiveData<TrackScreenState>(TrackScreenState.Loading)
-    fun getScreenStateLiveData(): LiveData<TrackScreenState> = screenStateLiveData
+    private val _currentPosition = MutableLiveData<TimeTrack>()
+    val currentPosition: LiveData<TimeTrack> = _currentPosition
+
 
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> get() = _isFavorite
@@ -48,66 +51,59 @@ class MusicFragmentViewModel(
     private val _isPlaying = MutableLiveData(false)
     val isPlaying: LiveData<Boolean> = _isPlaying
 
+    private var audioPlayerControl: AudioPlayerControl? = null
+
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
+
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect { state ->
+                _playerState.postValue(state)
+                _isPlaying.value = when (state) {
+                    PlayerState.PLAYING -> true
+                    PlayerState.PAUSED, PlayerState.PREPARED -> false
+                    else -> _isPlaying.value
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerTime().collect {
+                _currentPosition.postValue(it)
+            }
+        }
+    }
+
     init {
-        preparePlayer()
-        getTrack()
         checkIsTrackFavorite()
         _isFavorite.value = false
         fillData()
     }
 
-//    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
-//        this.audioPlayerControl = audioPlayerControl
-//
-//        viewModelScope.launch {
-//            audioPlayerControl.getPlayerState().collect {
-//                screenStateLiveData.postValue(it)
-//            }
-//        }
-//    }
-//
-//    fun onPlayerButtonClicked() {
-//        _isPlaying.value = !_isPlaying.value!!
-//        if (_isPlaying.value!!) {
-//           start()
-//            Log.i("Log1", "${audioPlayerControl?.startPlayer()},_isPlaying = ${_isPlaying.value} ")
-//
-//        } else {
-//           pause()
-//            Log.i("Log2", "${audioPlayerControl?.pausePlayer()}, _isPlaying = ${_isPlaying.value} ")
-//        }
-//       // setOnCompleted()
-//        Log.i("Log3", " _isPlaying = ${_isPlaying.value} ")
-//        /*        if (playerState.value is PlayerState.Playing) {
-//                    audioPlayerControl?.pausePlayer()
-//                } else {
-//                    audioPlayerControl?.startPlayer()
-//                }*/
-//    }
-//    fun start(){
-//        audioPlayerControl?.startPlayer()
-//    }
-//
-//    fun pause() {
-//        _isPlaying.value = false
-//        audioPlayerControl?.setOnCompleted()
-//        Log.i("Log4", " _isPlaying = ${_isPlaying.value} ")
-//    }
-//
-//    fun time(): String {
-//        val time = audioPlayerControl?.time().toString()
-//        Log.i("Log5", " _isPlaying = ${_isPlaying.value} , time = $time")
-//        return time
-//    }
-//
-//     fun setOnCompleted() {
-//        _isPlaying.value = false
-//        audioPlayerControl?.setOnCompleted()
-//        Log.i("LogComlet", " _isPlaying = ${_isPlaying.value} ")
-//    }
-//    fun removeAudioPlayerControl() {
-//        audioPlayerControl = null
-//    }
+    fun togglePlayback() {
+        _isPlaying.value = !_isPlaying.value!!
+        if (_isPlaying.value!!) {
+            audioPlayerControl?.startPlayer()
+        } else {
+            pause()
+        }
+    }
+
+    fun pause(){
+        audioPlayerControl?.pausePlayer()
+    }
+
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
+    }
+
+    fun showNotification() {
+        audioPlayerControl?.provideNotificator()
+    }
+
+    fun hideNotification() {
+        audioPlayerControl?.stopNotification()
+    }
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
@@ -154,68 +150,8 @@ class MusicFragmentViewModel(
         }
     }
 
-    private fun getTrack() {
-        screenStateLiveData.postValue(TrackScreenState.Content(trackIteractor.loadTrackData()))
-    }
-
-    fun togglePlayback() {
-        _isPlaying.value = !_isPlaying.value!!
-        if (_isPlaying.value!!) {
-            start()
-            Log.i("Log3" ,"pause, isRunTime =${_isPlaying.value}")
-        } else {
-            pause()
-            Log.i("Log4" ,"pause, isRunTime =${_isPlaying.value}")
-        }
-        setOnCompleted()
-    }
-
-    private fun preparePlayer() {
-        val url = trackIteractor.loadTrackData().previewUrl.toString()
-        if (url != "null") {
-            stateMutable.value = PlayerState.PreparePlayer(mediaPlayerInteract.preparePlayer(url))
-        }
-    }
-
-    fun pause() {
-        stateMutable.value = PlayerState.Pause(mediaPlayerInteract.pausePlayer())
-        timerJob?.cancel()
-        _isPlaying.value = false
-    }
-
-    private fun start() {
-        stateMutable.value = PlayerState.Play(mediaPlayerInteract.play())
-        startTime()
-    }
-
-    private fun position(): Long {
-        return mediaPlayerInteract.currentPosition()
-    }
-
-    private fun release() {
-        stateMutable.value = PlayerState.Release(mediaPlayerInteract.release())
-    }
-
-    private fun setOnCompleted() {
-        stateMutable.value =
-            PlayerState.SetOnComplete(mediaPlayerInteract.setOnCompletionListener {
-                timerJob?.cancel()
-                screenStateLiveData.postValue(TrackScreenState.Complete)
-                _isPlaying.value = false
-            })
-    }
-
-    private fun startTime() {
-        timerJob = viewModelScope.launch {
-            while (mediaPlayerInteract.isPlaying()) {
-                delay(DELAY)
-                screenStateLiveData.postValue(TrackScreenState.TimeTrack(getCurrentPlayerPosition()))
-            }
-        }
-    }
-
-    private fun getCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(position()) ?: "00:00"
+    fun getTrack(): Track {
+        return trackIteractor.loadTrackData()
     }
 
     fun fillData() {
@@ -266,12 +202,8 @@ class MusicFragmentViewModel(
     }
 
     override fun onCleared() {
-        super.onCleared()
-     //   audioPlayerControl = null
-            release()
+        audioPlayerControl = null
     }
 
-    companion object {
-        private const val DELAY = 300L
-    }
 }
+

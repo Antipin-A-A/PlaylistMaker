@@ -17,10 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
-<!--        <service-->
-<!--            android:name=".player.service.MusicService"-->
-<!--            android:exported="false"-->
-<!--            android:foregroundServiceType="mediaPlayback"/>-->
+        <service
+            android:name=".player.service.MusicService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
         <activity
             android:name=".main.activity.RootActivity"
             android:exported="true"
