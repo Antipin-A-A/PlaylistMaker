@@ -5,16 +5,19 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.base_room.domain.api.RoomInteract
+import com.example.playlistmaker.search.Object.ERROR_CONNECT
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
 import com.example.playlistmaker.search.ui.state.TrackListState
-import com.example.playlistmaker.search.Object.ERROR_CONNECT
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SearchActivityViewModel(
-    private val trackIteractor:TrackIteractor
+    private val trackIteractor: TrackIteractor,
+    private val roomInteract: RoomInteract
 ) : ViewModel() {
 
     private val stateMutable = MutableLiveData<TrackListState>()
@@ -25,8 +28,7 @@ class SearchActivityViewModel(
     }
 
     private var latestSearchText: String? = null
-    private  var searchJob: Job? = null
-
+    private var searchJob: Job? = null
     fun saveHistoryTrack(track: Track) {
         trackIteractor.saveTrackList(track)
     }
@@ -36,7 +38,19 @@ class SearchActivityViewModel(
     }
 
     fun getHistoryTrackList() {
-        renderState(TrackListState.GetHistoryList(track = trackIteractor.loadTracksList()))
+        viewModelScope.launch {
+            val history = trackIteractor.loadTracksList()
+            val favoriteTrack = check(history)
+            renderState(TrackListState.GetHistoryList(track = favoriteTrack))
+        }
+    }
+
+    private suspend fun check(trackHistory: List<Track>): List<Track> {
+        val favoriteTracks = roomInteract.getTracksRoom().first()
+        val updatedHistory = trackHistory.map { track ->
+            track.copy(isFavorite = favoriteTracks.any { it.trackId == track.trackId })
+        }
+        return updatedHistory
     }
 
     fun removeHistoryTrackList() {
@@ -63,7 +77,7 @@ class SearchActivityViewModel(
             viewModelScope.launch {
                 trackIteractor
                     .searchTrack(searchText)
-                    .collect{pair ->
+                    .collect { pair ->
                         processResult(pair.first, pair.second)
                     }
             }
@@ -77,17 +91,19 @@ class SearchActivityViewModel(
         if (foundTreks != null) {
             trackSearch.addAll(foundTreks)
         }
-        when{
-            errorMessage != null ->{
-                if (errorMessage == "$ERROR_CONNECT"){
+        when {
+            errorMessage != null -> {
+                if (errorMessage == "$ERROR_CONNECT") {
                     renderState(TrackListState.Error(errorMessage))
-                }else{
+                } else {
                     renderState(TrackListState.Empty)
                 }
             }
-            trackSearch.isEmpty()->{
+
+            trackSearch.isEmpty() -> {
                 renderState(TrackListState.Empty)
             }
+
             else -> {
                 renderState(TrackListState.Content(trackSearch))
             }

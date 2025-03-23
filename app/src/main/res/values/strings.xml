@@ -58,4 +58,5 @@
     <string name="playlist_save">Плейлист [%1$s] сохранен</string>
     <string name="empty_playlist_for_screen_fragment">в этом плейлисте нет треков</string>
     <string name="playlist_isEmpty_for_share">в данном плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="Track_add">Трек добавлен</string>
 </resources>
