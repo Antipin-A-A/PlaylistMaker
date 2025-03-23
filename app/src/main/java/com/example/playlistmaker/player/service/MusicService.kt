@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
@@ -15,7 +16,6 @@ import androidx.core.app.ServiceCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.data.impl.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
-import com.example.playlistmaker.player.domain.api.repository.MediaPlayerRepository
 import com.example.playlistmaker.player.domain.imp.MediaPlayerInteractImpl
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TimeTrack
@@ -49,10 +49,8 @@ class MusicService :Service(),AudioPlayerControl {
     private var timerJob: Job? = null
 
     private val playerState = MutableStateFlow<PlayerState>(PlayerState.DEFAULT)
-    val observePlayerState = playerState.asStateFlow()
 
     private val _currentPosition = MutableStateFlow<TimeTrack>(TimeTrack.DefauliTime())
-    val currentPosition = _currentPosition.asStateFlow()
 
     override fun onCreate() {
 
@@ -78,21 +76,6 @@ class MusicService :Service(),AudioPlayerControl {
         mediaPlayerInteract.pausePlayer()
         timerJob?.cancel()
         stopForeground(STOP_FOREGROUND_REMOVE)
-    }
-
-
-    override fun provideNotificator() {
-        createNotificationChannel()
-        ServiceCompat.startForeground(
-            this,
-            SERVICE_NOTIFICATION_ID,
-            createServiceNotification(),
-            getForegroundServiceTypeConstant()
-        )
-    }
-
-    override fun stopNotification() {
-        stopForeground(STOP_FOREGROUND_DETACH)
     }
 
     private fun preparePlayer() {
@@ -124,10 +107,6 @@ class MusicService :Service(),AudioPlayerControl {
         }
     }
 
-//    private fun updateState(newState: PlayerState) {
-//        playerState.value = newState
-//    }
-
     private fun startPositionUpdates() {
         timerJob?.cancel()
         timerJob = CoroutineScope(Dispatchers.IO).launch {
@@ -142,6 +121,19 @@ class MusicService :Service(),AudioPlayerControl {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayerInteract.currentPosition()) ?: "00:00"
     }
 
+    override fun provideNotificator() {
+        createNotificationChannel()
+        ServiceCompat.startForeground(
+            this,
+            SERVICE_NOTIFICATION_ID,
+            createServiceNotification(),
+            getForegroundServiceTypeConstant()
+        )
+    }
+    override fun stopNotification() {
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+    }
+
     override fun onBind(intent: Intent?): IBinder {
         songUrl = intent?.getStringExtra("song_url") ?: ""
         val artist = intent?.getStringExtra("artist_name_song") ?: ""
@@ -149,18 +141,11 @@ class MusicService :Service(),AudioPlayerControl {
         trackInfo = "$artist - $track"
         preparePlayer()
         observePlayerTime()
-        val notification = createServiceNotification()
-        startForeground(SERVICE_NOTIFICATION_ID, notification)
-        ServiceCompat.startForeground(
-            this,
-            SERVICE_NOTIFICATION_ID,
-            createServiceNotification(),
-            getForegroundServiceTypeConstant()
-        )
         return binder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
+     //   release()
         return super.onUnbind(intent)
     }
 
@@ -169,18 +154,18 @@ class MusicService :Service(),AudioPlayerControl {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                "Music Playback",
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Channel for music player notifications"
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            }
-            val manager = getSystemService(NotificationManager::class.java)
-            manager?.createNotificationChannel(channel)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return
         }
+
+        val channel = NotificationChannel(
+             NOTIFICATION_CHANNEL_ID,
+             "Music service",
+             NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = "Service for playing music"
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun createServiceNotification(): Notification {

@@ -3,8 +3,6 @@ package com.example.playlistmaker.player.data.impl
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.repository.MediaPlayerRepository
 import com.example.playlistmaker.player.ui.state.PlayerState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class MediaPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : MediaPlayerRepository {
 

@@ -7,22 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.base_room.domain.api.PlayListInteract
 import com.example.playlistmaker.base_room.domain.api.RoomInteract
-import com.example.playlistmaker.player.domain.api.interact.MediaPlayerInteract
 import com.example.playlistmaker.player.service.AudioPlayerControl
 import com.example.playlistmaker.player.ui.state.PlayerState
 import com.example.playlistmaker.player.ui.state.TimeTrack
 import com.example.playlistmaker.playlist.domain.model.PlayList
 import com.example.playlistmaker.search.domain.api.interactor.TrackIteractor
 import com.example.playlistmaker.search.domain.modeles.Track
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MusicFragmentViewModel(
     private val trackIteractor: TrackIteractor,
@@ -39,7 +33,7 @@ class MusicFragmentViewModel(
 //    private var timerJob: Job? = null
 
     private val _playerState = MutableLiveData<PlayerState>()
-    val observePlayerState: LiveData<PlayerState> = _playerState
+      val observePlayerState: LiveData<PlayerState> = _playerState
 
     private val _currentPosition = MutableLiveData<TimeTrack>()
     val currentPosition: LiveData<TimeTrack> = _currentPosition
@@ -48,8 +42,8 @@ class MusicFragmentViewModel(
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> get() = _isFavorite
 
-    private val _isPlaying = MutableLiveData(false)
-    val isPlaying: LiveData<Boolean> = _isPlaying
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying
 
     private var audioPlayerControl: AudioPlayerControl? = null
 
@@ -61,8 +55,11 @@ class MusicFragmentViewModel(
                 _playerState.postValue(state)
                 _isPlaying.value = when (state) {
                     PlayerState.PLAYING -> true
-                    PlayerState.PAUSED, PlayerState.PREPARED -> false
+                    PlayerState.PAUSED, PlayerState.PREPARED, -> false
                     else -> _isPlaying.value
+                }
+                if (_isPlaying.value == false){
+                    hideNotification()
                 }
             }
         }
@@ -81,15 +78,15 @@ class MusicFragmentViewModel(
     }
 
     fun togglePlayback() {
-        _isPlaying.value = !_isPlaying.value!!
-        if (_isPlaying.value!!) {
-            audioPlayerControl?.startPlayer()
-        } else {
-            pause()
-        }
+            _isPlaying.value = !_isPlaying.value
+            if (_isPlaying.value) {
+                audioPlayerControl?.startPlayer()
+            } else {
+                pause()
+            }
     }
 
-    fun pause(){
+    fun pause() {
         audioPlayerControl?.pausePlayer()
     }
 
@@ -98,7 +95,9 @@ class MusicFragmentViewModel(
     }
 
     fun showNotification() {
-        audioPlayerControl?.provideNotificator()
+        if (_isPlaying.value == true) {
+            audioPlayerControl?.provideNotificator()
+        }
     }
 
     fun hideNotification() {
