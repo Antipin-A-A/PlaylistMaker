@@ -113,6 +113,12 @@ class MusicFragment : Fragment() {
                 binding.buttonPlay.setPlaying(isPlaying)
             }
         }
+
+        viewModel.message.observe(viewLifecycleOwner) { message ->
+            if (message.startsWith(getString(R.string.Track_add))) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
     }
 
     private fun init() {
